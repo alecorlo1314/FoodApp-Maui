@@ -5,7 +5,6 @@ using FoodApp.Aplicacion.Features.Authentication.Commands.CurrentUser;
 using FoodApp.Aplicacion.Features.Cart.Commands.RemoveCartItem;
 using FoodApp.Aplicacion.Features.Cart.Commands.UpdateQuantity;
 using FoodApp.Aplicacion.Features.Cart.Queries.GetCart;
-using FoodApp.Domain.Entities;
 using FoodApp.Presentacion.Views.Usuarios;
 using MediatR;
 using System.Collections.ObjectModel;
@@ -15,7 +14,7 @@ namespace FoodApp.Presentacion.ViewModels.Usuarios;
 public partial class CartViewModel(IMediator _mediator, ILocationService locationService) : ObservableObject
 {
     [ObservableProperty]
-    private ObservableCollection<CartItem> cartItems = new();
+    private ObservableCollection<CartItemViewModel> cartItems = new();
 
     [ObservableProperty]
     private decimal subTotal;
@@ -101,7 +100,7 @@ public partial class CartViewModel(IMediator _mediator, ILocationService locatio
                     CartItems.Clear();
                     foreach (var item in result.Value)
                     {
-                        CartItems.Add(item);
+                        CartItems.Add(new CartItemViewModel(item));
                     }
 
                     CalculateTotals();
@@ -129,71 +128,64 @@ public partial class CartViewModel(IMediator _mediator, ILocationService locatio
         PlaceOrderCommand.NotifyCanExecuteChanged();
     }
 
-    private bool CanPlaceOrder() => CartItems.Any();
+    private bool CanPlaceOrder() => CartItems.Any() && !CartItems.Any(item => item.IsUpdating);
 
     #region Commands Cambiar cantidades de productos en el carrito
     [RelayCommand]
-    private async Task IncreaseQuantity(CartItem item, CancellationToken cancellationToken)
-    {
-        try
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-            if (item == null) return;
-
-            // Incrementamos la cantidad localmente
-            item.Quantity++;
-
-            // Enviamos el cambio a Supabase a través de MediatR
-            var result = await _mediator.Send(new UpdateCartQuantityCommand(item.Id, item.Quantity), cancellationToken);
-            cancellationToken.ThrowIfCancellationRequested();
-
-            if (!result.IsSuccess)
-            {
-                // Si falla en la base de datos, revertimos el cambio local
-                item.Quantity--;
-                await Shell.Current.DisplayAlertAsync("Error", "No se pudo actualizar la cantidad", "OK");
-            }
-
-            // Recalculamos los totales de la pantalla del carrito
-            CalculateTotals();
-        }
-        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
-        {
-        }
-    }
+    private Task IncreaseQuantity(CartItemViewModel item, CancellationToken cancellationToken)
+        => UpdateQuantityAsync(item, 1, cancellationToken);
 
     [RelayCommand]
-    private async Task DecreaseQuantity(CartItem item, CancellationToken cancellationToken)
+    private async Task DecreaseQuantity(CartItemViewModel item, CancellationToken cancellationToken)
     {
+        if (item is null || item.IsUpdating)
+            return;
+
+        if (item.Quantity > 1)
+            await UpdateQuantityAsync(item, -1, cancellationToken);
+        else
+            await RemoveItemAsync(item, cancellationToken);
+    }
+
+    private async Task UpdateQuantityAsync(CartItemViewModel item, int change, CancellationToken cancellationToken)
+    {
+        if (item is null || item.IsUpdating || cancellationToken.IsCancellationRequested)
+            return;
+
+        var previousQuantity = item.Quantity;
+        var saved = false;
+        string? errorMessage = null;
+        item.IsUpdating = true;
+        item.Quantity += change;
+        CalculateTotals();
+
         try
         {
+            var result = await _mediator.Send(
+                new UpdateCartQuantityCommand(item.Id, item.Quantity), cancellationToken);
             cancellationToken.ThrowIfCancellationRequested();
-            if (item == null) return;
-
-            if (item.Quantity > 1)
-            {
-                item.Quantity--;
-
-                var result = await _mediator.Send(new UpdateCartQuantityCommand(item.Id, item.Quantity), cancellationToken);
-                cancellationToken.ThrowIfCancellationRequested();
-
-                if (!result.IsSuccess)
-                {
-                    item.Quantity++;
-                    await Shell.Current.DisplayAlertAsync("Error", "No se pudo actualizar la cantidad", "OK");
-                }
-
-                CalculateTotals();
-            }
-            else
-            {
-                // Si llega a 0, opcionalmente podemos invocar la eliminación del ítem
-                await RemoveItemAsync(item, cancellationToken);
-            }
+            saved = result.IsSuccess;
+            if (!saved)
+                errorMessage = "No se pudo actualizar la cantidad";
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
         }
+        catch (Exception)
+        {
+            errorMessage = "No se pudo actualizar la cantidad";
+        }
+        finally
+        {
+            if (!saved)
+                item.Quantity = previousQuantity;
+
+            item.IsUpdating = false;
+            CalculateTotals();
+        }
+
+        if (errorMessage is not null)
+            await Shell.Current.DisplayAlertAsync("Error", errorMessage, "OK");
     }
 
     #endregion
@@ -214,12 +206,16 @@ public partial class CartViewModel(IMediator _mediator, ILocationService locatio
     }
 
     [RelayCommand]
-    private async Task RemoveItemAsync(CartItem item, CancellationToken cancellationToken)
+    private async Task RemoveItemAsync(CartItemViewModel item, CancellationToken cancellationToken)
     {
+        if (item is null || item.IsUpdating)
+            return;
+
+        item.IsUpdating = true;
+        CalculateTotals();
         try
         {
             cancellationToken.ThrowIfCancellationRequested();
-            if (item == null) return;
 
             var result = await _mediator.Send(new RemoveCartItemCommand(item.Id), cancellationToken);
             cancellationToken.ThrowIfCancellationRequested();
@@ -236,6 +232,11 @@ public partial class CartViewModel(IMediator _mediator, ILocationService locatio
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
+        }
+        finally
+        {
+            item.IsUpdating = false;
+            CalculateTotals();
         }
     }
 }

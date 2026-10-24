@@ -79,7 +79,7 @@
                 <LinearItemsLayout ItemSpacing="16" Orientation="Vertical" />
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="models:CartItem">
+                <DataTemplate x:DataType="vm:CartItemViewModel">
                     <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="16">
 
                         <!--  Imagen Redondeada del Plato  -->
@@ -123,6 +123,7 @@
                         <!--  Botón Eliminar (X) y Control de Cantidad  -->
                         <VerticalStackLayout
                             Grid.Column="2"
+                            IsEnabled="{Binding IsNotUpdating}"
                             Spacing="12"
                             VerticalOptions="Center">
                             <!--  Botón Cerrar / Eliminar (Rojo)  -->
