@@ -64,7 +64,7 @@ public class StripePaymentService : IPaymentGatewayService
             // Deserializamos la respuesta de la Edge Function
             var resultData = await response.Content.ReadFromJsonAsync<EdgeFunctionPaymentResponse>(cancellationToken: cancellationToken);
 
-            if (resultData != null && resultData.Success)
+            if (resultData != null && resultData.Success) 
             {
                 return Result.Success(resultData.TransactionId);
             }
