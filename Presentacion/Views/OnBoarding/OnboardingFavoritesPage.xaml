@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="FoodApp.Presentacion.Views.OnBoarding.OnboardingFavoritesPage"
+    x:DataType="vm:OnboardingFavoritesViewModel"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:FoodApp.Presentacion.ViewModels"
+    xmlns:droid="clr-namespace:CommunityToolkit.Maui.PlatformConfiguration.AndroidSpecific;assembly=CommunityToolkit.Maui"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    droid:NavigationBar.Color="White"
+    droid:NavigationBar.Style="DarkContent"
+    BackgroundColor="White">
+
+    <ContentPage.Behaviors>
+        <toolkit:StatusBarBehavior StatusBarColor="white" StatusBarStyle="DarkContent" />
+    </ContentPage.Behaviors>
+
+    <Grid Padding="24,40,24,30" RowDefinitions="*, Auto">
+
+        <!--  Contenido Principal  -->
+        <VerticalStackLayout
+            Grid.Row="0"
+            Spacing="24"
+            VerticalOptions="Center">
+
+            <!--  Imagen / PlaceHolder Principal  -->
+            <Border
+                BackgroundColor="Transparent"
+                HeightRequest="292"
+                HorizontalOptions="Center"
+                StrokeShape="RoundRectangle 16"
+                StrokeThickness="0">
+
+                <!--  Imagen de Favoritos  -->
+                <Image
+                    Aspect="AspectFill"
+                    HorizontalOptions="Center"
+                    Source="onboarding_favorites.png" />
+
+            </Border>
+
+            <!--  Textos Informativos  -->
+            <VerticalStackLayout Margin="0,10,0,0" Spacing="12">
+                <Label
+                    FontFamily="SenBold"
+                    FontSize="24"
+                    HorizontalTextAlignment="Center"
+                    Text="All your favorites"
+                    TextColor="#32343E" />
+
+                <Label
+                    Padding="10,0"
+                    FontFamily="SenRegular"
+                    FontSize="16"
+                    HorizontalTextAlignment="Center"
+                    LineBreakMode="WordWrap"
+                    Text="Get all your loved foods in one once place, you just place the orer we do the rest"
+                    TextColor="#646982" />
+            </VerticalStackLayout>
+
+            <!--  Indicadores de Página (Puntos)  -->
+            <HorizontalStackLayout
+                Margin="0,10,0,0"
+                HorizontalOptions="Center"
+                Spacing="10">
+                <Ellipse
+                    Fill="#FF6B2C"
+                    HeightRequest="10"
+                    WidthRequest="10" />
+                <Ellipse
+                    Fill="#FFE0D3"
+                    HeightRequest="10"
+                    WidthRequest="10" />
+                <Ellipse
+                    Fill="#FFE0D3"
+                    HeightRequest="10"
+                    WidthRequest="10" />
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
+
+        <!--  Botones Inferiores  -->
+        <VerticalStackLayout Grid.Row="1" Spacing="16">
+
+            <!--  Botón NEXT  -->
+            <Button
+                BackgroundColor="#FF7622"
+                Command="{Binding NextCommand}"
+                CornerRadius="12"
+                FontFamily="SenBold"
+                FontSize="14"
+                HeightRequest="62"
+                HorizontalOptions="Fill"
+                Text="NEXT"
+                TextColor="White" />
+
+            <!--  Botón Skip  -->
+            <Button
+                BackgroundColor="Transparent"
+                Command="{Binding SkipCommand}"
+                CornerRadius="12"
+                FontFamily="SenRegular"
+                FontSize="16"
+                HeightRequest="62"
+                HorizontalOptions="Fill"
+                Text="Skip"
+                TextColor="#646982" />
+
+        </VerticalStackLayout>
+
+    </Grid>
+</ContentPage>

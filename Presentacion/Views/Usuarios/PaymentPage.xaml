@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="FoodApp.Presentacion.Views.Usuarios.PaymentPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:droid="clr-namespace:CommunityToolkit.Maui.PlatformConfiguration.AndroidSpecific;assembly=CommunityToolkit.Maui"
+    xmlns:skia="clr-namespace:SkiaSharp.Extended.UI.Controls;assembly=SkiaSharp.Extended.UI"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:vm="clr-namespace:FoodApp.Presentacion.ViewModels.Usuarios"
+    droid:NavigationBar.Color="White"
+    droid:NavigationBar.Style="DarkContent"
+    x:DataType="vm:PaymentViewModel"
+    BackgroundColor="White"
+    Shell.NavBarIsVisible="False">
+
+    <ContentPage.Behaviors>
+        <toolkit:StatusBarBehavior StatusBarColor="White" StatusBarStyle="DarkContent" />
+    </ContentPage.Behaviors>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <!--
+        Estados exclusivos: formulario / procesando / fallo.
+        El éxito navega a una página diferente.
+    -->
+    <Grid>
+
+        <!--  PANTALLA PRINCIPAL  -->
+        <Grid IsVisible="{Binding IsPaymentViewVisible}" RowDefinitions="Auto, *, Auto">
+
+            <!--  1. CABECERA  -->
+            <Grid
+                Grid.Row="0"
+                Margin="24,16"
+                ColumnDefinitions="Auto, *"
+                ColumnSpacing="18">
+                <ImageButton
+                    Grid.Column="0"
+                    BackgroundColor="Transparent"
+                    Command="{Binding GoBackCommand}"
+                    CornerRadius="20"
+                    HeightRequest="45"
+                    Source="ic_back_white.png"
+                    WidthRequest="45" />
+                <Label
+                    Grid.Column="1"
+                    FontFamily="SenRegular"
+                    FontSize="18"
+                    HorizontalOptions="Center"
+                    Text="Payment"
+                    TextColor="#181C2E"
+                    VerticalOptions="Center" />
+            </Grid>
+
+            <!--  2. MÉTODOS DE PAGO Y TARJETA  -->
+            <ScrollView Grid.Row="1" Margin="24,12,24,0">
+                <VerticalStackLayout Spacing="16">
+
+                    <!--  Opciones Superiores: Cash, Visa, Mastercard, Paypal  -->
+                    <ScrollView HorizontalScrollBarVisibility="Never" Orientation="Horizontal">
+                        <HorizontalStackLayout Spacing="12">
+
+                            <!--  Icono Cash  -->
+                            <VerticalStackLayout Spacing="4">
+                                <Border
+                                    BackgroundColor="#F0F5FA"
+                                    HeightRequest="72"
+                                    StrokeThickness="0"
+                                    WidthRequest="85">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="12" />
+                                    </Border.StrokeShape>
+                                    <Image
+                                        Aspect="AspectFit"
+                                        HeightRequest="24"
+                                        Source="ic_cash.svg"
+                                        WidthRequest="24" />
+                                </Border>
+                                <Label
+                                    FontFamily="SenRegular"
+                                    FontSize="14"
+                                    HorizontalOptions="Center"
+                                    Text="Cash"
+                                    TextColor="#464E57" />
+                            </VerticalStackLayout>
+
+                            <!--  Icono Visa  -->
+                            <VerticalStackLayout Spacing="4">
+                                <Border
+                                    BackgroundColor="#F0F5FA"
+                                    HeightRequest="72"
+                                    StrokeThickness="0"
+                                    WidthRequest="85">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="12" />
+                                    </Border.StrokeShape>
+
+                                    <Image
+                                        Aspect="AspectFit"
+                                        HeightRequest="30"
+                                        Source="ic_visa.svg"
+                                        WidthRequest="30" />
+                                </Border>
+
+                                <Label
+                                    FontFamily="SenRegular"
+                                    FontSize="14"
+                                    HorizontalOptions="Center"
+                                    Text="Visa"
+                                    TextColor="#464E57" />
+                            </VerticalStackLayout>
+
+                            <!--  Icono Mastercard (Seleccionado con borde naranja)  -->
+                            <VerticalStackLayout Spacing="4">
+                                <Border
+                                    BackgroundColor="#F0F5FA"
+                                    HeightRequest="72"
+                                    Stroke="#FF7622"
+                                    StrokeThickness="2"
+                                    WidthRequest="85">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="12" />
+                                    </Border.StrokeShape>
+                                    <Image
+                                        Aspect="AspectFit"
+                                        HeightRequest="30"
+                                        Source="ic_mastercard.svg"
+                                        WidthRequest="30" />
+
+                                </Border>
+                                <Label
+                                    FontFamily="SenRegular"
+                                    FontSize="14"
+                                    HorizontalOptions="Center"
+                                    Text="Mastercard"
+                                    TextColor="#464E57" />
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
+                    </ScrollView>
+
+                    <!--  ESTADO A: SI NO HAY TARJETA (Payment Method_No Mastercard.png)  -->
+                    <VerticalStackLayout IsVisible="{Binding HasCard, Converter={StaticResource InvertedBoolConverter}}" Spacing="16">
+                        <Border
+                            Padding="24"
+                            BackgroundColor="#F7F8F9"
+                            StrokeThickness="0">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="12" />
+                            </Border.StrokeShape>
+                            <VerticalStackLayout HorizontalOptions="Center" Spacing="12">
+                                <Image
+                                    Aspect="AspectFit"
+                                    HeightRequest="117"
+                                    HorizontalOptions="Center"
+                                    Source="ic_mastercard_card.svg" />
+                                <Label
+                                    FontFamily="SenBold"
+                                    FontSize="16"
+                                    HorizontalOptions="Center"
+                                    Text="No master card added"
+                                    TextColor="#32343E" />
+                                <Label
+                                    FontFamily="SenRegular"
+                                    FontSize="16"
+                                    HorizontalOptions="Center"
+                                    HorizontalTextAlignment="Center"
+                                    Text="You can add a mastercard and save it for later"
+                                    TextColor="#2D2D2D" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!--  ESTADO B: SI SÍ HAY TARJETA (Payment Method.png)  -->
+                    <VerticalStackLayout IsVisible="{Binding HasCard}" Spacing="16">
+                        <Border
+                            Padding="20"
+                            BackgroundColor="#F4F5F7"
+                            StrokeThickness="0">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="24" />
+                            </Border.StrokeShape>
+                            <Grid ColumnDefinitions="*, Auto">
+                                <VerticalStackLayout Grid.Column="0" Spacing="10">
+                                    <Label
+                                        FontFamily="SenBold"
+                                        FontSize="16"
+                                        Text="Master Card"
+                                        TextColor="#32343E"
+                                        VerticalOptions="Center" />
+
+                                    <Grid ColumnDefinitions="*, Auto" ColumnSpacing="2">
+                                        <Label
+                                            Grid.Column="0"
+                                            Margin="0,0,12,0"
+                                            FontAttributes="Bold"
+                                            Text="MC"
+                                            TextColor="Orange"
+                                            VerticalOptions="Center" />
+                                        <Label
+                                            Grid.Column="1"
+                                            FontFamily="SenRegular"
+                                            FontSize="16"
+                                            Text="{Binding SavedCard.CardNumberMasked, StringFormat='************ {0}'}"
+                                            TextColor="#32343E"
+                                            VerticalOptions="Center" />
+                                    </Grid>
+                                </VerticalStackLayout>
+                                <Label
+                                    Grid.Column="1"
+                                    FontSize="16"
+                                    HorizontalOptions="End"
+                                    Text="▼"
+                                    TextColor="#181C2E"
+                                    VerticalOptions="Center" />
+                            </Grid>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!--  Botón Add New  -->
+                    <Button
+                        BackgroundColor="White"
+                        BorderColor="#F0F5FA"
+                        BorderWidth="2"
+                        Command="{Binding NavigateToAddCardCommand}"
+                        CornerRadius="12"
+                        FontFamily="SenBold"
+                        FontSize="14"
+                        HeightRequest="62"
+                        Text="+ ADD NEW"
+                        TextColor="#FF7622" />
+                </VerticalStackLayout>
+            </ScrollView>
+
+            <!--  3. PANEL INFERIOR DE PAGO  -->
+            <Border
+                Grid.Row="2"
+                Padding="24,24,24,32"
+                BackgroundColor="Transparent"
+                StrokeThickness="0">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="32,32,0,0" />
+                </Border.StrokeShape>
+                <VerticalStackLayout Spacing="28">
+                    <HorizontalStackLayout Spacing="12">
+                        <Label
+                            FontFamily="SenRegular"
+                            FontSize="14"
+                            Text="TOTAL:"
+                            TextColor="#A0A5BA"
+                            VerticalOptions="Center" />
+                        <Label
+                            Grid.Column="1"
+                            FontFamily="SenRegular"
+                            FontSize="30"
+                            Text="{Binding TotalAmount, StringFormat='${0:F0}'}"
+                            TextColor="#181C2E"
+                            VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                    <Button
+                        BackgroundColor="#FF7622"
+                        Command="{Binding PayAndConfirmCommand}"
+                        CornerRadius="12"
+                        FontFamily="SenBold"
+                        FontSize="14"
+                        HeightRequest="62"
+                        IsEnabled="{Binding HasCard}"
+                        Text="PAY &amp; CONFIRM"
+                        TextColor="White" />
+                </VerticalStackLayout>
+            </Border>
+
+        </Grid>
+
+        <!--  2. PROCESANDO PAGO  -->
+        <Grid
+            Padding="24"
+            BackgroundColor="White"
+            IsVisible="{Binding IsProcessing}">
+
+            <VerticalStackLayout
+                HorizontalOptions="Center"
+                Spacing="20"
+                VerticalOptions="Center">
+
+                <skia:SKLottieView
+                    HeightRequest="220"
+                    HorizontalOptions="Center"
+                    RepeatCount="-1"
+                    Source="success_wallet.json"
+                    WidthRequest="220" />
+
+                <Label
+                    FontFamily="SenBold"
+                    FontSize="24"
+                    HorizontalTextAlignment="Center"
+                    Text="Processing Payment..."
+                    TextColor="#181C2E" />
+
+                <Label
+                    FontFamily="SenRegular"
+                    FontSize="14"
+                    HorizontalTextAlignment="Center"
+                    Text="Please wait while we process your payment."
+                    TextColor="#A0A5BA" />
+
+            </VerticalStackLayout>
+        </Grid>
+
+        <!--  3. PAGO FALLIDO  -->
+        <Grid
+            Padding="24"
+            BackgroundColor="White"
+            IsVisible="{Binding IsPaymentFailed}">
+
+            <VerticalStackLayout
+                HorizontalOptions="Center"
+                Spacing="20"
+                VerticalOptions="Center">
+
+                <Image
+                    HeightRequest="220"
+                    HorizontalOptions="Center"
+                    Source="ic_payment_failed.png"
+                    WidthRequest="220" />
+
+                <Label
+                    FontFamily="SenBold"
+                    FontSize="24"
+                    HorizontalTextAlignment="Center"
+                    Text="Payment Failed"
+                    TextColor="#181C2E" />
+
+                <Label
+                    FontFamily="SenRegular"
+                    FontSize="14"
+                    HorizontalTextAlignment="Center"
+                    Text="{Binding ErrorMessage}"
+                    TextColor="#A0A5BA" />
+
+                <Button
+                    BackgroundColor="#FF7622"
+                    Command="{Binding GoBackCommand}"
+                    CornerRadius="14"
+                    HeightRequest="56"
+                    Text="GO BACK"
+                    TextColor="White"
+                    WidthRequest="260" />
+
+            </VerticalStackLayout>
+        </Grid>
+    </Grid>
+</ContentPage>

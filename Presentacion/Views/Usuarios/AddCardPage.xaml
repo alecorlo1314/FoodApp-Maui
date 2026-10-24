@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="FoodApp.Presentacion.Views.Usuarios.AddCardPage"
+    x:DataType="vm:AddCardViewModel"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:FoodApp.Presentacion.ViewModels.Usuarios"
+    xmlns:droid="clr-namespace:CommunityToolkit.Maui.PlatformConfiguration.AndroidSpecific;assembly=CommunityToolkit.Maui"
+    xmlns:editors="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    droid:NavigationBar.Color="White"
+    droid:NavigationBar.Style="DarkContent"
+    BackgroundColor="White"
+    Shell.NavBarIsVisible="False">
+
+    <ContentPage.Behaviors>
+        <toolkit:StatusBarBehavior StatusBarColor="White" StatusBarStyle="LightContent" />
+    </ContentPage.Behaviors>
+
+    <Grid RowDefinitions="Auto, *, Auto">
+        <Grid
+            Grid.Row="0"
+            Margin="24,16"
+            ColumnDefinitions="Auto, *"
+            ColumnSpacing="18">
+            <ImageButton
+                Grid.Column="0"
+                BackgroundColor="#F0F2F5"
+                Command="{Binding GoBackCommand}"
+                CornerRadius="20"
+                HeightRequest="45"
+                Source="ic_close.svg"
+                VerticalOptions="Center"
+                WidthRequest="45" />
+            <Label
+                Grid.Column="1"
+                FontFamily="SenRegular"
+                FontSize="18"
+                HorizontalOptions="Start"
+                Text="Add Card"
+                TextColor="#181C2E"
+                VerticalOptions="Center" />
+        </Grid>
+
+        <VerticalStackLayout
+            Grid.Row="1"
+            Margin="24,10"
+            Spacing="20">
+            <VerticalStackLayout Spacing="8">
+                <Label
+                    FontFamily="SenRegular"
+                    FontSize="14"
+                    Text="CARD HOLDER NAME"
+                    TextColor="#A0A5BA" />
+                <Border
+                    Padding="16,12"
+                    BackgroundColor="#F0F5FA"
+                    StrokeThickness="0">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="12" />
+                    </Border.StrokeShape>
+                    <Entry
+                        FontFamily="SenRegular"
+                        FontSize="16"
+                        Keyboard="Text"
+                        Text="{Binding CardHolderName}"
+                        TextColor="#32343E" />
+                </Border>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Spacing="8">
+                <Label
+                    FontFamily="SenRegular"
+                    FontSize="14"
+                    Text="CARD NUMBER"
+                    TextColor="#A0A5BA" />
+                <Border
+                    Padding="16,12"
+                    BackgroundColor="#F0F5FA"
+                    StrokeThickness="0">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="12" />
+                    </Border.StrokeShape>
+                    <editors:SfMaskedEntry
+                        BackgroundColor="Transparent"
+                        FontFamily="SenRegular"
+                        FontSize="16"
+                        HidePromptOnLeave="False"
+                        Keyboard="Numeric"
+                        Mask="[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}"
+                        MaskType="RegEx"
+                        PromptChar="_"
+                        Stroke="Transparent"
+                        TextColor="#32343E"
+                        ValueMaskFormat="ExcludePromptAndLiterals"
+                        Value="{Binding CardNumber, Mode=TwoWay}" />
+                </Border>
+            </VerticalStackLayout>
+
+            <!--  Expiry Date & CVC  -->
+            <Grid ColumnDefinitions="*, *" ColumnSpacing="16">
+                <VerticalStackLayout Grid.Column="0" Spacing="8">
+                    <Label
+                        FontFamily="SenRegular"
+                        FontSize="14"
+                        Text="EXPIRE DATE"
+                        TextColor="#A0A5BA" />
+                    <Border
+                        Padding="16,12"
+                        BackgroundColor="#F0F5FA"
+                        StrokeThickness="0">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="12" />
+                        </Border.StrokeShape>
+                        <editors:SfMaskedEntry
+                            BackgroundColor="Transparent"
+                            ClearButtonVisibility="WhileEditing"
+                            FontFamily="SenRegular"
+                            FontSize="16"
+                            Keyboard="Numeric"
+                            Mask="00/00"
+                            MaskType="Simple"
+                            Stroke="Transparent"
+                            TextColor="#32343E"
+                            Value="{Binding ExpireDate}" />
+                    </Border>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Grid.Column="1" Spacing="8">
+                    <Label
+                        FontFamily="SenRegular"
+                        FontSize="14"
+                        Text="CVC"
+                        TextColor="#A0A5BA" />
+                    <Border
+                        Padding="16,12"
+                        BackgroundColor="#F0F5FA"
+                        StrokeThickness="0">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="12" />
+                        </Border.StrokeShape>
+                        <Entry
+                            FontFamily="SenRegular"
+                            FontSize="16"
+                            IsPassword="True"
+                            Keyboard="Numeric"
+                            MaxLength="3"
+                            Placeholder="***"
+                            Text="{Binding Cvc}"
+                            TextColor="#32343E" />
+                    </Border>
+                </VerticalStackLayout>
+            </Grid>
+        </VerticalStackLayout>
+
+        <Border
+            Grid.Row="2"
+            Padding="24,16,24,32"
+            BackgroundColor="White"
+            StrokeThickness="0">
+            <Button
+                BackgroundColor="#FF7622"
+                Command="{Binding SaveAndMakePaymentCommand}"
+                CornerRadius="12"
+                FontFamily="SenBold"
+                FontSize="14"
+                HeightRequest="62"
+                Text="ADD &amp; MAKE PAYMENT"
+                TextColor="White" />
+        </Border>
+    </Grid>
+</ContentPage>

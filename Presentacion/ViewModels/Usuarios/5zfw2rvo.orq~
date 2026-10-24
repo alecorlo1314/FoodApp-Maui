@@ -1,0 +1,195 @@
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using FoodApp.Aplicacion.Common.Interfaces;
+using FoodApp.Aplicacion.Features.Authentication.Commands.CurrentUser;
+using FoodApp.Aplicacion.Features.Cart.Commands.RemoveCartItem;
+using FoodApp.Aplicacion.Features.Cart.Commands.UpdateQuantity;
+using FoodApp.Aplicacion.Features.Cart.Queries.GetCart;
+using FoodApp.Domain.Entities;
+using MediatR;
+using System.Collections.ObjectModel;
+
+namespace FoodApp.Presentacion.ViewModels.Usuarios;
+
+public partial class CartViewModel(IMediator _mediator, ILocationService locationService) : ObservableObject
+{
+    [ObservableProperty]
+    private ObservableCollection<CartItem> cartItems = new();
+
+    [ObservableProperty]
+    private decimal subTotal;
+
+    [ObservableProperty]
+    private decimal deliveryFee = 0.00m;
+
+    [ObservableProperty]
+    private decimal total;
+
+    [ObservableProperty]
+    private string deliveryAddress = "2118 Thornridge Cir. Syracuse"; // aun por definir
+
+    [ObservableProperty]
+    private bool isLoading;
+
+    [RelayCommand]
+    private async Task LoadDataAsync()
+    {
+        if (IsLoading)
+            return;
+
+        try
+        {
+            IsLoading = true;
+
+            // Operaciones asíncronas independientes
+            await Task.WhenAll(
+                LoadCartAsync(),
+                GetCurrentLocationAsync()
+            );
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    [RelayCommand]
+    private async Task GetCurrentLocationAsync()
+    {
+        try
+        {
+            var currentAddress = await locationService.GetCurrentAddressAsync();
+            if (!string.IsNullOrEmpty(currentAddress))
+            {
+                DeliveryAddress = currentAddress;
+            }
+
+        }
+        catch (Exception)
+        {
+            await Shell.Current.DisplayAlertAsync("Error", "No se pudo obtener la ubicación actual.", "OK");
+        }
+    }
+
+    public async Task LoadCartAsync()
+    {
+        try
+        {
+            // Obtener el ID del usuario actual logeoado en supabase
+            var userId = await _mediator.Send(new GetCurrentUser());
+
+            //si existe alguno entonces se realiza la consulta para obtener el carrito de compras
+            if (userId.IsSuccess && !string.IsNullOrEmpty(userId.Value?.Id.ToString()))
+            {
+                var result = await _mediator.Send(new GetCartQuery(userId.Value.Id.ToString()));
+
+                //si existe carrito de compras entonces llenamos la lista de productos en el carrito
+                if (result.IsSuccess && result.Value != null)
+                {
+                    CartItems.Clear();
+                    foreach (var item in result.Value)
+                    {
+                        CartItems.Add(item);
+                    }
+
+                    CalculateTotals();
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            // Manejar errores, por ejemplo, mostrar un mensaje al usuario
+            await Shell.Current.DisplayAlertAsync("Error", $"{ex.Message}", "OK");
+        }
+    }
+
+    private void CalculateTotals()
+    {
+        SubTotal = CartItems
+            .Sum(x => x.TotalItemPrice);
+        Total = SubTotal + DeliveryFee;
+
+        //Notificamos a MAUI para que pueda ejecutar el comando PlcaOrderCommand
+        PlaceOrderCommand.NotifyCanExecuteChanged();
+    }
+
+    #region Commands Cambiar cantidades de productos en el carrito
+    [RelayCommand]
+    private async Task IncreaseQuantity(CartItem item)
+    {
+        if (item == null) return;
+
+        // Incrementamos la cantidad localmente
+        item.Quantity++;
+
+        // Enviamos el cambio a Supabase a través de MediatR
+        var result = await _mediator.Send(new UpdateCartQuantityCommand(item.Id, item.Quantity));
+
+        if (!result.IsSuccess)
+        {
+            // Si falla en la base de datos, revertimos el cambio local
+            item.Quantity--;
+            await Shell.Current.DisplayAlertAsync("Error", "No se pudo actualizar la cantidad", "OK");
+        }
+
+        // Recalculamos los totales de la pantalla del carrito
+        CalculateTotals();
+    }
+
+    [RelayCommand]
+    private async Task DecreaseQuantity(CartItem item)
+    {
+        if (item == null) return;
+
+        if (item.Quantity > 1)
+        {
+            item.Quantity--;
+
+            var result = await _mediator.Send(new UpdateCartQuantityCommand(item.Id, item.Quantity));
+
+            if (!result.IsSuccess)
+            {
+                item.Quantity++;
+                await Shell.Current.DisplayAlertAsync("Error", "No se pudo actualizar la cantidad", "OK");
+            }
+
+            CalculateTotals();
+        }
+        else
+        {
+            // Si llega a 0, opcionalmente podemos invocar la eliminación del ítem
+            await RemoveItemAsync(item);
+        }
+    }
+
+    #endregion
+
+    [RelayCommand]
+    private async Task GoBackAsync() => await Shell.Current.GoToAsync("..");
+
+    [RelayCommand]
+    private async Task PlaceOrderAsync()
+    {
+        await Shell.Current.DisplayAlertAsync("Éxito", $"Pedido realizado por ${Total:F0}. ¡Disfruta tu comida!", "OK");
+    }
+
+    [RelayCommand]
+    private async Task RemoveItemAsync(CartItem item)
+    {
+        if (item == null) return;
+
+        // Ejecutamos el comando de MediatR para borrarlo de Supabase
+        var result = await _mediator.Send(new RemoveCartItemCommand(item.Id));
+
+        if (result.IsSuccess)
+        {
+            // Si se eliminó correctamente en la BD, lo quitamos de la lista visual
+            CartItems.Remove(item);
+            CalculateTotals();
+        }
+        else
+        {
+            await Shell.Current.DisplayAlertAsync("Error", $"No se pudo eliminar el producto: {result.ErrorMessage}", "OK");
+        }
+    }
+}

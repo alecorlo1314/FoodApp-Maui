@@ -1,0 +1,744 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="FoodApp.Presentacion.Views.Usuarios.HomePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:droid="clr-namespace:CommunityToolkit.Maui.PlatformConfiguration.AndroidSpecific;assembly=CommunityToolkit.Maui"
+    xmlns:models="clr-namespace:FoodApp.Domain.Entities"
+    xmlns:sk="clr-namespace:Maui.Skeleton;assembly=Maui.Skeleton"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:views="clr-namespace:FoodApp.Presentacion.Views.Usuarios"
+    xmlns:vm="clr-namespace:FoodApp.Presentacion.ViewModels.Usuarios"
+    x:Name="HomePageRoot"
+    droid:NavigationBar.Color="White"
+    droid:NavigationBar.Style="DarkContent"
+    x:DataType="vm:HomeViewModel"
+    BackgroundColor="White"
+    Shell.NavBarIsVisible="False">
+
+    <ContentPage.Behaviors>
+        <toolkit:StatusBarBehavior StatusBarColor="White" StatusBarStyle="DarkContent" />
+    </ContentPage.Behaviors>
+
+    <Grid>
+
+        <!--  CONTENIDO REAL  -->
+        <Grid IsVisible="{Binding IsNotLoading}" RowDefinitions="Auto, *">
+
+            <!--  1. CABECERA Y BUSCADOR (FIJO)  -->
+            <VerticalStackLayout
+                Grid.Row="0"
+                Padding="24,20,24,10"
+                Spacing="16">
+                <!--  Top Bar: Menu / Dirección / Carrito  -->
+                <Grid ColumnDefinitions="Auto, *, Auto">
+
+                    <!--  Botón Menú (Izquierda)  -->
+                    <ImageButton
+                        Grid.Column="0"
+                        Command="{Binding OpenMenuCommand}"
+                        HeightRequest="45"
+                        HorizontalOptions="Center"
+                        Source="ic_burguer.svg"
+                        VerticalOptions="Center"
+                        WidthRequest="45" />
+
+                    <!--  Ubicación de Entrega (Centro)  -->
+                    <VerticalStackLayout
+                        Grid.Column="1"
+                        Margin="12,0,0,0"
+                        VerticalOptions="Center">
+                        <Label
+                            FontFamily="SenBold"
+                            FontSize="11"
+                            Text="DELIVER TO"
+                            TextColor="#FC6E2A" />
+
+                        <HorizontalStackLayout Spacing="4">
+                            <Label
+                                FontFamily="SenRegular"
+                                FontSize="14"
+                                Text="{Binding UserAddress}"
+                                TextColor="#676767" />
+                            <Image
+                                HeightRequest="12"
+                                Source="ic_dropdown.png"
+                                VerticalOptions="Center"
+                                WidthRequest="12" />
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+
+                    <!--  Ícono Carrito con Contador (Derecha)  -->
+                    <Grid
+                        Grid.Column="2"
+                        HeightRequest="45"
+                        WidthRequest="45">
+                        <ImageButton
+                            Command="{Binding OpenCartCommand}"
+                            HeightRequest="45"
+                            HorizontalOptions="Center"
+                            Source="ic_carrito_compras.svg"
+                            VerticalOptions="Center"
+                            WidthRequest="45" />
+
+                        <!--  Badge Naranja de Cantidad  -->
+                        <Border
+                            BackgroundColor="#FF7622"
+                            HeightRequest="20"
+                            HorizontalOptions="End"
+                            IsVisible="{Binding IsCartCountVisible}"
+                            StrokeThickness="0"
+                            VerticalOptions="Start"
+                            WidthRequest="20">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10" />
+                            </Border.StrokeShape>
+                            <Label
+                                FontFamily="SenBold"
+                                FontSize="11"
+                                HorizontalTextAlignment="Center"
+                                Text="{Binding CartCount}"
+                                TextColor="White"
+                                VerticalTextAlignment="Center" />
+                        </Border>
+                    </Grid>
+                </Grid>
+
+                <!--  Saludo al Usuario (Con Skeleton)  -->
+                <HorizontalStackLayout sk:Skeleton.IsBusy="{Binding IsLoading}" Spacing="6">
+                    <Label
+                        FontFamily="SenRegular"
+                        FontSize="16"
+                        Text="Hey"
+                        TextColor="#1E1D1D" />
+                    <Label
+                        FontFamily="SenBold"
+                        FontSize="16"
+                        Text="{Binding UserName, StringFormat='{0},'}"
+                        TextColor="#1E1D1D" />
+                    <Label
+                        FontFamily="SenBold"
+                        FontSize="16"
+                        Text="Good Afternoon!"
+                        TextColor="#1E1D1D" />
+                </HorizontalStackLayout>
+
+                <!--  Barra de Búsqueda con Skeleton  -->
+                <Border
+                    Padding="16,0"
+                    sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                Direction=DiagonalReverse,
+                                                                SweepColors='#00FFFFFF,#70FFFFFF,#00FFFFFF'}"
+                    sk:Skeleton.BackgroundColor="#F6F6F6"
+                    sk:Skeleton.IsBusy="{Binding IsLoading, Mode=OneWay}"
+                    BackgroundColor="#F6F6F6"
+                    HeightRequest="56"
+                    StrokeThickness="0">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="12" />
+                    </Border.StrokeShape>
+                    <Grid ColumnDefinitions="Auto, *">
+                        <Image
+                            Grid.Column="0"
+                            HeightRequest="18"
+                            Source="ic_search.svg"
+                            VerticalOptions="Center"
+                            WidthRequest="18" />
+                        <Entry
+                            Grid.Column="1"
+                            Margin="12,0,0,0"
+                            FontFamily="SenRegular"
+                            FontSize="14"
+                            Placeholder="Search dishes, restaurants"
+                            PlaceholderColor="#676767"
+                            Text="{Binding SearchText}"
+                            TextColor="#32343E"
+                            VerticalOptions="Center" />
+                    </Grid>
+                </Border>
+
+            </VerticalStackLayout>
+
+            <!--  2. CONTENIDO SCROLLABLE (CATEGORÍAS Y RESTAURANTES)  -->
+            <ScrollView Grid.Row="1">
+                <VerticalStackLayout Padding="0,10,0,30" Spacing="24">
+
+                    <!--  SECCIÓN: ALL CATEGORIES  -->
+                    <VerticalStackLayout Spacing="20">
+                        <Grid Padding="24,0" ColumnDefinitions="*, Auto">
+                            <Label
+                                Grid.Column="0"
+                                FontFamily="SenRegular"
+                                FontSize="20"
+                                Text="All Categories"
+                                TextColor="#32343E"
+                                VerticalOptions="Center" />
+                            <Button
+                                Grid.Column="1"
+                                Padding="6,0"
+                                BackgroundColor="Transparent"
+                                FontFamily="SenRegular"
+                                FontSize="16"
+                                IsEnabled="False"
+                                Text="See All ›"
+                                TextColor="#333333"
+                                VerticalOptions="Center" />
+                        </Grid>
+
+                        <!--  Lista Horizontal de Categorías con Skeleton  -->
+                        <CollectionView
+                            x:Name="CategoriesCollectionView"
+                            Margin="24,0,0,0"
+                            sk:Skeleton.IsBusy="{Binding IsLoading}"
+                            sk:Skeleton.IsParent="True"
+                            HorizontalScrollBarVisibility="Never"
+                            ItemsSource="{Binding Categories}"
+                            SelectionChangedCommand="{Binding SelectCategoryCommand}"
+                            SelectionChangedCommandParameter="{Binding SelectedItem, Source={x:Reference CategoriesCollectionView}, x:DataType='CollectionView'}"
+                            SelectionMode="Single">
+
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout ItemSpacing="12" Orientation="Horizontal" />
+                            </CollectionView.ItemsLayout>
+
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="models:Category">
+                                    <Border
+                                        Padding="8"
+                                        sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                                    Direction=DiagonalReverse,
+                                                                                    SweepColors='#00FFFFFF,#70FFFFFF,#00FFFFFF'}"
+                                        sk:Skeleton.BackgroundColor="#E8E8E8"
+                                        sk:Skeleton.IsBusy="{Binding ViewModel.IsLoading, Source={x:Reference HomePageRoot}, x:DataType='views:HomePage', Mode=OneWay}"
+                                        BackgroundColor="#F9F9F9"
+                                        StrokeThickness="0">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="28" />
+                                        </Border.StrokeShape>
+
+                                        <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                                            <Border
+                                                BackgroundColor="Transparent"
+                                                HeightRequest="44"
+                                                StrokeThickness="0"
+                                                WidthRequest="44">
+                                                <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="20" />
+                                                </Border.StrokeShape>
+                                                <Image
+                                                    HeightRequest="44"
+                                                    HorizontalOptions="Center"
+                                                    Source="{Binding IconUrl}"
+                                                    VerticalOptions="Center"
+                                                    WidthRequest="44" />
+                                            </Border>
+                                            <Label
+                                                FontFamily="SenBold"
+                                                FontSize="14"
+                                                Text="{Binding Name}"
+                                                TextColor="#32343E"
+                                                VerticalOptions="Center" />
+                                        </HorizontalStackLayout>
+
+                                        <!--  VisualStateManager para controlar el color al seleccionarlo y anular el default  -->
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <!--  Estado Normal (Fondo gris suave)  -->
+                                                <VisualState x:Name="Normal">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="BackgroundColor" Value="#F9F9F9" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <!--  Estado Seleccionado (Fondo #FFD27C y reemplaza el color por defecto)  -->
+                                                <VisualState x:Name="Selected">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="BackgroundColor" Value="#FFD27C" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+
+                    </VerticalStackLayout>
+
+
+                    <!--  SECCIÓN: OPEN RESTAURANTS  -->
+                    <VerticalStackLayout Spacing="16">
+                        <Grid Padding="24,0" ColumnDefinitions="*, Auto">
+                            <Label
+                                Grid.Column="0"
+                                FontFamily="SenRegular"
+                                FontSize="20"
+                                Text="Open Restaurants"
+                                TextColor="#32343E"
+                                VerticalOptions="Center" />
+                            <Button
+                                Grid.Column="1"
+                                Padding="6,0"
+                                BackgroundColor="Transparent"
+                                Command="{Binding SeeAllRestaurantsCommand}"
+                                FontFamily="SenRegular"
+                                FontSize="16"
+                                Text="See All ›"
+                                TextColor="#333333"
+                                VerticalOptions="Center" />
+                        </Grid>
+
+                        <!--  Lista Vertical de Restaurantes con Skeleton  -->
+                        <CollectionView
+                            Margin="24,0"
+                            sk:Skeleton.IsBusy="{Binding IsLoading}"
+                            sk:Skeleton.IsParent="True"
+                            ItemsSource="{Binding Restaurants}"
+                            SelectionMode="None">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout ItemSpacing="20" Orientation="Vertical" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="models:Restaurant">
+                                    <VerticalStackLayout Spacing="10">
+
+                                        <!--  Imagen Portada del Restaurante con Skeleton  -->
+                                        <Border
+                                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                                        Direction=DiagonalReverse,
+                                                                                        SweepColors='#00FFFFFF,#70FFFFFF,#00FFFFFF'}"
+                                            sk:Skeleton.BackgroundColor="#E8E8E8"
+                                            sk:Skeleton.IsBusy="{Binding ViewModel.IsLoading, Source={x:Reference HomePageRoot}, x:DataType='views:HomePage', Mode=OneWay}"
+                                            BackgroundColor="#96A7B8"
+                                            HeightRequest="160"
+                                            StrokeThickness="0">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="16" />
+                                            </Border.StrokeShape>
+                                            <!--  DETECTOR DE TOQUE VINCULADO AL COMANDO  -->
+                                            <Border.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding ViewModel.SelectRestaurantCommand, Source={x:Reference HomePageRoot}, x:DataType='views:HomePage'}" CommandParameter="{Binding}" />
+                                            </Border.GestureRecognizers>
+
+                                            <Image Aspect="AspectFill" Source="{Binding ImageUrl}" />
+                                        </Border>
+
+                                        <!--  Nombre del Restaurante con Skeleton  -->
+                                        <Border
+                                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                                        Direction=DiagonalReverse,
+                                                                                        SweepColors='#00FFFFFF,#70FFFFFF,#00FFFFFF'}"
+                                            sk:Skeleton.BackgroundColor="#E8E8E8"
+                                            sk:Skeleton.IsBusy="{Binding ViewModel.IsLoading, Source={x:Reference HomePageRoot}, x:DataType='views:HomePage', Mode=OneWay}"
+                                            HeightRequest="22"
+                                            StrokeThickness="0">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="6" />
+                                            </Border.StrokeShape>
+                                            <Label
+                                                FontFamily="SenRegular"
+                                                FontSize="20"
+                                                Text="{Binding Name}"
+                                                TextColor="#181C2E" />
+                                        </Border>
+
+                                        <!--  Tags / Categorías del Restaurante con Skeleton  -->
+                                        <Border
+                                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                                        Direction=DiagonalReverse,
+                                                                                        SweepColors='#00FFFFFF,#70FFFFFF,#00FFFFFF'}"
+                                            sk:Skeleton.BackgroundColor="#E8E8E8"
+                                            sk:Skeleton.IsBusy="{Binding ViewModel.IsLoading, Source={x:Reference HomePageRoot}, x:DataType='views:HomePage', Mode=OneWay}"
+                                            HeightRequest="18"
+                                            StrokeThickness="0">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="6" />
+                                            </Border.StrokeShape>
+                                            <Label
+                                                FontFamily="SenRegular"
+                                                FontSize="14"
+                                                Text="{Binding TagsFormatted}"
+                                                TextColor="#A0A5BA" />
+                                        </Border>
+
+                                        <!--  Metadatos: Rating / Envío / Tiempo  -->
+                                        <HorizontalStackLayout Spacing="20">
+
+                                            <!--  Rating  -->
+                                            <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
+                                                <Image
+                                                    HeightRequest="20"
+                                                    Source="ic_star.png"
+                                                    WidthRequest="20" />
+                                                <Label
+                                                    FontFamily="SenBold"
+                                                    FontSize="16"
+                                                    Text="{Binding Rating}"
+                                                    TextColor="#181C2E" />
+                                            </HorizontalStackLayout>
+
+                                            <!--  Delivery Fee  -->
+                                            <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
+                                                <Image
+                                                    HeightRequest="20"
+                                                    Source="ic_delivery.png"
+                                                    WidthRequest="20" />
+                                                <Label
+                                                    FontFamily="SenRegular"
+                                                    FontSize="14"
+                                                    Text="{Binding DeliveryFee}"
+                                                    TextColor="#181C2E" />
+                                            </HorizontalStackLayout>
+
+                                            <!--  Delivery Time  -->
+                                            <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
+                                                <Image
+                                                    HeightRequest="20"
+                                                    Source="ic_clock.png"
+                                                    WidthRequest="20" />
+                                                <Label
+                                                    FontFamily="SenRegular"
+                                                    FontSize="14"
+                                                    Text="{Binding DeliveryTime}"
+                                                    TextColor="#181C2E" />
+                                            </HorizontalStackLayout>
+
+                                        </HorizontalStackLayout>
+
+                                    </VerticalStackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+
+                </VerticalStackLayout>
+            </ScrollView>
+
+        </Grid>
+
+        <!--  SKELETON, INDEPENDIENTE DE Categories Y Restaurants  -->
+        <Grid
+            BackgroundColor="White"
+            InputTransparent="True"
+            IsVisible="{Binding IsLoading}"
+            RowDefinitions="Auto,*">
+            <VerticalStackLayout
+                Grid.Row="0"
+                Padding="24,20,24,10"
+                Spacing="16">
+                <Grid ColumnDefinitions="45,*,45" ColumnSpacing="12">
+                    <Border
+                        Grid.Column="0"
+                        sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                    Direction=DiagonalReverse,
+                                                                    SweepColors='#00FFFFFF,#70FFFFFF,#00FFFFFF'}"
+                        sk:Skeleton.BackgroundColor="#E8E8E8"
+                        sk:Skeleton.IsBusy="True"
+                        HeightRequest="45"
+                        HorizontalOptions="Start"
+                        StrokeShape="RoundRectangle 22"
+                        StrokeThickness="0"
+                        WidthRequest="45" />
+                    <VerticalStackLayout
+                        Grid.Column="1"
+                        Spacing="7"
+                        VerticalOptions="Center">
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#00FFFFFF,#70FFFFFF,#00FFFFFF'}"
+                            sk:Skeleton.BackgroundColor="#E8E8E8"
+                            sk:Skeleton.IsBusy="True"
+                            HeightRequest="11"
+                            HorizontalOptions="Start"
+                            StrokeShape="RoundRectangle 5"
+                            StrokeThickness="0"
+                            WidthRequest="85" />
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#00FFFFFF,#70FFFFFF,#00FFFFFF'}"
+                            sk:Skeleton.BackgroundColor="#E8E8E8"
+                            sk:Skeleton.IsBusy="True"
+                            HeightRequest="16"
+                            HorizontalOptions="Start"
+                            StrokeShape="RoundRectangle 6"
+                            StrokeThickness="0"
+                            WidthRequest="150" />
+                    </VerticalStackLayout>
+                    <Border
+                        Grid.Column="2"
+                        sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                    Direction=DiagonalReverse,
+                                                                    SweepColors='#00FFFFFF,#70FFFFFF,#00FFFFFF'}"
+                        sk:Skeleton.BackgroundColor="#E8E8E8"
+                        sk:Skeleton.IsBusy="True"
+                        HeightRequest="45"
+                        StrokeShape="RoundRectangle 22"
+                        StrokeThickness="0"
+                        WidthRequest="45" />
+                </Grid>
+                <HorizontalStackLayout Spacing="8">
+                    <Border
+                        sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                    Direction=DiagonalReverse,
+                                                                    SweepColors='#00FFFFFF,#70FFFFFF,#00FFFFFF'}"
+                        sk:Skeleton.BackgroundColor="#E8E8E8"
+                        sk:Skeleton.IsBusy="True"
+                        HeightRequest="17"
+                        StrokeShape="RoundRectangle 5"
+                        StrokeThickness="0"
+                        WidthRequest="48" />
+                    <Border
+                        sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                    Direction=DiagonalReverse,
+                                                                    SweepColors='#00FFFFFF,#70FFFFFF,#00FFFFFF'}"
+                        sk:Skeleton.BackgroundColor="#E8E8E8"
+                        sk:Skeleton.IsBusy="True"
+                        HeightRequest="17"
+                        StrokeShape="RoundRectangle 5"
+                        StrokeThickness="0"
+                        WidthRequest="92" />
+                    <Border
+                        sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                    Direction=DiagonalReverse,
+                                                                    SweepColors='#00FFFFFF,#70FFFFFF,#00FFFFFF'}"
+                        sk:Skeleton.BackgroundColor="#E8E8E8"
+                        sk:Skeleton.IsBusy="True"
+                        HeightRequest="17"
+                        StrokeShape="RoundRectangle 5"
+                        StrokeThickness="0"
+                        WidthRequest="115" />
+                </HorizontalStackLayout>
+                <Border
+                    sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                Direction=DiagonalReverse,
+                                                                SweepColors='#00FFFFFF,#70FFFFFF,#00FFFFFF'}"
+                    sk:Skeleton.BackgroundColor="#E8E8E8"
+                    sk:Skeleton.IsBusy="True"
+                    HeightRequest="56"
+                    StrokeShape="RoundRectangle 12"
+                    StrokeThickness="0" />
+            </VerticalStackLayout>
+
+            <ScrollView Grid.Row="1" InputTransparent="True">
+                <VerticalStackLayout Padding="24,10,24,30" Spacing="20">
+                    <Grid ColumnDefinitions="*,75">
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#00FFFFFF,#70FFFFFF,#00FFFFFF'}"
+                            sk:Skeleton.BackgroundColor="#E8E8E8"
+                            sk:Skeleton.IsBusy="True"
+                            HeightRequest="22"
+                            HorizontalOptions="Start"
+                            StrokeShape="RoundRectangle 6"
+                            StrokeThickness="0"
+                            WidthRequest="155" />
+                        <Border
+                            Grid.Column="1"
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#00FFFFFF,#70FFFFFF,#00FFFFFF'}"
+                            sk:Skeleton.BackgroundColor="#E8E8E8"
+                            sk:Skeleton.IsBusy="True"
+                            HeightRequest="18"
+                            HorizontalOptions="End"
+                            StrokeShape="RoundRectangle 6"
+                            StrokeThickness="0"
+                            WidthRequest="65" />
+                    </Grid>
+                    <HorizontalStackLayout Spacing="12">
+                        <!--  Categorías simuladas, sin ItemsSource  -->
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#00FFFFFF,#70FFFFFF,#00FFFFFF'}"
+                            sk:Skeleton.BackgroundColor="#E8E8E8"
+                            sk:Skeleton.IsBusy="True"
+                            HeightRequest="56"
+                            StrokeShape="RoundRectangle 28"
+                            StrokeThickness="0"
+                            WidthRequest="112" />
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#00FFFFFF,#70FFFFFF,#00FFFFFF'}"
+                            sk:Skeleton.BackgroundColor="#E8E8E8"
+                            sk:Skeleton.IsBusy="True"
+                            HeightRequest="56"
+                            StrokeShape="RoundRectangle 28"
+                            StrokeThickness="0"
+                            WidthRequest="105" />
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#00FFFFFF,#70FFFFFF,#00FFFFFF'}"
+                            sk:Skeleton.BackgroundColor="#E8E8E8"
+                            sk:Skeleton.IsBusy="True"
+                            HeightRequest="56"
+                            StrokeShape="RoundRectangle 28"
+                            StrokeThickness="0"
+                            WidthRequest="95" />
+                    </HorizontalStackLayout>
+                    <Grid Margin="0,8,0,0" ColumnDefinitions="*,75">
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#00FFFFFF,#70FFFFFF,#00FFFFFF'}"
+                            sk:Skeleton.BackgroundColor="#E8E8E8"
+                            sk:Skeleton.IsBusy="True"
+                            HeightRequest="22"
+                            HorizontalOptions="Start"
+                            StrokeShape="RoundRectangle 6"
+                            StrokeThickness="0"
+                            WidthRequest="185" />
+                        <Border
+                            Grid.Column="1"
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#00FFFFFF,#70FFFFFF,#00FFFFFF'}"
+                            sk:Skeleton.BackgroundColor="#E8E8E8"
+                            sk:Skeleton.IsBusy="True"
+                            HeightRequest="18"
+                            HorizontalOptions="End"
+                            StrokeShape="RoundRectangle 6"
+                            StrokeThickness="0"
+                            WidthRequest="65" />
+                    </Grid>
+                    <!--  Restaurante provisional  -->
+                    <VerticalStackLayout Spacing="10">
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#00FFFFFF,#70FFFFFF,#00FFFFFF'}"
+                            sk:Skeleton.BackgroundColor="#E8E8E8"
+                            sk:Skeleton.IsBusy="True"
+                            HeightRequest="160"
+                            StrokeShape="RoundRectangle 16"
+                            StrokeThickness="0" />
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#00FFFFFF,#70FFFFFF,#00FFFFFF'}"
+                            sk:Skeleton.BackgroundColor="#E8E8E8"
+                            sk:Skeleton.IsBusy="True"
+                            HeightRequest="22"
+                            HorizontalOptions="Start"
+                            StrokeShape="RoundRectangle 6"
+                            StrokeThickness="0"
+                            WidthRequest="210" />
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#00FFFFFF,#70FFFFFF,#00FFFFFF'}"
+                            sk:Skeleton.BackgroundColor="#E8E8E8"
+                            sk:Skeleton.IsBusy="True"
+                            HeightRequest="17"
+                            HorizontalOptions="Start"
+                            StrokeShape="RoundRectangle 6"
+                            StrokeThickness="0"
+                            WidthRequest="148" />
+                        <HorizontalStackLayout Spacing="16">
+                            <Border
+                                sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                            Direction=DiagonalReverse,
+                                                                            SweepColors='#00FFFFFF,#70FFFFFF,#00FFFFFF'}"
+                                sk:Skeleton.BackgroundColor="#E8E8E8"
+                                sk:Skeleton.IsBusy="True"
+                                HeightRequest="16"
+                                StrokeShape="RoundRectangle 5"
+                                StrokeThickness="0"
+                                WidthRequest="56" />
+                            <Border
+                                sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                            Direction=DiagonalReverse,
+                                                                            SweepColors='#00FFFFFF,#70FFFFFF,#00FFFFFF'}"
+                                sk:Skeleton.BackgroundColor="#E8E8E8"
+                                sk:Skeleton.IsBusy="True"
+                                HeightRequest="16"
+                                StrokeShape="RoundRectangle 5"
+                                StrokeThickness="0"
+                                WidthRequest="72" />
+                            <Border
+                                sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                            Direction=DiagonalReverse,
+                                                                            SweepColors='#00FFFFFF,#70FFFFFF,#00FFFFFF'}"
+                                sk:Skeleton.BackgroundColor="#E8E8E8"
+                                sk:Skeleton.IsBusy="True"
+                                HeightRequest="16"
+                                StrokeShape="RoundRectangle 5"
+                                StrokeThickness="0"
+                                WidthRequest="65" />
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                    <!--  Restaurante provisional  -->
+                    <VerticalStackLayout Spacing="10">
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#00FFFFFF,#70FFFFFF,#00FFFFFF'}"
+                            sk:Skeleton.BackgroundColor="#E8E8E8"
+                            sk:Skeleton.IsBusy="True"
+                            HeightRequest="160"
+                            StrokeShape="RoundRectangle 16"
+                            StrokeThickness="0" />
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#00FFFFFF,#70FFFFFF,#00FFFFFF'}"
+                            sk:Skeleton.BackgroundColor="#E8E8E8"
+                            sk:Skeleton.IsBusy="True"
+                            HeightRequest="22"
+                            HorizontalOptions="Start"
+                            StrokeShape="RoundRectangle 6"
+                            StrokeThickness="0"
+                            WidthRequest="210" />
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#00FFFFFF,#70FFFFFF,#00FFFFFF'}"
+                            sk:Skeleton.BackgroundColor="#E8E8E8"
+                            sk:Skeleton.IsBusy="True"
+                            HeightRequest="17"
+                            HorizontalOptions="Start"
+                            StrokeShape="RoundRectangle 6"
+                            StrokeThickness="0"
+                            WidthRequest="148" />
+                        <HorizontalStackLayout Spacing="16">
+                            <Border
+                                sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                            Direction=DiagonalReverse,
+                                                                            SweepColors='#00FFFFFF,#70FFFFFF,#00FFFFFF'}"
+                                sk:Skeleton.BackgroundColor="#E8E8E8"
+                                sk:Skeleton.IsBusy="True"
+                                HeightRequest="16"
+                                StrokeShape="RoundRectangle 5"
+                                StrokeThickness="0"
+                                WidthRequest="56" />
+                            <Border
+                                sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                            Direction=DiagonalReverse,
+                                                                            SweepColors='#00FFFFFF,#70FFFFFF,#00FFFFFF'}"
+                                sk:Skeleton.BackgroundColor="#E8E8E8"
+                                sk:Skeleton.IsBusy="True"
+                                HeightRequest="16"
+                                StrokeShape="RoundRectangle 5"
+                                StrokeThickness="0"
+                                WidthRequest="72" />
+                            <Border
+                                sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                            Direction=DiagonalReverse,
+                                                                            SweepColors='#00FFFFFF,#70FFFFFF,#00FFFFFF'}"
+                                sk:Skeleton.BackgroundColor="#E8E8E8"
+                                sk:Skeleton.IsBusy="True"
+                                HeightRequest="16"
+                                StrokeShape="RoundRectangle 5"
+                                StrokeThickness="0"
+                                WidthRequest="65" />
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </ScrollView>
+        </Grid>
+    </Grid>
+</ContentPage>

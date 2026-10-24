@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="FoodApp.Presentacion.Views.Autentificacion.SignUpPage"
+    x:DataType="vm:SignUpViewModel"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:FoodApp.Presentacion.ViewModels.Autentificacion"
+    xmlns:droid="clr-namespace:CommunityToolkit.Maui.PlatformConfiguration.AndroidSpecific;assembly=CommunityToolkit.Maui"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    droid:NavigationBar.Color="White"
+    droid:NavigationBar.Style="DarkContent"
+    BackgroundColor="#121223"
+    Shell.NavBarIsVisible="False">
+
+    <ContentPage.Behaviors>
+        <toolkit:StatusBarBehavior StatusBarColor="#121223" StatusBarStyle="LightContent" />
+    </ContentPage.Behaviors>
+
+    <Grid RowDefinitions="Auto, *">
+
+        <!--  Cabecera Oscura con Botón Atrás y Textos  -->
+        <VerticalStackLayout
+            Grid.Row="0"
+            Padding="24,30,24,30"
+            Spacing="16">
+
+            <!--  Botón Atrás (Circular)  -->
+            <ImageButton
+                Aspect="Fill"
+                Command="{Binding BackCommand}"
+                CornerRadius="20"
+                HeightRequest="45"
+                HorizontalOptions="Start"
+                Source="ic_regresar.svg"
+                VerticalOptions="Center"
+                WidthRequest="45" />
+
+            <!--  Textos Informativos  -->
+            <VerticalStackLayout Spacing="8">
+                <Label
+                    FontFamily="SenBold"
+                    FontSize="30"
+                    HorizontalTextAlignment="Center"
+                    Text="Sign Up"
+                    TextColor="White" />
+
+                <Label
+                    FontFamily="SenRegular"
+                    FontSize="16"
+                    HorizontalTextAlignment="Center"
+                    Text="Please sign up to get started"
+                    TextColor="White" />
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+
+        <!--  Contenedor Blanco Curvado  -->
+        <Border
+            Grid.Row="1"
+            BackgroundColor="White"
+            StrokeThickness="0">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="30,30,0,0" />
+            </Border.StrokeShape>
+
+            <ScrollView>
+                <VerticalStackLayout Padding="24,30" Spacing="20">
+
+                    <!--  CAMPO NAME  -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label
+                            FontFamily="SenBold"
+                            FontSize="12"
+                            Text="NAME"
+                            TextColor="#32343E" />
+
+                        <Border
+                            Padding="16,0"
+                            BackgroundColor="#F0F5FA"
+                            HeightRequest="58"
+                            Stroke="#F0F5FA"
+                            StrokeThickness="1.5">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10" />
+                            </Border.StrokeShape>
+
+                            <Border.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding x:DataType='Entry', Source={x:Reference NameEntry}, Path=IsFocused}"
+                                    TargetType="Border"
+                                    Value="True">
+                                    <Setter Property="Stroke" Value="#FF7622" />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding x:DataType='Entry', Source={x:Reference NameEntry}, Path=IsFocused}"
+                                    TargetType="Border"
+                                    Value="False">
+                                    <Setter Property="Stroke" Value="Transparent" />
+                                </DataTrigger>
+                            </Border.Triggers>
+
+                            <Entry
+                                x:Name="NameEntry"
+                                FontFamily="SenRegular"
+                                FontSize="14"
+                                Placeholder="John doe"
+                                PlaceholderColor="#A0A5BA"
+                                Text="{Binding Name}"
+                                TextColor="#32343E"
+                                VerticalOptions="Center" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!--  CAMPO EMAIL  -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label
+                            FontFamily="SenBold"
+                            FontSize="12"
+                            Text="EMAIL"
+                            TextColor="#32343E" />
+
+                        <Border
+                            Padding="16,0"
+                            BackgroundColor="#F0F5FA"
+                            HeightRequest="58"
+                            Stroke="#F0F5FA"
+                            StrokeThickness="1.5">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10" />
+                            </Border.StrokeShape>
+
+                            <Border.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding x:DataType='Entry', Source={x:Reference EmailEntry}, Path=IsFocused}"
+                                    TargetType="Border"
+                                    Value="True">
+                                    <Setter Property="Stroke" Value="#FF7622" />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding x:DataType='Entry', Source={x:Reference EmailEntry}, Path=IsFocused}"
+                                    TargetType="Border"
+                                    Value="False">
+                                    <Setter Property="Stroke" Value="Transparent" />
+                                </DataTrigger>
+                            </Border.Triggers>
+
+                            <Entry
+                                x:Name="EmailEntry"
+                                FontFamily="SenRegular"
+                                FontSize="14"
+                                Keyboard="Email"
+                                Placeholder="example@gmail.com"
+                                PlaceholderColor="#A0A5BA"
+                                Text="{Binding Email}"
+                                TextColor="#32343E"
+                                VerticalOptions="Center" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!--  CAMPO PASSWORD  -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label
+                            FontFamily="SenBold"
+                            FontSize="12"
+                            Text="PASSWORD"
+                            TextColor="#32343E" />
+
+                        <Border
+                            Padding="16,0"
+                            BackgroundColor="#F0F5FA"
+                            HeightRequest="58"
+                            Stroke="#F0F5FA"
+                            StrokeThickness="1.5">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10" />
+                            </Border.StrokeShape>
+
+                            <Border.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding x:DataType='Entry', Source={x:Reference PasswordEntry}, Path=IsFocused}"
+                                    TargetType="Border"
+                                    Value="True">
+                                    <Setter Property="Stroke" Value="#FF7622" />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding x:DataType='Entry', Source={x:Reference PasswordEntry}, Path=IsFocused}"
+                                    TargetType="Border"
+                                    Value="False">
+                                    <Setter Property="Stroke" Value="Transparent" />
+                                </DataTrigger>
+                            </Border.Triggers>
+
+                            <Grid ColumnDefinitions="*, Auto">
+                                <Entry
+                                    x:Name="PasswordEntry"
+                                    Grid.Column="0"
+                                    FontFamily="SenRegular"
+                                    FontSize="14"
+                                    IsPassword="{Binding IsPasswordHidden}"
+                                    Placeholder="••••••••••••"
+                                    PlaceholderColor="#A0A5BA"
+                                    Text="{Binding Password}"
+                                    TextColor="#32343E"
+                                    VerticalOptions="Center" />
+
+                                <ImageButton
+                                    Grid.Column="1"
+                                    Aspect="Center"
+                                    Command="{Binding TogglePasswordVisibilityCommand}"
+                                    HeightRequest="22"
+                                    HorizontalOptions="End"
+                                    Source="{Binding EyeIcon}"
+                                    VerticalOptions="Center"
+                                    WidthRequest="22" />
+                            </Grid>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!--  CAMPO RE-TYPE PASSWORD  -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label
+                            FontFamily="SenBold"
+                            FontSize="12"
+                            Text="RE-TYPE PASSWORD"
+                            TextColor="#32343E" />
+
+                        <Border
+                            Padding="16,0"
+                            BackgroundColor="#F0F5FA"
+                            HeightRequest="58"
+                            Stroke="#F0F5FA"
+                            StrokeThickness="1.5">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10" />
+                            </Border.StrokeShape>
+
+                            <Border.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding x:DataType='Entry', Source={x:Reference ConfirmPasswordEntry}, Path=IsFocused}"
+                                    TargetType="Border"
+                                    Value="True">
+                                    <Setter Property="Stroke" Value="#FF7622" />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding x:DataType='Entry', Source={x:Reference ConfirmPasswordEntry}, Path=IsFocused}"
+                                    TargetType="Border"
+                                    Value="False">
+                                    <Setter Property="Stroke" Value="Transparent" />
+                                </DataTrigger>
+                            </Border.Triggers>
+
+                            <Grid ColumnDefinitions="*, Auto">
+                                <Entry
+                                    x:Name="ConfirmPasswordEntry"
+                                    Grid.Column="0"
+                                    FontFamily="SenRegular"
+                                    FontSize="14"
+                                    IsPassword="{Binding IsConfirmPasswordHidden}"
+                                    Placeholder="••••••••••••"
+                                    PlaceholderColor="#A0A5BA"
+                                    Text="{Binding ConfirmPassword}"
+                                    TextColor="#32343E"
+                                    VerticalOptions="Center" />
+
+                                <ImageButton
+                                    Grid.Column="1"
+                                    Aspect="Center"
+                                    Command="{Binding ToggleConfirmPasswordVisibilityCommand}"
+                                    HeightRequest="22"
+                                    HorizontalOptions="End"
+                                    Source="{Binding ConfirmEyeIcon}"
+                                    VerticalOptions="Center"
+                                    WidthRequest="22" />
+                            </Grid>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!--  MENSAJE DE ERROR DINÁMICO EN ROJO  -->
+                    <Label
+                        FontFamily="SenRegular"
+                        FontSize="13"
+                        HorizontalTextAlignment="Center"
+                        IsVisible="{Binding HasError}"
+                        Text="{Binding ErrorMessage}"
+                        TextColor="#FF3B30" />
+
+                    <!--  BOTÓN SIGN UP  -->
+                    <Button
+                        Margin="0,10,0,0"
+                        BackgroundColor="#FF7622"
+                        Command="{Binding SignUpCommand}"
+                        CornerRadius="12"
+                        FontFamily="SenBold"
+                        FontSize="14"
+                        HeightRequest="62"
+                        HorizontalOptions="Fill"
+                        Text="SIGN UP"
+                        TextColor="White" />
+
+                </VerticalStackLayout>
+            </ScrollView>
+        </Border>
+
+    </Grid>
+</ContentPage>

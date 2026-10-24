@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="FoodApp.Presentacion.Views.Usuarios.CartPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:droid="clr-namespace:CommunityToolkit.Maui.PlatformConfiguration.AndroidSpecific;assembly=CommunityToolkit.Maui"
+    xmlns:models="clr-namespace:FoodApp.Domain.Entities"
+    xmlns:sk="clr-namespace:Maui.Skeleton;assembly=Maui.Skeleton"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:views="clr-namespace:FoodApp.Presentacion.Views.Usuarios"
+    xmlns:vm="clr-namespace:FoodApp.Presentacion.ViewModels.Usuarios"
+    x:Name="CartPageRoot"
+    droid:NavigationBar.Color="White"
+    droid:NavigationBar.Style="DarkContent"
+    x:DataType="vm:CartViewModel"
+    BackgroundColor="#121223"
+    Shell.NavBarIsVisible="False">
+
+    <ContentPage.Behaviors>
+        <toolkit:StatusBarBehavior StatusBarColor="#121223" StatusBarStyle="LightContent" />
+    </ContentPage.Behaviors>
+
+    <Grid RowDefinitions="Auto, *, Auto">
+
+        <!--  1. CABECERA OSCURA CON TÍTULO Y BOTÓN ATRÁS / DONE  -->
+        <Grid
+            Grid.Row="0"
+            Margin="24,16,24,10"
+            ColumnDefinitions="Auto, *">
+
+            <HorizontalStackLayout Grid.Column="0" Spacing="18">
+                <!--  Botón Atrás  -->
+                <ImageButton
+                    BackgroundColor="#212134"
+                    Command="{Binding GoBackCommand}"
+                    CornerRadius="20"
+                    HeightRequest="45"
+                    Source="ic_back_white.svg"
+                    WidthRequest="45" />
+
+                <!--  Título Cart  -->
+                <Label
+                    Grid.Column="1"
+                    FontFamily="SenRegular"
+                    FontSize="17"
+                    HorizontalOptions="Center"
+                    Text="Cart"
+                    TextColor="White"
+                    VerticalOptions="Center" />
+            </HorizontalStackLayout>
+
+            <!--  Botón DONE  -->
+            <Button
+                Grid.Column="2"
+                BackgroundColor="Transparent"
+                Command="{Binding GoBackCommand}"
+                FontFamily="SenBold"
+                FontSize="14"
+                HorizontalOptions="End"
+                Text="DONE"
+                TextColor="#059C6A"
+                VerticalOptions="Center" />
+        </Grid>
+
+        <!--  2. LISTA DE ITEMS EN EL CARRITO  -->
+        <CollectionView
+            Grid.Row="1"
+            Margin="24,0"
+            ItemsSource="{Binding CartItems}"
+            SelectionMode="None">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout ItemSpacing="16" Orientation="Vertical" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:CartItem">
+                    <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="16">
+
+                        <!--  Imagen Redondeada del Plato  -->
+                        <Border
+                            Grid.Column="0"
+                            BackgroundColor="#212134"
+                            HeightRequest="88"
+                            StrokeThickness="0"
+                            WidthRequest="88">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="20" />
+                            </Border.StrokeShape>
+                            <Image Aspect="AspectFill" Source="{Binding ImageUrl}" />
+                        </Border>
+
+                        <!--  Información del Plato, Tamaño y Controles  -->
+                        <VerticalStackLayout
+                            Grid.Column="1"
+                            Spacing="4"
+                            VerticalOptions="Center">
+                            <Label
+                                FontFamily="SenRegular"
+                                FontSize="18"
+                                LineBreakMode="TailTruncation"
+                                Text="{Binding Name}"
+                                TextColor="White" />
+
+                            <Label
+                                FontFamily="SenBold"
+                                FontSize="20"
+                                Text="{Binding TotalItemPriceFormatted}"
+                                TextColor="White" />
+
+                            <Label
+                                FontFamily="SenRegular"
+                                FontSize="18"
+                                Text="{Binding SizeName}"
+                                TextColor="#A0A5BA" />
+                        </VerticalStackLayout>
+
+                        <!--  Botón Eliminar (X) y Control de Cantidad  -->
+                        <VerticalStackLayout
+                            Grid.Column="2"
+                            Spacing="12"
+                            VerticalOptions="Center">
+                            <!--  Botón Cerrar / Eliminar (Rojo)  -->
+                            <ImageButton
+                                Padding="0"
+                                BackgroundColor="#FF4B4B"
+                                Command="{Binding ViewModel.RemoveItemCommand, Source={x:Reference CartPageRoot}, x:DataType='views:CartPage'}"
+                                CommandParameter="{Binding}"
+                                CornerRadius="22"
+                                HeightRequest="27"
+                                HorizontalOptions="End"
+                                Source="ic_close_white.svg"
+                                WidthRequest="27" />
+
+                            <!--  Control de Cantidad (+ / -)  -->
+                            <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                                <Button
+                                    Padding="0"
+                                    BackgroundColor="#212134"
+                                    Command="{Binding ViewModel.DecreaseQuantityCommand, Source={x:Reference CartPageRoot}, x:DataType='views:CartPage'}"
+                                    CommandParameter="{Binding}"
+                                    CornerRadius="14"
+                                    FontSize="16"
+                                    HeightRequest="16"
+                                    Text="-"
+                                    TextColor="White"
+                                    WidthRequest="16" />
+
+                                <Label
+                                    FontFamily="SenBold"
+                                    FontSize="16"
+                                    Text="{Binding Quantity}"
+                                    TextColor="White"
+                                    VerticalOptions="Center" />
+
+                                <Button
+                                    Padding="0"
+                                    BackgroundColor="#212134"
+                                    Command="{Binding ViewModel.IncreaseQuantityCommand, Source={x:Reference CartPageRoot}, x:DataType='views:CartPage'}"
+                                    CommandParameter="{Binding}"
+                                    CornerRadius="14"
+                                    FontSize="16"
+                                    HeightRequest="22"
+                                    Text="+"
+                                    TextColor="White"
+                                    WidthRequest="22" />
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!--  3. PANEL INFERIOR BLANCO (DIRECCIÓN, TOTAL Y PLACE ORDER)  -->
+        <Border
+            Grid.Row="2"
+            Padding="24,24,24,32"
+            BackgroundColor="White"
+            StrokeThickness="0">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="24,24,0,0" />
+            </Border.StrokeShape>
+
+            <VerticalStackLayout Spacing="30">
+
+                <VerticalStackLayout Spacing="10">
+
+                    <Grid ColumnDefinitions="*, *">
+                        <Label
+                            Grid.Column="0"
+                            FontFamily="SenRegular"
+                            FontSize="14"
+                            Text="DELIVERY ADDRESS"
+                            TextColor="#A0A5BA"
+                            VerticalOptions="Center" />
+                        <Button
+                            Grid.Column="1"
+                            BackgroundColor="Transparent"
+                            Command="{Binding GetCurrentLocationCommand}"
+                            FontFamily="SenRegular"
+                            FontSize="14"
+                            HorizontalOptions="End"
+                            Text="EDIT"
+                            TextColor="#FF7622"
+                            VerticalOptions="Center" />
+                    </Grid>
+                    <!--  Sección Dirección de Envío  -->
+                    <Border
+                        Padding="16"
+                        BackgroundColor="#F6F6F6"
+                        HeightRequest="62"
+                        StrokeThickness="0">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="16" />
+                        </Border.StrokeShape>
+
+                        <Label
+                            Grid.Column="0"
+                            FontFamily="SenRegular"
+                            FontSize="16"
+                            LineBreakMode="TailTruncation"
+                            Text="{Binding DeliveryAddress}"
+                            TextColor="#32343E"
+                            VerticalOptions="Center" />
+                    </Border>
+                </VerticalStackLayout>
+
+                <!--  Totales y Breakdown  -->
+                <Grid ColumnDefinitions="*, Auto">
+                    <HorizontalStackLayout
+                        Grid.Column="0"
+                        Spacing="6"
+                        VerticalOptions="Center">
+                        <Label
+                            FontFamily="SenRegular"
+                            FontSize="14"
+                            Text="TOTAL:"
+                            TextColor="#A0A5BA"
+                            VerticalOptions="Center" />
+                        <Label
+                            FontFamily="SenRegular"
+                            FontSize="30"
+                            HorizontalOptions="Center"
+                            Text="{Binding Total, StringFormat='${0:F0}'}"
+                            TextColor="#181C2E"
+                            VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+
+                    <Label
+                        Grid.Column="1"
+                        FontFamily="SenRegular"
+                        FontSize="14"
+                        Text="Breakdown &gt;"
+                        TextColor="#FF7622"
+                        VerticalOptions="Center" />
+                </Grid>
+
+                <!--  Botón Place Order  -->
+                <Button
+                    BackgroundColor="#FF7622"
+                    Command="{Binding PlaceOrderCommand}"
+                    CornerRadius="12"
+                    FontFamily="SenBold"
+                    FontSize="14"
+                    HeightRequest="56"
+                    Text="PLACE ORDER"
+                    TextColor="White" />
+
+            </VerticalStackLayout>
+        </Border>
+
+    </Grid>
+</ContentPage>

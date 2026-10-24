@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="FoodApp.Presentacion.Views.Usuarios.PaymentSuccessPage"
+    x:DataType="vm:PaymentSuccessViewModel"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:FoodApp.Presentacion.ViewModels.Usuarios"
+    xmlns:skia="clr-namespace:SkiaSharp.Extended.UI.Controls;assembly=SkiaSharp.Extended.UI"
+    BackgroundColor="White"
+    Shell.NavBarIsVisible="False">
+
+    <Grid Padding="24" RowDefinitions="*, Auto">
+
+        <!--  CONTENIDO CENTRAL: LOTTIE Y MENSAJES  -->
+        <VerticalStackLayout
+            Grid.Row="0"
+            HorizontalOptions="Center"
+            Spacing="20"
+            VerticalOptions="Center">
+
+            <skia:SKLottieView
+                HeightRequest="220"
+                HorizontalOptions="Center"
+                RepeatCount="-1"
+                Source="payment_success.json"
+                WidthRequest="220" />
+
+            <Label
+                FontFamily="SenBold"
+                FontSize="24"
+                HorizontalTextAlignment="Center"
+                Text="Congratulations!"
+                TextColor="#181C2E" />
+
+            <Label
+                FontFamily="SenRegular"
+                FontSize="14"
+                HorizontalTextAlignment="Center"
+                LineHeight="1.3"
+                Text="You successfully maked a payment, enjoy our service!"
+                TextColor="#A0A5BA" />
+        </VerticalStackLayout>
+
+        <!--  BOTÓN INFERIOR TRACK ORDER  -->
+        <Button
+            Grid.Row="1"
+            Margin="0,0,0,24"
+            BackgroundColor="#FF7622"
+            Command="{Binding TrackOrderCommand}"
+            CornerRadius="12"
+            FontFamily="SenBold"
+            FontSize="14"
+            HeightRequest="62"
+            Text="TRACK ORDER"
+            TextColor="White" />
+
+    </Grid>
+</ContentPage>

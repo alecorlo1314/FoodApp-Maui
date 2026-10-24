@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="FoodApp.Presentacion.Views.Autentificacion.VerificationPage"
+    x:DataType="vm:VerificationViewModel"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:FoodApp.Presentacion.ViewModels.Autentificacion"
+    xmlns:droid="clr-namespace:CommunityToolkit.Maui.PlatformConfiguration.AndroidSpecific;assembly=CommunityToolkit.Maui"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    droid:NavigationBar.Color="Transparent"
+    droid:NavigationBar.Style="Default"
+    BackgroundColor="#121223"
+    Shell.NavBarIsVisible="False">
+
+    <ContentPage.Behaviors>
+        <toolkit:StatusBarBehavior StatusBarColor="#121223" StatusBarStyle="LightContent" />
+    </ContentPage.Behaviors>
+
+    <Grid RowDefinitions="Auto, *">
+
+        <!--  Cabecera Oscura con Botón Atrás y Título  -->
+        <VerticalStackLayout
+            Grid.Row="0"
+            Padding="24,30,24,30"
+            Spacing="16">
+
+            <!--  Botón Atrás (Circular)  -->
+            <ImageButton
+                Aspect="Fill"
+                Command="{Binding BackCommand}"
+                CornerRadius="20"
+                HeightRequest="45"
+                HorizontalOptions="Start"
+                Source="ic_regresar.svg"
+                VerticalOptions="Center"
+                WidthRequest="45" />
+
+            <!--  Textos Informativos  -->
+            <VerticalStackLayout Spacing="12">
+                <VerticalStackLayout Spacing="4">
+
+                    <Label
+                        FontFamily="SenBold"
+                        FontSize="30"
+                        HorizontalTextAlignment="Center"
+                        Text="Verification"
+                        TextColor="White" />
+
+                    <Label
+                        FontFamily="SenRegular"
+                        FontSize="16"
+                        HorizontalTextAlignment="Center"
+                        Text="We have sent a code to your email"
+                        TextColor="White" />
+
+                </VerticalStackLayout>
+
+                <Label
+                    FontFamily="SenBold"
+                    FontSize="16"
+                    HorizontalTextAlignment="Center"
+                    Text="{Binding Email}"
+                    TextColor="White" />
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+
+        <!--  Contenedor Blanco Curvado  -->
+        <Border
+            Grid.Row="1"
+            BackgroundColor="White"
+            StrokeThickness="0">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="30,30,0,0" />
+            </Border.StrokeShape>
+
+            <ScrollView>
+                <VerticalStackLayout Padding="24,30" Spacing="30">
+
+                    <!--  ENCABEZADO DE CÓDIGO Y REENVÍO  -->
+                    <Grid ColumnDefinitions="Auto, *">
+                        <Label
+                            Grid.Column="0"
+                            FontFamily="SenBold"
+                            FontSize="14"
+                            Text="CODE"
+                            TextColor="#32343E"
+                            VerticalOptions="Center" />
+
+                        <HorizontalStackLayout
+                            Grid.Column="1"
+                            HorizontalOptions="End"
+                            Spacing="4">
+                            <Label
+                                FontFamily="SenBold"
+                                FontSize="14"
+                                Text="Resend"
+                                TextColor="#32343E"
+                                TextDecorations="Underline"
+                                VerticalOptions="Center">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding ResendCodeCommand}" />
+                                </Label.GestureRecognizers>
+                            </Label>
+
+                            <Label
+                                FontFamily="SenRegular"
+                                FontSize="14"
+                                Text="{Binding TimerText}"
+                                TextColor="#32343E"
+                                VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                    </Grid>
+
+                    <!--  CAMPOS DE CÓDIGO (4 DIGITOS)  -->
+                    <Grid ColumnDefinitions="*, *, *, *" ColumnSpacing="16">
+
+                        <!--  Dígito 1  -->
+                        <Border
+                            Grid.Column="0"
+                            BackgroundColor="#F0F5FA"
+                            HeightRequest="62"
+                            Stroke="#F0F5FA"
+                            StrokeThickness="1.5">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="12" />
+                            </Border.StrokeShape>
+
+                            <Border.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding x:DataType='Entry', Source={x:Reference Code1Entry}, Path=IsFocused}"
+                                    TargetType="Border"
+                                    Value="True">
+                                    <Setter Property="Stroke" Value="#FF7622" />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding x:DataType='Entry', Source={x:Reference Code1Entry}, Path=IsFocused}"
+                                    TargetType="Border"
+                                    Value="False">
+                                    <Setter Property="Stroke" Value="Transparent" />
+                                </DataTrigger>
+                            </Border.Triggers>
+
+                            <Entry
+                                x:Name="Code1Entry"
+                                FontFamily="SenBold"
+                                FontSize="16"
+                                HorizontalTextAlignment="Center"
+                                Keyboard="Numeric"
+                                MaxLength="1"
+                                Text="{Binding Code1}"
+                                TextColor="#32343E"
+                                VerticalOptions="Center" />
+                        </Border>
+
+                        <!--  Dígito 2  -->
+                        <Border
+                            Grid.Column="1"
+                            BackgroundColor="#F0F5FA"
+                            HeightRequest="62"
+                            Stroke="#F0F5FA"
+                            StrokeThickness="1.5">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="12" />
+                            </Border.StrokeShape>
+
+                            <Border.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding x:DataType='Entry', Source={x:Reference Code2Entry}, Path=IsFocused}"
+                                    TargetType="Border"
+                                    Value="True">
+                                    <Setter Property="Stroke" Value="#FF7622" />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding x:DataType='Entry', Source={x:Reference Code2Entry}, Path=IsFocused}"
+                                    TargetType="Border"
+                                    Value="False">
+                                    <Setter Property="Stroke" Value="Transparent" />
+                                </DataTrigger>
+                            </Border.Triggers>
+
+                            <Entry
+                                x:Name="Code2Entry"
+                                FontFamily="SenBold"
+                                FontSize="16"
+                                HorizontalTextAlignment="Center"
+                                Keyboard="Numeric"
+                                MaxLength="1"
+                                Text="{Binding Code2}"
+                                TextColor="#32343E"
+                                VerticalOptions="Center" />
+                        </Border>
+
+                        <!--  Dígito 3  -->
+                        <Border
+                            Grid.Column="2"
+                            BackgroundColor="#F0F5FA"
+                            HeightRequest="62"
+                            Stroke="#F0F5FA"
+                            StrokeThickness="1.5">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="12" />
+                            </Border.StrokeShape>
+
+                            <Border.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding x:DataType='Entry', Source={x:Reference Code3Entry}, Path=IsFocused}"
+                                    TargetType="Border"
+                                    Value="True">
+                                    <Setter Property="Stroke" Value="#FF7622" />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding x:DataType='Entry', Source={x:Reference Code3Entry}, Path=IsFocused}"
+                                    TargetType="Border"
+                                    Value="False">
+                                    <Setter Property="Stroke" Value="Transparent" />
+                                </DataTrigger>
+                            </Border.Triggers>
+
+                            <Entry
+                                x:Name="Code3Entry"
+                                FontFamily="SenBold"
+                                FontSize="16"
+                                HorizontalTextAlignment="Center"
+                                Keyboard="Numeric"
+                                MaxLength="1"
+                                Text="{Binding Code3}"
+                                TextColor="#32343E"
+                                VerticalOptions="Center" />
+                        </Border>
+
+                        <!--  Dígito 4  -->
+                        <Border
+                            Grid.Column="3"
+                            BackgroundColor="#F0F5FA"
+                            HeightRequest="62"
+                            Stroke="#F0F5FA"
+                            StrokeThickness="1.5">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="12" />
+                            </Border.StrokeShape>
+
+                            <Border.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding x:DataType='Entry', Source={x:Reference Code4Entry}, Path=IsFocused}"
+                                    TargetType="Border"
+                                    Value="True">
+                                    <Setter Property="Stroke" Value="#FF7622" />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding x:DataType='Entry', Source={x:Reference Code4Entry}, Path=IsFocused}"
+                                    TargetType="Border"
+                                    Value="False">
+                                    <Setter Property="Stroke" Value="Transparent" />
+                                </DataTrigger>
+                            </Border.Triggers>
+
+                            <Entry
+                                x:Name="Code4Entry"
+                                FontFamily="SenBold"
+                                FontSize="20"
+                                HorizontalTextAlignment="Center"
+                                Keyboard="Numeric"
+                                MaxLength="1"
+                                Text="{Binding Code4}"
+                                TextColor="#32343E"
+                                VerticalOptions="Center" />
+                        </Border>
+
+                    </Grid>
+
+                    <!--  BOTÓN VERIFY  -->
+                    <Button
+                        BackgroundColor="#FF7622"
+                        Command="{Binding VerifyCommand}"
+                        CornerRadius="12"
+                        FontFamily="SenBold"
+                        FontSize="14"
+                        HeightRequest="62"
+                        HorizontalOptions="Fill"
+                        Text="VERIFY"
+                        TextColor="White" />
+
+                </VerticalStackLayout>
+            </ScrollView>
+        </Border>
+
+    </Grid>
+</ContentPage>

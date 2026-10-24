@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="FoodApp.Presentacion.Views.Usuarios.FoodDetailPage"
+    x:DataType="vm:FoodDetailViewModel"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:FoodApp.Presentacion.ViewModels.Usuarios"
+    xmlns:models="clr-namespace:FoodApp.Domain.Entities"
+    xmlns:droid="clr-namespace:CommunityToolkit.Maui.PlatformConfiguration.AndroidSpecific;assembly=CommunityToolkit.Maui"
+    xmlns:sk="clr-namespace:Maui.Skeleton;assembly=Maui.Skeleton"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    droid:NavigationBar.Color="#F0F5FA"
+    BackgroundColor="White"
+    Shell.NavBarIsVisible="False">
+
+    <ContentPage.Behaviors>
+        <toolkit:StatusBarBehavior StatusBarColor="Transparent" StatusBarStyle="DarkContent" />
+    </ContentPage.Behaviors>
+
+    <Grid RowDefinitions="*, Auto">
+
+        <!--  CONTENIDO PRINCIPAL SCROLLABLE  -->
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout Padding="0,0,0,40" Spacing="20">
+
+                <!--  1. IMAGEN GRANDE CON BOTONES FLOTANTES  -->
+                <Border
+                    Margin="0"
+                    BackgroundColor="#C4C9D4"
+                    HeightRequest="320"
+                    StrokeThickness="0">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="0,0,32,32" />
+                    </Border.StrokeShape>
+
+                    <Grid>
+                        <Image Aspect="AspectFill" Source="{Binding FoodItem.ImageUrl}" />
+
+                        <!--  Botones Superiores (Atrás y Favorito)  -->
+                        <Grid
+                            Margin="24,16,24,0"
+                            ColumnDefinitions="Auto, *, Auto"
+                            VerticalOptions="Start">
+                            <ImageButton
+                                Grid.Column="0"
+                                Aspect="Center"
+                                Command="{Binding GoBackCommand}"
+                                CornerRadius="20"
+                                HeightRequest="45"
+                                Source="ic_regresar.svg"
+                                WidthRequest="45" />
+                            <Button
+                                Grid.Column="2"
+                                BackgroundColor="White"
+                                CornerRadius="20"
+                                HeightRequest="40"
+                                ImageSource="ic_favorite.png"
+                                WidthRequest="40" />
+                        </Grid>
+                    </Grid>
+                </Border>
+
+                <!--  2. INFORMACIÓN DEL PRODUCTO Y RESTAURANTE  -->
+                <VerticalStackLayout Padding="24,0" Spacing="8">
+                    <Label
+                        FontFamily="SenBold"
+                        FontSize="20"
+                        Text="{Binding FoodItem.Name}"
+                        TextColor="#181C2E" />
+
+                    <!--  Nombre del Restaurante  -->
+                    <HorizontalStackLayout Spacing="12">
+                        <Image
+                            HeightRequest="16"
+                            Source="ic_restaurant_badge.svg"
+                            WidthRequest="16" />
+                        <Label
+                            FontFamily="SenRegular"
+                            FontSize="14"
+                            Text="Rose Garden"
+                            TextColor="#FF7622" />
+                    </HorizontalStackLayout>
+
+                    <!--  Métricas  -->
+                    <HorizontalStackLayout Margin="0,4,0,0" Spacing="24">
+                        <HorizontalStackLayout Spacing="6">
+                            <Image
+                                HeightRequest="16"
+                                Source="ic_star.png"
+                                WidthRequest="16" />
+                            <Label
+                                FontFamily="SenBold"
+                                FontSize="16"
+                                Text="4.7"
+                                TextColor="#181C2E" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="6">
+                            <Image
+                                HeightRequest="16"
+                                Source="ic_delivery.png"
+                                WidthRequest="16" />
+                            <Label
+                                FontFamily="SenRegular"
+                                FontSize="14"
+                                Text="Free"
+                                TextColor="#181C2E" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="6">
+                            <Image
+                                HeightRequest="16"
+                                Source="ic_clock.png"
+                                WidthRequest="16" />
+                            <Label
+                                FontFamily="SenRegular"
+                                FontSize="14"
+                                Text="20 min"
+                                TextColor="#181C2E" />
+                        </HorizontalStackLayout>
+                    </HorizontalStackLayout>
+
+                    <Label
+                        Margin="0,8,0,0"
+                        FontFamily="SenRegular"
+                        FontSize="14"
+                        LineHeight="1.3"
+                        Text="{Binding FoodItem.Description}"
+                        TextColor="#A0A5BA" />
+                </VerticalStackLayout>
+
+                <!--  3. SECCIÓN DE TAMAÑOS (SIZE)  -->
+                <HorizontalStackLayout Margin="24,0" Spacing="16">
+                    <Label
+                        FontFamily="SenRegular"
+                        FontSize="14"
+                        Text="SIZE:"
+                        TextColor="#A0A5BA"
+                        VerticalOptions="Center" />
+
+                    <CollectionView
+                        HeightRequest="48"
+                        ItemsSource="{Binding Sizes}"
+                        SelectedItem="{Binding SelectedSize}"
+                        SelectionMode="Single">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout ItemSpacing="12" Orientation="Horizontal" />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:FoodSize">
+                                <Border
+                                    HeightRequest="48"
+                                    Stroke="#F0F5FA"
+                                    StrokeThickness="0"
+                                    WidthRequest="48">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="25" />
+                                    </Border.StrokeShape>
+                                    <Label
+                                        FontFamily="SenBold"
+                                        FontSize="14"
+                                        HorizontalOptions="Center"
+                                        Text="{Binding Name}"
+                                        TextColor="#181C2E"
+                                        VerticalOptions="Center">
+                                        <Label.Triggers>
+                                            <DataTrigger
+                                                Binding="{Binding x:DataType='Border', Source={RelativeSource AncestorType={x:Type Border}}, Path=BackgroundColor}"
+                                                TargetType="Label"
+                                                Value="#FF7622">
+                                                <Setter Property="TextColor" Value="White" />
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+                                    <VisualStateManager.VisualStateGroups>
+                                        <VisualStateGroup x:Name="CommonStates">
+                                            <VisualState x:Name="Normal">
+                                                <VisualState.Setters>
+                                                    <Setter Property="BackgroundColor" Value="#F0F2F5" />
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                            <VisualState x:Name="Selected">
+                                                <VisualState.Setters>
+                                                    <Setter Property="BackgroundColor" Value="#FF7622" />
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                        </VisualStateGroup>
+                                    </VisualStateManager.VisualStateGroups>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </HorizontalStackLayout>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!--  4. BARRA INFERIOR: PRECIO, CANTIDAD Y BOTÓN ADD TO CART  -->
+        <Border
+            Grid.Row="1"
+            Padding="24,20"
+            BackgroundColor="#F0F5FA"
+            StrokeThickness="0">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="32,32,0,0" />
+            </Border.StrokeShape>
+
+            <VerticalStackLayout Spacing="16">
+
+                <!--  Primera fila: Precio y Selector de Cantidad  -->
+                <Grid ColumnDefinitions="*, Auto">
+
+                    <!--  Precio Dinámico  -->
+                    <VerticalStackLayout Grid.Column="0" VerticalOptions="Center">
+                        <Label
+                            FontFamily="SenRegular"
+                            FontSize="12"
+                            Text="Price"
+                            TextColor="#A0A5BA" />
+                        <Label
+                            FontFamily="SenBold"
+                            FontSize="24"
+                            Text="{Binding TotalPrice, StringFormat='${0:F2}'}"
+                            TextColor="#181C2E" />
+                    </VerticalStackLayout>
+
+                    <!--  Control de Cantidad Estilo Píldora Oscura  -->
+                    <Border
+                        Grid.Column="1"
+                        Padding="8,4"
+                        BackgroundColor="#181C2E"
+                        HeightRequest="48"
+                        StrokeThickness="0">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="24" />
+                        </Border.StrokeShape>
+                        <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                            <Button
+                                BackgroundColor="Transparent"
+                                Command="{Binding DecreaseQuantityCommand}"
+                                FontAttributes="Bold"
+                                FontSize="18"
+                                HeightRequest="36"
+                                Text="-"
+                                TextColor="White"
+                                WidthRequest="36" />
+                            <Label
+                                FontFamily="SenBold"
+                                FontSize="16"
+                                Text="{Binding Quantity}"
+                                TextColor="White"
+                                VerticalOptions="Center" />
+                            <Button
+                                BackgroundColor="Transparent"
+                                Command="{Binding IncreaseQuantityCommand}"
+                                FontAttributes="Bold"
+                                FontSize="18"
+                                HeightRequest="36"
+                                Text="+"
+                                TextColor="White"
+                                WidthRequest="36" />
+                        </HorizontalStackLayout>
+                    </Border>
+                </Grid>
+
+                <!--  Segunda fila: Botón grande ADD TO CART  -->
+                <Button
+                    BackgroundColor="#FF7622"
+                    Command="{Binding AddToCartCommand}"
+                    CornerRadius="28"
+                    FontFamily="SenBold"
+                    FontSize="16"
+                    HeightRequest="56"
+                    Text="ADD TO CART"
+                    TextColor="White" />
+
+            </VerticalStackLayout>
+        </Border>
+
+    </Grid>
+</ContentPage>

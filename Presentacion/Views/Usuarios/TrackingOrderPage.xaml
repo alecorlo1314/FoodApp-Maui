@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="FoodApp.Presentacion.Views.Usuarios.TrackingOrderPage"
+    x:DataType="vm:TrackingOrderViewModel"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:FoodApp.Presentacion.ViewModels.Usuarios"
+    xmlns:syncfusion="http://schemas.syncfusion.com/maui/toolkit"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    Background="White"
+    SafeAreaEdges="None"
+    Shell.NavBarIsVisible="False">
+
+    <ContentPage.Behaviors>
+        <toolkit:StatusBarBehavior
+            ApplyOn="OnPageNavigatedTo"
+            StatusBarColor="Transparent"
+            StatusBarStyle="DarkContent" />
+    </ContentPage.Behaviors>
+
+    <Grid SafeAreaEdges="None">
+        <!--  1. MAPA DE FONDO (WEBVIEW)  -->
+        <WebView
+            HorizontalOptions="Fill"
+            Source="{Binding MapHtmlSource}"
+            VerticalOptions="Fill" />
+
+        <!--  2. BOTÓN FLOTANTE SUPERIOR (ATRÁS)  -->
+        <ImageButton
+            Margin="24,40,0,0"
+            Command="{Binding GoBackCommand}"
+            CornerRadius="20"
+            HeightRequest="45"
+            HorizontalOptions="Start"
+            Source="ic_back_black.svg"
+            VerticalOptions="Start"
+            WidthRequest="45" />
+
+        <!--  3. SYNCFUSION BOTTOM SHEET PARA EL RASTREO  -->
+        <syncfusion:SfBottomSheet
+            x:Name="TrackingBottomSheet"
+            AllowedState="HalfExpanded"
+            Background="White"
+            CollapseOnOverlayTap="False"
+            CollapsedHeight="200"
+            CornerRadius="24,24,0,0"
+            EnableSwiping="True"
+            FullExpandedRatio="0.70"
+            GrabberAreaHeight="28"
+            GrabberBackground="#D8E3ED"
+            GrabberCornerRadius="60"
+            GrabberHeight="7"
+            GrabberWidth="70"
+            HalfExpandedRatio="0.62"
+            IsModal="False"
+            IsOpen="True"
+            ShowGrabber="True"
+            State="Collapsed"
+            StateChanged="TrackingBottomSheet_StateChanged"
+            SwipeFromHeaderOnly="True">
+
+            <syncfusion:SfBottomSheet.BottomSheetContent>
+                <ScrollView BackgroundColor="Transparent">
+                    <VerticalStackLayout Spacing="24">
+
+                        <!--  DATOS DEL RESTAURANTE Y PRODUCTOS  -->
+                        <Grid
+                            Padding="24,16,24,0"
+                            ColumnDefinitions="Auto, *"
+                            ColumnSpacing="16">
+                            <Border
+                                Grid.Column="0"
+                                BackgroundColor="#F6F6F6"
+                                HeightRequest="63"
+                                StrokeThickness="0"
+                                WidthRequest="63">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="16" />
+                                </Border.StrokeShape>
+                                <Image Aspect="AspectFill" Source="{Binding RestaurantImage}" />
+                            </Border>
+
+                            <VerticalStackLayout
+                                Grid.Column="1"
+                                Spacing="2"
+                                VerticalOptions="Center">
+                                <Label
+                                    FontFamily="SenRegular"
+                                    FontSize="18"
+                                    Text="{Binding RestaurantName}"
+                                    TextColor="#181C2E" />
+                                <Label
+                                    FontFamily="SenRegular"
+                                    FontSize="14"
+                                    Text="{Binding OrderDateFormatted, StringFormat='Orderd At {0}'}"
+                                    TextColor="#A0A5BA" />
+                                <Label
+                                    Margin="0,4,0,0"
+                                    FontFamily="SenRegular"
+                                    FontSize="13"
+                                    Text="{Binding OrderSummaryText}"
+                                    TextColor="#646982" />
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <!--  TIEMPO ESTIMADO DE ENTREGA[cite: 8]  -->
+                        <VerticalStackLayout
+                            Padding="24,0"
+                            HorizontalOptions="Center"
+                            Spacing="4">
+                            <Label
+                                FontFamily="SenExtraBold"
+                                FontSize="30"
+                                HorizontalTextAlignment="Center"
+                                Text="{Binding EstimatedTime}"
+                                TextColor="#181C2E" />
+                            <Label
+                                FontFamily="SenRegular"
+                                FontSize="14"
+                                HorizontalTextAlignment="Center"
+                                Text="ESTIMATED DELIVERY TIME"
+                                TextColor="#A0A5BA" />
+                        </VerticalStackLayout>
+
+                        <!--  LÍNEA DE TIEMPO DE ESTADOS DEL PEDIDO (TIMELINE)[cite: 8]  -->
+                        <VerticalStackLayout Padding="24,0" Spacing="0">
+
+                            <!--  Paso 1: Recibido (Activo / Naranja)  -->
+                            <Grid ColumnDefinitions="32, *" ColumnSpacing="12">
+                                <Ellipse
+                                    Grid.Column="0"
+                                    Fill="#FF7622"
+                                    HeightRequest="17"
+                                    HorizontalOptions="Center"
+                                    WidthRequest="17" />
+                                <Label
+                                    Grid.Column="1"
+                                    FontFamily="SenRegular"
+                                    FontSize="14"
+                                    Text="Your order has been received"
+                                    TextColor="#FF7622"
+                                    VerticalOptions="Center" />
+                            </Grid>
+                            <BoxView
+                                Margin="15,0,0,0"
+                                BackgroundColor="#FF7622"
+                                HeightRequest="24"
+                                HorizontalOptions="Start"
+                                WidthRequest="2" />
+
+                            <!--  Paso 2: Preparando (En proceso)  -->
+                            <Grid ColumnDefinitions="32, *" ColumnSpacing="12">
+                                <Ellipse
+                                    Grid.Column="0"
+                                    Fill="#FF7622"
+                                    HeightRequest="17"
+                                    HorizontalOptions="Center"
+                                    WidthRequest="17" />
+                                <Label
+                                    Grid.Column="1"
+                                    FontFamily="SenRegular"
+                                    FontSize="14"
+                                    Text="The restaurant is preparing your food"
+                                    TextColor="#A0A5BA"
+                                    VerticalOptions="Center" />
+                            </Grid>
+                            <BoxView
+                                Margin="15,0,0,0"
+                                BackgroundColor="#E8E8E8"
+                                HeightRequest="24"
+                                HorizontalOptions="Start"
+                                WidthRequest="2" />
+
+                            <!--  Paso 3: Recogido  -->
+                            <Grid ColumnDefinitions="32, *" ColumnSpacing="12">
+                                <Ellipse
+                                    Grid.Column="0"
+                                    Fill="#C4C9D4"
+                                    HeightRequest="17"
+                                    HorizontalOptions="Center"
+                                    WidthRequest="17" />
+                                <Label
+                                    Grid.Column="1"
+                                    FontFamily="SenRegular"
+                                    FontSize="14"
+                                    Text="Your order has been picked up for delivery"
+                                    TextColor="#A0A5BA"
+                                    VerticalOptions="Center" />
+                            </Grid>
+                            <BoxView
+                                Margin="15,0,0,0"
+                                BackgroundColor="#E8E8E8"
+                                HeightRequest="24"
+                                HorizontalOptions="Start"
+                                WidthRequest="2" />
+
+                            <!--  Paso 4: Pronto  -->
+                            <Grid ColumnDefinitions="32, *" ColumnSpacing="12">
+                                <Ellipse
+                                    Grid.Column="0"
+                                    Fill="#C4C9D4"
+                                    HeightRequest="17"
+                                    HorizontalOptions="Center"
+                                    WidthRequest="17" />
+                                <Label
+                                    Grid.Column="1"
+                                    FontFamily="SenRegular"
+                                    FontSize="14"
+                                    Text="Order arriving soon!"
+                                    TextColor="#A0A5BA"
+                                    VerticalOptions="Center" />
+                            </Grid>
+                        </VerticalStackLayout>
+
+                        <!--  TARJETA DEL REPARTIDOR (COURIER)[cite: 8]  -->
+                        <Border
+                            Margin="0,0,0,24"
+                            Padding="24"
+                            BackgroundColor="White"
+                            Stroke="#E8E8E8"
+                            StrokeThickness="1">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="24" />
+                            </Border.StrokeShape>
+                            <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="12">
+                                <!--  Foto del repartidor  -->
+                                <Image
+                                    Grid.Column="0"
+                                    Aspect="AspectFill"
+                                    HeightRequest="50"
+                                    Source="{Binding CourierImage}"
+                                    WidthRequest="50">
+                                    <Image.Clip>
+                                        <EllipseGeometry
+                                            Center="25,25"
+                                            RadiusX="25"
+                                            RadiusY="25" />
+                                    </Image.Clip>
+                                </Image>
+
+                                <!--  Nombre y rol  -->
+                                <VerticalStackLayout
+                                    Grid.Column="1"
+                                    Spacing="2"
+                                    VerticalOptions="Center">
+                                    <Label
+                                        FontFamily="SenBold"
+                                        FontSize="16"
+                                        Text="{Binding CourierName}"
+                                        TextColor="#181C2E" />
+                                    <Label
+                                        FontFamily="SenRegular"
+                                        FontSize="12"
+                                        Text="Courier"
+                                        TextColor="#A0A5BA" />
+                                </VerticalStackLayout>
+
+                                <!--  Botones de Llamada y Chat  -->
+                                <HorizontalStackLayout
+                                    Grid.Column="2"
+                                    Spacing="8"
+                                    VerticalOptions="Center">
+                                    <ImageButton
+                                        Aspect="Fill"
+                                        Command="{Binding CallCourierCommand}"
+                                        CornerRadius="20"
+                                        HeightRequest="45"
+                                        Source="ic_phone.svg"
+                                        WidthRequest="45" />
+                                    <ImageButton
+                                        Aspect="Fill"
+                                        BorderWidth="1"
+                                        Command="{Binding ChatCourierCommand}"
+                                        CornerRadius="20"
+                                        HeightRequest="45"
+                                        Source="ic_chat.svg"
+                                        WidthRequest="45" />
+                                </HorizontalStackLayout>
+                            </Grid>
+                        </Border>
+
+                    </VerticalStackLayout>
+                </ScrollView>
+            </syncfusion:SfBottomSheet.BottomSheetContent>
+        </syncfusion:SfBottomSheet>
+    </Grid>
+</ContentPage>
