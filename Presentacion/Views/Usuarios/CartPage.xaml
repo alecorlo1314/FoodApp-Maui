@@ -20,13 +20,19 @@
         <toolkit:StatusBarBehavior StatusBarColor="#121223" StatusBarStyle="LightContent" />
     </ContentPage.Behaviors>
 
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <toolkit:InvertedBoolConverter x:Key="InvertBool" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
     <Grid RowDefinitions="Auto, *, Auto">
 
         <!--  1. CABECERA OSCURA CON TÍTULO Y BOTÓN ATRÁS / DONE  -->
         <Grid
             Grid.Row="0"
             Margin="24,16,24,10"
-            ColumnDefinitions="Auto, *">
+            ColumnDefinitions="Auto, *, Auto">
 
             <HorizontalStackLayout Grid.Column="0" Spacing="18">
                 <!--  Botón Atrás  -->
@@ -66,6 +72,7 @@
         <CollectionView
             Grid.Row="1"
             Margin="24,0"
+            IsVisible="{Binding IsLoading, Converter={StaticResource InvertBool}}"
             ItemsSource="{Binding CartItems}"
             SelectionMode="None">
             <CollectionView.ItemsLayout>
@@ -169,11 +176,408 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
 
+        <!--  Placeholders independientes para mostrar productos aun con CartItems vacío.  -->
+        <ScrollView
+            x:Name="ProductsSkeleton"
+            Grid.Row="1"
+            Margin="24,0"
+            InputTransparent="True"
+            IsVisible="{Binding IsLoading}"
+            VerticalScrollBarVisibility="Never">
+            <VerticalStackLayout Spacing="0">
+                <Grid
+                    Margin="0,0,0,16"
+                    ColumnDefinitions="88,*,54"
+                    ColumnSpacing="16">
+                    <Grid Grid.Column="0">
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Interval=1600,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#18FF7622,#50FFB076,#18FF7622'}"
+                            sk:Skeleton.BackgroundColor="#46465B"
+                            sk:Skeleton.IsBusy="{Binding IsLoading, Mode=OneWay}"
+                            BackgroundColor="#46465B"
+                            HeightRequest="88"
+                            HorizontalOptions="Start"
+                            StrokeShape="RoundRectangle 20"
+                            StrokeThickness="0"
+                            WidthRequest="88" />
+                    </Grid>
+                    <VerticalStackLayout
+                        Grid.Column="1"
+                        Spacing="12"
+                        VerticalOptions="Center">
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Interval=1600,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#18FF7622,#50FFB076,#18FF7622'}"
+                            sk:Skeleton.BackgroundColor="#46465B"
+                            sk:Skeleton.IsBusy="{Binding IsLoading, Mode=OneWay}"
+                            BackgroundColor="#46465B"
+                            HeightRequest="17"
+                            HorizontalOptions="Start"
+                            StrokeShape="RoundRectangle 7"
+                            StrokeThickness="0"
+                            WidthRequest="120" />
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Interval=1600,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#18FF7622,#50FFB076,#18FF7622'}"
+                            sk:Skeleton.BackgroundColor="#46465B"
+                            sk:Skeleton.IsBusy="{Binding IsLoading, Mode=OneWay}"
+                            BackgroundColor="#46465B"
+                            HeightRequest="20"
+                            HorizontalOptions="Start"
+                            StrokeShape="RoundRectangle 7"
+                            StrokeThickness="0"
+                            WidthRequest="78" />
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Interval=1600,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#18FF7622,#50FFB076,#18FF7622'}"
+                            sk:Skeleton.BackgroundColor="#46465B"
+                            sk:Skeleton.IsBusy="{Binding IsLoading, Mode=OneWay}"
+                            BackgroundColor="#46465B"
+                            HeightRequest="13"
+                            HorizontalOptions="Start"
+                            StrokeShape="RoundRectangle 7"
+                            StrokeThickness="0"
+                            WidthRequest="56" />
+                    </VerticalStackLayout>
+                    <VerticalStackLayout
+                        Grid.Column="2"
+                        HorizontalOptions="End"
+                        Spacing="20"
+                        VerticalOptions="Center">
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Interval=1600,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#18FF7622,#50FFB076,#18FF7622'}"
+                            sk:Skeleton.BackgroundColor="#46465B"
+                            sk:Skeleton.IsBusy="{Binding IsLoading, Mode=OneWay}"
+                            BackgroundColor="#46465B"
+                            HeightRequest="26"
+                            HorizontalOptions="Start"
+                            StrokeShape="RoundRectangle 13"
+                            StrokeThickness="0"
+                            WidthRequest="26" />
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Interval=1600,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#18FF7622,#50FFB076,#18FF7622'}"
+                            sk:Skeleton.BackgroundColor="#46465B"
+                            sk:Skeleton.IsBusy="{Binding IsLoading, Mode=OneWay}"
+                            BackgroundColor="#46465B"
+                            HeightRequest="20"
+                            HorizontalOptions="Start"
+                            StrokeShape="RoundRectangle 7"
+                            StrokeThickness="0"
+                            WidthRequest="52" />
+                    </VerticalStackLayout>
+                </Grid>
+                <Grid
+                    Margin="0,0,0,16"
+                    ColumnDefinitions="88,*,54"
+                    ColumnSpacing="16">
+                    <Grid Grid.Column="0">
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Interval=1600,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#18FF7622,#50FFB076,#18FF7622'}"
+                            sk:Skeleton.BackgroundColor="#46465B"
+                            sk:Skeleton.IsBusy="{Binding IsLoading, Mode=OneWay}"
+                            BackgroundColor="#46465B"
+                            HeightRequest="88"
+                            HorizontalOptions="Start"
+                            StrokeShape="RoundRectangle 20"
+                            StrokeThickness="0"
+                            WidthRequest="88" />
+                    </Grid>
+                    <VerticalStackLayout
+                        Grid.Column="1"
+                        Spacing="12"
+                        VerticalOptions="Center">
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Interval=1600,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#18FF7622,#50FFB076,#18FF7622'}"
+                            sk:Skeleton.BackgroundColor="#46465B"
+                            sk:Skeleton.IsBusy="{Binding IsLoading, Mode=OneWay}"
+                            BackgroundColor="#46465B"
+                            HeightRequest="17"
+                            HorizontalOptions="Start"
+                            StrokeShape="RoundRectangle 7"
+                            StrokeThickness="0"
+                            WidthRequest="120" />
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Interval=1600,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#18FF7622,#50FFB076,#18FF7622'}"
+                            sk:Skeleton.BackgroundColor="#46465B"
+                            sk:Skeleton.IsBusy="{Binding IsLoading, Mode=OneWay}"
+                            BackgroundColor="#46465B"
+                            HeightRequest="20"
+                            HorizontalOptions="Start"
+                            StrokeShape="RoundRectangle 7"
+                            StrokeThickness="0"
+                            WidthRequest="78" />
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Interval=1600,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#18FF7622,#50FFB076,#18FF7622'}"
+                            sk:Skeleton.BackgroundColor="#46465B"
+                            sk:Skeleton.IsBusy="{Binding IsLoading, Mode=OneWay}"
+                            BackgroundColor="#46465B"
+                            HeightRequest="13"
+                            HorizontalOptions="Start"
+                            StrokeShape="RoundRectangle 7"
+                            StrokeThickness="0"
+                            WidthRequest="56" />
+                    </VerticalStackLayout>
+                    <VerticalStackLayout
+                        Grid.Column="2"
+                        HorizontalOptions="End"
+                        Spacing="20"
+                        VerticalOptions="Center">
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Interval=1600,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#18FF7622,#50FFB076,#18FF7622'}"
+                            sk:Skeleton.BackgroundColor="#46465B"
+                            sk:Skeleton.IsBusy="{Binding IsLoading, Mode=OneWay}"
+                            BackgroundColor="#46465B"
+                            HeightRequest="26"
+                            HorizontalOptions="Start"
+                            StrokeShape="RoundRectangle 13"
+                            StrokeThickness="0"
+                            WidthRequest="26" />
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Interval=1600,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#18FF7622,#50FFB076,#18FF7622'}"
+                            sk:Skeleton.BackgroundColor="#46465B"
+                            sk:Skeleton.IsBusy="{Binding IsLoading, Mode=OneWay}"
+                            BackgroundColor="#46465B"
+                            HeightRequest="20"
+                            HorizontalOptions="Start"
+                            StrokeShape="RoundRectangle 7"
+                            StrokeThickness="0"
+                            WidthRequest="52" />
+                    </VerticalStackLayout>
+                </Grid>
+                <Grid
+                    Margin="0,0,0,16"
+                    ColumnDefinitions="88,*,54"
+                    ColumnSpacing="16">
+                    <Grid Grid.Column="0">
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Interval=1600,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#18FF7622,#50FFB076,#18FF7622'}"
+                            sk:Skeleton.BackgroundColor="#46465B"
+                            sk:Skeleton.IsBusy="{Binding IsLoading, Mode=OneWay}"
+                            BackgroundColor="#46465B"
+                            HeightRequest="88"
+                            HorizontalOptions="Start"
+                            StrokeShape="RoundRectangle 20"
+                            StrokeThickness="0"
+                            WidthRequest="88" />
+                    </Grid>
+                    <VerticalStackLayout
+                        Grid.Column="1"
+                        Spacing="12"
+                        VerticalOptions="Center">
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Interval=1600,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#18FF7622,#50FFB076,#18FF7622'}"
+                            sk:Skeleton.BackgroundColor="#46465B"
+                            sk:Skeleton.IsBusy="{Binding IsLoading, Mode=OneWay}"
+                            BackgroundColor="#46465B"
+                            HeightRequest="17"
+                            HorizontalOptions="Start"
+                            StrokeShape="RoundRectangle 7"
+                            StrokeThickness="0"
+                            WidthRequest="120" />
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Interval=1600,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#18FF7622,#50FFB076,#18FF7622'}"
+                            sk:Skeleton.BackgroundColor="#46465B"
+                            sk:Skeleton.IsBusy="{Binding IsLoading, Mode=OneWay}"
+                            BackgroundColor="#46465B"
+                            HeightRequest="20"
+                            HorizontalOptions="Start"
+                            StrokeShape="RoundRectangle 7"
+                            StrokeThickness="0"
+                            WidthRequest="78" />
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Interval=1600,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#18FF7622,#50FFB076,#18FF7622'}"
+                            sk:Skeleton.BackgroundColor="#46465B"
+                            sk:Skeleton.IsBusy="{Binding IsLoading, Mode=OneWay}"
+                            BackgroundColor="#46465B"
+                            HeightRequest="13"
+                            HorizontalOptions="Start"
+                            StrokeShape="RoundRectangle 7"
+                            StrokeThickness="0"
+                            WidthRequest="56" />
+                    </VerticalStackLayout>
+                    <VerticalStackLayout
+                        Grid.Column="2"
+                        HorizontalOptions="End"
+                        Spacing="20"
+                        VerticalOptions="Center">
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Interval=1600,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#18FF7622,#50FFB076,#18FF7622'}"
+                            sk:Skeleton.BackgroundColor="#46465B"
+                            sk:Skeleton.IsBusy="{Binding IsLoading, Mode=OneWay}"
+                            BackgroundColor="#46465B"
+                            HeightRequest="26"
+                            HorizontalOptions="Start"
+                            StrokeShape="RoundRectangle 13"
+                            StrokeThickness="0"
+                            WidthRequest="26" />
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Interval=1600,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#18FF7622,#50FFB076,#18FF7622'}"
+                            sk:Skeleton.BackgroundColor="#46465B"
+                            sk:Skeleton.IsBusy="{Binding IsLoading, Mode=OneWay}"
+                            BackgroundColor="#46465B"
+                            HeightRequest="20"
+                            HorizontalOptions="Start"
+                            StrokeShape="RoundRectangle 7"
+                            StrokeThickness="0"
+                            WidthRequest="52" />
+                    </VerticalStackLayout>
+                </Grid>
+                <Grid
+                    Margin="0,0,0,16"
+                    ColumnDefinitions="88,*,54"
+                    ColumnSpacing="16">
+                    <Grid Grid.Column="0">
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Interval=1600,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#18FF7622,#50FFB076,#18FF7622'}"
+                            sk:Skeleton.BackgroundColor="#46465B"
+                            sk:Skeleton.IsBusy="{Binding IsLoading, Mode=OneWay}"
+                            BackgroundColor="#46465B"
+                            HeightRequest="88"
+                            HorizontalOptions="Start"
+                            StrokeShape="RoundRectangle 20"
+                            StrokeThickness="0"
+                            WidthRequest="88" />
+                    </Grid>
+                    <VerticalStackLayout
+                        Grid.Column="1"
+                        Spacing="12"
+                        VerticalOptions="Center">
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Interval=1600,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#18FF7622,#50FFB076,#18FF7622'}"
+                            sk:Skeleton.BackgroundColor="#46465B"
+                            sk:Skeleton.IsBusy="{Binding IsLoading, Mode=OneWay}"
+                            BackgroundColor="#46465B"
+                            HeightRequest="17"
+                            HorizontalOptions="Start"
+                            StrokeShape="RoundRectangle 7"
+                            StrokeThickness="0"
+                            WidthRequest="120" />
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Interval=1600,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#18FF7622,#50FFB076,#18FF7622'}"
+                            sk:Skeleton.BackgroundColor="#46465B"
+                            sk:Skeleton.IsBusy="{Binding IsLoading, Mode=OneWay}"
+                            BackgroundColor="#46465B"
+                            HeightRequest="20"
+                            HorizontalOptions="Start"
+                            StrokeShape="RoundRectangle 7"
+                            StrokeThickness="0"
+                            WidthRequest="78" />
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Interval=1600,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#18FF7622,#50FFB076,#18FF7622'}"
+                            sk:Skeleton.BackgroundColor="#46465B"
+                            sk:Skeleton.IsBusy="{Binding IsLoading, Mode=OneWay}"
+                            BackgroundColor="#46465B"
+                            HeightRequest="13"
+                            HorizontalOptions="Start"
+                            StrokeShape="RoundRectangle 7"
+                            StrokeThickness="0"
+                            WidthRequest="56" />
+                    </VerticalStackLayout>
+                    <VerticalStackLayout
+                        Grid.Column="2"
+                        HorizontalOptions="End"
+                        Spacing="20"
+                        VerticalOptions="Center">
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Interval=1600,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#18FF7622,#50FFB076,#18FF7622'}"
+                            sk:Skeleton.BackgroundColor="#46465B"
+                            sk:Skeleton.IsBusy="{Binding IsLoading, Mode=OneWay}"
+                            BackgroundColor="#46465B"
+                            HeightRequest="26"
+                            HorizontalOptions="Start"
+                            StrokeShape="RoundRectangle 13"
+                            StrokeThickness="0"
+                            WidthRequest="26" />
+                        <Border
+                            sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                        Interval=1600,
+                                                                        Direction=DiagonalReverse,
+                                                                        SweepColors='#18FF7622,#50FFB076,#18FF7622'}"
+                            sk:Skeleton.BackgroundColor="#46465B"
+                            sk:Skeleton.IsBusy="{Binding IsLoading, Mode=OneWay}"
+                            BackgroundColor="#46465B"
+                            HeightRequest="20"
+                            HorizontalOptions="Start"
+                            StrokeShape="RoundRectangle 7"
+                            StrokeThickness="0"
+                            WidthRequest="52" />
+                    </VerticalStackLayout>
+                </Grid>
+            </VerticalStackLayout>
+        </ScrollView>
+
         <!--  3. PANEL INFERIOR BLANCO (DIRECCIÓN, TOTAL Y PLACE ORDER)  -->
         <Border
             Grid.Row="2"
             Padding="24,24,24,32"
             BackgroundColor="White"
+            IsVisible="{Binding IsLoading, Converter={StaticResource InvertBool}}"
             StrokeThickness="0">
             <Border.StrokeShape>
                 <RoundRectangle CornerRadius="24,24,0,0" />
@@ -264,6 +668,103 @@
                     Text="PLACE ORDER"
                     TextColor="White" />
 
+            </VerticalStackLayout>
+        </Border>
+
+        <!--  Aurora en dirección, total, desglose y botón mientras carga el pedido.  -->
+        <Border
+            x:Name="OrderSummarySkeleton"
+            Grid.Row="2"
+            Padding="24,24,24,32"
+            BackgroundColor="White"
+            IsVisible="{Binding IsLoading}"
+            StrokeThickness="0">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="24,24,0,0" />
+            </Border.StrokeShape>
+            <VerticalStackLayout InputTransparent="True" Spacing="24">
+                <Grid ColumnDefinitions="*,Auto">
+                    <Border
+                        sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                    Interval=1600,
+                                                                    Direction=DiagonalReverse,
+                                                                    SweepColors='#18FF7622,#50FFB076,#18FF7622'}"
+                        sk:Skeleton.BackgroundColor="#E8E8E8"
+                        sk:Skeleton.IsBusy="{Binding IsLoading, Mode=OneWay}"
+                        BackgroundColor="#E8E8E8"
+                        HeightRequest="16"
+                        HorizontalOptions="Start"
+                        StrokeShape="RoundRectangle 7"
+                        StrokeThickness="0"
+                        WidthRequest="137" />
+                    <Border
+                        Grid.Column="1"
+                        sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                    Interval=1600,
+                                                                    Direction=DiagonalReverse,
+                                                                    SweepColors='#18FF7622,#50FFB076,#18FF7622'}"
+                        sk:Skeleton.BackgroundColor="#E8E8E8"
+                        sk:Skeleton.IsBusy="{Binding IsLoading, Mode=OneWay}"
+                        BackgroundColor="#E8E8E8"
+                        HeightRequest="16"
+                        HorizontalOptions="End"
+                        StrokeShape="RoundRectangle 7"
+                        StrokeThickness="0"
+                        WidthRequest="37" />
+                </Grid>
+                <Border
+                    sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                Interval=1600,
+                                                                Direction=DiagonalReverse,
+                                                                SweepColors='#18FF7622,#50FFB076,#18FF7622'}"
+                    sk:Skeleton.BackgroundColor="#E8E8E8"
+                    sk:Skeleton.IsBusy="{Binding IsLoading, Mode=OneWay}"
+                    BackgroundColor="#E8E8E8"
+                    HeightRequest="62"
+                    HorizontalOptions="Start"
+                    StrokeShape="RoundRectangle 16"
+                    StrokeThickness="0"
+                    WidthRequest="270" />
+                <Grid ColumnDefinitions="*,Auto">
+                    <Border
+                        sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                    Interval=1600,
+                                                                    Direction=DiagonalReverse,
+                                                                    SweepColors='#18FF7622,#50FFB076,#18FF7622'}"
+                        sk:Skeleton.BackgroundColor="#E8E8E8"
+                        sk:Skeleton.IsBusy="{Binding IsLoading, Mode=OneWay}"
+                        BackgroundColor="#E8E8E8"
+                        HeightRequest="30"
+                        HorizontalOptions="Start"
+                        StrokeShape="RoundRectangle 7"
+                        StrokeThickness="0"
+                        WidthRequest="155" />
+                    <Border
+                        Grid.Column="1"
+                        sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                    Interval=1600,
+                                                                    Direction=DiagonalReverse,
+                                                                    SweepColors='#18FF7622,#50FFB076,#18FF7622'}"
+                        sk:Skeleton.BackgroundColor="#E8E8E8"
+                        sk:Skeleton.IsBusy="{Binding IsLoading, Mode=OneWay}"
+                        BackgroundColor="#E8E8E8"
+                        HeightRequest="16"
+                        HorizontalOptions="End"
+                        StrokeShape="RoundRectangle 7"
+                        StrokeThickness="0"
+                        WidthRequest="92" />
+                </Grid>
+                <Border
+                    sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                                Interval=1600,
+                                                                Direction=DiagonalReverse,
+                                                                SweepColors='#18FF7622,#50FFB076,#18FF7622'}"
+                    sk:Skeleton.BackgroundColor="#E8E8E8"
+                    sk:Skeleton.IsBusy="{Binding IsLoading, Mode=OneWay}"
+                    BackgroundColor="#E8E8E8"
+                    HeightRequest="56"
+                    StrokeShape="RoundRectangle 12"
+                    StrokeThickness="0" />
             </VerticalStackLayout>
         </Border>
 
