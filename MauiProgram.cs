@@ -9,6 +9,8 @@ using FoodApp.Presentacion.Views.Autentificacion;
 using FoodApp.Presentacion.Views.OnBoarding;
 using FoodApp.Presentacion.Views.Usuarios;
 using Microsoft.Extensions.Logging;
+using Polly;
+using Polly.Extensions.Http;
 using SkiaSharp.Views.Maui.Controls.Hosting;
 using Syncfusion.Maui.Core.Hosting;
 using Syncfusion.Maui.Toolkit.Hosting;
@@ -111,7 +113,17 @@ namespace FoodApp
             builder.Services.AddHttpClient<IPaymentGatewayService, StripePaymentService>(cliente =>
             {
                 cliente.BaseAddress = new Uri("https://hdtsshzstljffllzoqkb.supabase.co/functions/v1/process-payment");
-            });
+            })  .SetHandlerLifetime(TimeSpan.FromMinutes(1)) //Definir el tiempo de vida de la solicitud
+                .AddPolicyHandler(GetRetryPolicy());
+
+            static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+            {
+                return HttpPolicyExtensions
+                    .HandleTransientHttpError()
+                    .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.NotFound) //reintentar cuando codigo sea 404
+                    .WaitAndRetryAsync(3, //Haz hasta 3 reintentos.
+                                        retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))); //Calculo tiempo de 
+            }
 
 #if DEBUG
             builder.Logging.AddDebug(); 

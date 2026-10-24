@@ -1,11 +1,50 @@
-# Build outputs
-bin/
-obj/
+# .NET / MAUI build outputs
+[Bb]in/
+[Oo]bj/
+artifacts/
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
 
-# User-specific files
+# Local IDE settings
 .vs/
+.idea/
 *.user
 *.suo
+*.userosscache
+*.sln.docstates
 
-# OS-generated files
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+*~
+
+# Generated application packages
+*.apk
+*.aab
+*.ipa
+*.app/
+*.msix
+*.msixbundle
+AppPackages/
+
+# Local secrets and signing credentials
+.env
+.env.*
+!.env.example
+!.env.sample
+*.keystore
+*.jks
+*.p12
+*.pfx
+*.mobileprovision
+appsettings.Local.json
+appsettings.*.Local.json
+
+# Operating system metadata
 .DS_Store
+._*
+Thumbs.db
+Desktop.ini
