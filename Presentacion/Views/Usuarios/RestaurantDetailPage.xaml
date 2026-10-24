@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
     x:Class="FoodApp.Presentacion.Views.Usuarios.RestaurantDetailPage"
+    x:Name="RestaurantDetailPageRoot"
     x:DataType="vm:RestaurantDetailViewModel"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:vm="clr-namespace:FoodApp.Presentacion.ViewModels.Usuarios"
+    xmlns:views="clr-namespace:FoodApp.Presentacion.Views.Usuarios"
     xmlns:models="clr-namespace:FoodApp.Domain.Entities"
     xmlns:droid="clr-namespace:CommunityToolkit.Maui.PlatformConfiguration.AndroidSpecific;assembly=CommunityToolkit.Maui"
     xmlns:sk="clr-namespace:Maui.Skeleton;assembly=Maui.Skeleton"
@@ -234,7 +236,7 @@
 
                                     <!--  GESTURE RECOGNIZER PARA NAVEGAR A DETALLES  -->
                                     <Border.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding x:DataType='vm:RestaurantDetailViewModel', Source={RelativeSource AncestorType={x:Type vm:RestaurantDetailViewModel}}, Path=NavigateToFoodDetailCommand}" CommandParameter="{Binding}" />
+                                        <TapGestureRecognizer Command="{Binding ViewModel.NavigateToFoodDetailCommand, Source={x:Reference RestaurantDetailPageRoot}, x:DataType='views:RestaurantDetailPage'}" CommandParameter="{Binding}" />
                                     </Border.GestureRecognizers>
 
                                     <Border.StrokeShape>
@@ -294,7 +296,7 @@
                                             <!--  Botón Redondo Naranja (+)  -->
                                             <ImageButton
                                                 Grid.Column="1"
-                                                Command="{Binding x:DataType='vm:RestaurantDetailViewModel', Source={RelativeSource AncestorType={x:Type vm:RestaurantDetailViewModel}}, Path=AddToCartCommand}"
+                                                Command="{Binding ViewModel.AddToCartCommand, Source={x:Reference RestaurantDetailPageRoot}, x:DataType='views:RestaurantDetailPage'}"
                                                 CommandParameter="{Binding}"
                                                 CornerRadius="16"
                                                 HeightRequest="30"

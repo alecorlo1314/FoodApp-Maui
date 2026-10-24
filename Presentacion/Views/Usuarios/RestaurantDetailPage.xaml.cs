@@ -6,11 +6,14 @@ public partial class RestaurantDetailPage : ContentPage
 {
     private readonly RestaurantDetailViewModel _viewModel;
 
+    public RestaurantDetailViewModel ViewModel => _viewModel;
+
     public RestaurantDetailPage(RestaurantDetailViewModel viewModel)
     {
-        InitializeComponent();
+        ArgumentNullException.ThrowIfNull(viewModel);
         _viewModel = viewModel;
         BindingContext = _viewModel;
+        InitializeComponent();
     }
 
     protected override void OnAppearing()
