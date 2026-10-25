@@ -6,6 +6,7 @@ using MediatR;
 
 namespace FoodApp.Presentacion.ViewModels.Usuarios;
 
+[QueryProperty(nameof(CardBrand), "CardBrand")]
 public partial class AddCardViewModel(IMediator _mediator) : ObservableObject
 {
     [ObservableProperty]
@@ -19,6 +20,9 @@ public partial class AddCardViewModel(IMediator _mediator) : ObservableObject
 
     [ObservableProperty]
     private string cvc = string.Empty;
+
+    [ObservableProperty]
+    private string cardBrand = string.Empty;
 
     [RelayCommand]
     private async Task GoBackAsync() => await Shell.Current.GoToAsync("..");
@@ -36,7 +40,7 @@ public partial class AddCardViewModel(IMediator _mediator) : ObservableObject
             {
                 CardHolderName = CardHolderName,
                 CardNumberMasked = lastFour,
-                Brand = "Mastercard", // O detectarlo según el número
+                Brand = CardBrand, // O detectarlo según el número
                 ExpiryDate = ExpireDate,
                 IsDefault = true
             };

@@ -62,7 +62,7 @@
             <ScrollView Grid.Row="1" Margin="24,12,24,0">
                 <VerticalStackLayout Spacing="16">
 
-                    <!--  Opciones Superiores: Cash, Visa, Mastercard, Paypal (Filtros)  -->
+                    <!--  Opciones Superiores: Cash, Visa, Mastercard  -->
                     <ScrollView HorizontalScrollBarVisibility="Never" Orientation="Horizontal">
                         <HorizontalStackLayout Spacing="12">
 
@@ -74,11 +74,22 @@
                                 <Border
                                     BackgroundColor="#F0F5FA"
                                     HeightRequest="72"
-                                    StrokeThickness="0"
+                                    Stroke="Transparent"
                                     WidthRequest="85">
                                     <Border.StrokeShape>
                                         <RoundRectangle CornerRadius="12" />
                                     </Border.StrokeShape>
+
+                                    <Border.Triggers>
+                                        <DataTrigger
+                                            Binding="{Binding SelectedBrandFilter}"
+                                            TargetType="Border"
+                                            Value="Cash">
+                                            <Setter Property="Stroke" Value="#FF7622" />
+                                            <Setter Property="StrokeThickness" Value="2" />
+                                        </DataTrigger>
+                                    </Border.Triggers>
+
                                     <Image
                                         Aspect="AspectFit"
                                         HeightRequest="24"
@@ -98,14 +109,26 @@
                                 <VerticalStackLayout.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding FilterCardsCommand}" CommandParameter="Visa" />
                                 </VerticalStackLayout.GestureRecognizers>
+
                                 <Border
                                     BackgroundColor="#F0F5FA"
                                     HeightRequest="72"
-                                    StrokeThickness="0"
+                                    Stroke="Transparent"
                                     WidthRequest="85">
                                     <Border.StrokeShape>
                                         <RoundRectangle CornerRadius="12" />
                                     </Border.StrokeShape>
+
+                                    <Border.Triggers>
+                                        <DataTrigger
+                                            Binding="{Binding SelectedBrandFilter}"
+                                            TargetType="Border"
+                                            Value="Visa">
+                                            <Setter Property="Stroke" Value="#FF7622" />
+                                            <Setter Property="StrokeThickness" Value="2" />
+                                        </DataTrigger>
+                                    </Border.Triggers>
+
                                     <Image
                                         Aspect="AspectFit"
                                         HeightRequest="30"
@@ -128,12 +151,21 @@
                                 <Border
                                     BackgroundColor="#F0F5FA"
                                     HeightRequest="72"
-                                    Stroke="#FF7622"
-                                    StrokeThickness="2"
+                                    Stroke="Transparent"
                                     WidthRequest="85">
                                     <Border.StrokeShape>
                                         <RoundRectangle CornerRadius="12" />
                                     </Border.StrokeShape>
+
+                                    <Border.Triggers>
+                                        <DataTrigger
+                                            Binding="{Binding SelectedBrandFilter}"
+                                            TargetType="Border"
+                                            Value="Mastercard">
+                                            <Setter Property="Stroke" Value="#FF7622" />
+                                            <Setter Property="StrokeThickness" Value="2" />
+                                        </DataTrigger>
+                                    </Border.Triggers>
                                     <Image
                                         Aspect="AspectFit"
                                         HeightRequest="30"
@@ -403,7 +435,7 @@
                         ItemsSource="{Binding FilteredCards}"
                         SelectionMode="None">
                         <CollectionView.ItemsLayout>
-                            <LinearItemsLayout ItemSpacing="16" Orientation="Vertical" />
+                            <LinearItemsLayout ItemSpacing="12" Orientation="Vertical" />
                         </CollectionView.ItemsLayout>
 
                         <CollectionView.ItemTemplate>
