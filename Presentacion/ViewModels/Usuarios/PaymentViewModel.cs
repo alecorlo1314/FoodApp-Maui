@@ -22,8 +22,7 @@ public partial class PaymentViewModel(IMediator _mediator) : ObservableObject
     [ObservableProperty]
     private string errorMessage = string.Empty;
 
-    public bool IsPaymentViewVisible =>
-        !IsProcessing && !IsPaymentFailed;
+    public bool IsPaymentViewVisible => !IsProcessing && !IsPaymentFailed;
 
     [ObservableProperty]
     private decimal totalAmount;
@@ -37,24 +36,35 @@ public partial class PaymentViewModel(IMediator _mediator) : ObservableObject
     [ObservableProperty]
     private bool isLoading;
 
+    // Propiedades nuevas para el BottomSheet y filtrado
+    [ObservableProperty]
+    private bool isBottomSheetOpen;
+
+    [ObservableProperty]
+    private List<UserPaymentMethod> allCards = new();
+
+    [ObservableProperty]
+    private List<UserPaymentMethod> filteredCards = new();
+
+    [ObservableProperty]
+    private string selectedBrandFilter = "All";
+
     [RelayCommand]
     private async Task LoadDataAsync(CancellationToken cancellationToken)
     {
-        if (IsLoading)
-            return;
+        if (IsLoading) return;
 
         try
         {
             cancellationToken.ThrowIfCancellationRequested();
+            IsBottomSheetOpen = false;
             IsPaymentFailed = false;
             ErrorMessage = string.Empty;
             IsProcessing = false;
             IsLoading = true;
             await LoadPaymentMethodAsync(cancellationToken);
         }
-        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
-        {
-        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested) { }
         catch (Exception)
         {
             await Shell.Current.DisplayAlertAsync("Error", "Error al cargar los datos", "OK");
@@ -70,22 +80,56 @@ public partial class PaymentViewModel(IMediator _mediator) : ObservableObject
         cancellationToken.ThrowIfCancellationRequested();
         var result = await _mediator.Send(new GetPaymentMethodsQuery(), cancellationToken);
         cancellationToken.ThrowIfCancellationRequested();
+
         if (result.IsFailure)
         {
             await Shell.Current.DisplayAlertAsync("Error", result.ErrorMessage, "OK");
             return;
         }
-        var cardModel = result.Value.FirstOrDefault();
 
-        if (cardModel != null)
+        AllCards = result.Value.ToList();
+        FilteredCards = AllCards;
+
+        SavedCard = AllCards.FirstOrDefault();
+        HasCard = SavedCard is not null;
+    }
+
+    [RelayCommand]
+    private void OpenBottomSheet()
+    {
+        FilteredCards = AllCards; // Muestra todas por defecto al abrir
+        IsBottomSheetOpen = true;
+    }
+
+    [RelayCommand]
+    private void FilterCards(string brand)
+    {
+        SelectedBrandFilter = brand;
+
+        if (brand.Equals("Cash", StringComparison.OrdinalIgnoreCase))
         {
-            SavedCard = cardModel;
-            HasCard = true; // Muestra la tarjeta registrada (Payment Method.png)
+            // Opcional: manejar lógica si selecciona efectivo
+            return;
         }
-        else
+
+        // Filtra las tarjetas según la marca seleccionada en los iconos superiores
+        FilteredCards = AllCards
+            .Where(c => c.Brand.Equals(brand, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+
+        // Abre automáticamente el BottomSheet para mostrar las tarjetas de esa marca
+        IsBottomSheetOpen = true;
+    }
+
+    [RelayCommand]
+    private void SelectCard(UserPaymentMethod card)
+    {
+        if (card != null)
         {
-            HasCard = false; // Muestra el estado vacío (Payment Method_No Mastercard.png)
+            SavedCard = card;
+            HasCard = true;
         }
+        IsBottomSheetOpen = false;
     }
 
     [RelayCommand]
@@ -94,15 +138,18 @@ public partial class PaymentViewModel(IMediator _mediator) : ObservableObject
     [RelayCommand]
     private async Task NavigateToAddCardAsync()
     {
-        // Navega a la vista de agregar tarjeta
-        await Shell.Current.GoToAsync(nameof(AddCardPage));
+        // Pasa el tipo de tarjeta seleccionado (ej. "Visa" o "Mastercard") como parámetro de navegación
+        var parameters = new Dictionary<string, object>
+        {
+            { "CardBrand", SelectedBrandFilter }
+        };
+        await Shell.Current.GoToAsync(nameof(AddCardPage), parameters);
     }
 
     [RelayCommand]
     private async Task PayAndConfirmAsync(CancellationToken cancellationToken)
     {
-        if (IsProcessing || !HasCard)
-            return;
+        if (IsProcessing || !HasCard) return;
         try
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -112,46 +159,33 @@ public partial class PaymentViewModel(IMediator _mediator) : ObservableObject
 
             if (SavedCard == null)
             {
-                await Shell.Current.DisplayAlertAsync("Aviso", "Por favor agrega o selecciona una tarjeta de crédito.", "OK");
+                await Shell.Current.DisplayAlertAsync("Aviso", "Por favor selecciona una tarjeta.", "OK");
                 return;
             }
 
-            // Ejecutamos la solicitud de cobro en tiempo real a la API de Stripe
             var result = await _mediator.Send(new ProcessPaymentCommand(
                 TotalAmount,
-                SavedCard.CardNumberMasked, // O el número de tarjeta introducido
+                SavedCard.CardNumberMasked,
                 SavedCard.ExpiryDate,
-                "123" // CVC de prueba
+                "123"
             ), cancellationToken);
             cancellationToken.ThrowIfCancellationRequested();
 
             if (result.IsSuccess)
             {
-                // Limpiar el carrito en la base de datos si el pago fue aprobado...
-
-                // Navegar a la pantalla de felicitaciones con Lottie
                 await Shell.Current.GoToAsync(nameof(PaymentSuccessPage));
             }
             else
             {
-                ErrorMessage = string.IsNullOrWhiteSpace(
-                    result.ErrorMessage)
-                    ? "No se pudo completar el pago."
-                    : result.ErrorMessage;
-
+                ErrorMessage = string.IsNullOrWhiteSpace(result.ErrorMessage) ? "No se pudo completar el pago." : result.ErrorMessage;
                 IsPaymentFailed = true;
-                return;
             }
         }
-        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
-        {
-        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested) { }
         catch (Exception ex)
         {
-            ErrorMessage =
-                "Ocurrió un problema al procesar el pago.";
+            ErrorMessage = "Ocurrió un problema al procesar el pago.";
             System.Diagnostics.Debug.WriteLine($"Error al procesar el pago: {ex.Message}");
-
             IsPaymentFailed = true;
         }
         finally

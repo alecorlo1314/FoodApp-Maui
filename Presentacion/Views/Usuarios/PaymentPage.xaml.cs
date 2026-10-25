@@ -5,10 +5,15 @@ namespace FoodApp.Presentacion.Views.Usuarios;
 public partial class PaymentPage : ContentPage
 {
     private readonly PaymentViewModel _viewModel;
+
+    public PaymentViewModel ViewModel => _viewModel;
+
     public PaymentPage(PaymentViewModel viewModel)
-	{
-		InitializeComponent();
-        BindingContext = _viewModel = viewModel;
+    {
+        ArgumentNullException.ThrowIfNull(viewModel);
+        _viewModel = viewModel;
+        BindingContext = _viewModel;
+        InitializeComponent();
     }
 
     protected override void OnAppearing()
