@@ -74,6 +74,16 @@ namespace FoodApp.Infrastructure.Repositories
                 .Delete(cancellationToken: cancellationToken);
         }
 
+        public async Task ClearAsync(Guid userId, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (userId == Guid.Empty)
+                throw new ArgumentException("El usuario del carrito no es válido.", nameof(userId));
+            await _supabaseClient.From<CartItemModel>()
+                .Where(item => item.UserId == userId)
+                .Delete(cancellationToken: cancellationToken);
+        }
+
         public async Task<int> GetCountCartQuery(string userId, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();

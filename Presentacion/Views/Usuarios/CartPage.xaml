@@ -64,10 +64,13 @@
                 FontSize="14"
                 Text="{Binding EditButtonText}"
                 TextColor="#059C6A"
-                VerticalOptions="Center" >
+                VerticalOptions="Center">
                 <Button.Triggers>
-                    <DataTrigger TargetType="Button" Binding="{Binding IsNotEditing}" Value="True">
-                        <Setter Property="TextColor" Value="#FF7622"/> 
+                    <DataTrigger
+                        Binding="{Binding IsNotEditing}"
+                        TargetType="Button"
+                        Value="True">
+                        <Setter Property="TextColor" Value="#FF7622" />
                     </DataTrigger>
                 </Button.Triggers>
             </Button>

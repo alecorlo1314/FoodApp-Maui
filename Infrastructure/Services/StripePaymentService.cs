@@ -9,7 +9,6 @@ namespace FoodApp.Infrastructure.Services;
 public class StripePaymentService : IPaymentGatewayService
 {
     private readonly HttpClient _httpClient;
-    // O puedes inyectar tu cliente de Supabase configurado y obtener la URL y el anon/auth token
 
     public StripePaymentService(HttpClient httpClient)
     {
@@ -23,7 +22,8 @@ public class StripePaymentService : IPaymentGatewayService
         string expMonth,
         string expYear,
         string cvc,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default,
+        string? idempotencyKey = null)
     {
         try
         {
@@ -32,28 +32,15 @@ public class StripePaymentService : IPaymentGatewayService
             if (amount <= 0)
                 return Result.Failure<string>("El monto debe ser mayor que cero.");
 
-            // Estructura de los datos que espera tu Supabase Edge Function
-            //var payload = new
-            //{
-            //    amount = amount,
-            //    currency = currency.ToLowerInvariant(),
-            //    card_number = cardNumber.Replace(" ", ""),
-            //    exp_month = expMonth,
-            //    exp_year = expYear,
-            //    cvc = cvc
-            //};
+            // La función de prueba usa un PaymentMethod de Stripe; no recibe PAN ni CVC.
             var payload = new
             {
                 amount = amount,
-                currency = currency.ToLowerInvariant()
+                currency = currency.ToLowerInvariant(),
+                idempotency_key = idempotencyKey ?? Guid.NewGuid().ToString("D")
             };
 
-            // URL de tu Supabase Edge Function (puedes configurarla en appsettings o constantes)
-            //string functionUrl = "https://hdtsshzstljffllzoqkb.supabase.co/functions/v1/process-payment";
-            string functionUrl = _httpClient.BaseAddress.ToString();
-
-            // Realizamos la petición POST a la Edge Function
-            var response = await _httpClient.PostAsJsonAsync(functionUrl, payload, cancellationToken);
+            using var response = await _httpClient.PostAsJsonAsync(string.Empty, payload, cancellationToken);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -64,7 +51,7 @@ public class StripePaymentService : IPaymentGatewayService
             // Deserializamos la respuesta de la Edge Function
             var resultData = await response.Content.ReadFromJsonAsync<EdgeFunctionPaymentResponse>(cancellationToken: cancellationToken);
 
-            if (resultData != null && resultData.Success) 
+            if (resultData is { Success: true } && !string.IsNullOrWhiteSpace(resultData.TransactionId))
             {
                 return Result.Success(resultData.TransactionId);
             }

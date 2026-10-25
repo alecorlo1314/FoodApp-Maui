@@ -105,6 +105,7 @@ namespace FoodApp
             builder.Services.AddTransient<IRestaurantCategoryRepository, RestaurantCategoryRepository>();
             builder.Services.AddTransient<IFoodRepository, FoodRepository>();
             builder.Services.AddTransient<ICartRepository, CartRepository>();
+            builder.Services.AddTransient<IProductMetricsRepository, ProductMetricsRepository>();
             builder.Services.AddScoped<IUserPaymentRepository, UserPaymentRepository>();
             builder.Services.AddTransient<ILocationService, LocationService>();
 

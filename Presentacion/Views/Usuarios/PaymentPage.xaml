@@ -394,6 +394,15 @@
 
                 <Button
                     BackgroundColor="#FF7622"
+                    Command="{Binding PayAndConfirmCommand}"
+                    CornerRadius="14"
+                    HeightRequest="56"
+                    Text="{Binding PaymentRetryText}"
+                    TextColor="White"
+                    WidthRequest="260" />
+
+                <Button
+                    BackgroundColor="#FF7622"
                     Command="{Binding GoBackCommand}"
                     CornerRadius="14"
                     HeightRequest="56"
