@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
     x:Class="FoodApp.Presentacion.Views.Usuarios.AddCardPage"
-    x:DataType="vm:AddCardViewModel"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:vm="clr-namespace:FoodApp.Presentacion.ViewModels.Usuarios"
     xmlns:droid="clr-namespace:CommunityToolkit.Maui.PlatformConfiguration.AndroidSpecific;assembly=CommunityToolkit.Maui"
     xmlns:editors="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:vm="clr-namespace:FoodApp.Presentacion.ViewModels.Usuarios"
     droid:NavigationBar.Color="White"
     droid:NavigationBar.Style="DarkContent"
+    x:DataType="vm:AddCardViewModel"
     BackgroundColor="White"
     Shell.NavBarIsVisible="False">
 
@@ -45,8 +45,10 @@
         <VerticalStackLayout
             Grid.Row="1"
             Margin="24,10"
-            Spacing="20">
-            <VerticalStackLayout Spacing="8">
+            Spacing="16">
+
+            <!--  CARD HOLDER NAME  -->
+            <VerticalStackLayout Spacing="4">
                 <Label
                     FontFamily="SenRegular"
                     FontSize="14"
@@ -66,9 +68,16 @@
                         Text="{Binding CardHolderName}"
                         TextColor="#32343E" />
                 </Border>
+                <Label
+                    Margin="4,2,0,0"
+                    FontSize="12"
+                    IsVisible="{Binding HasCardHolderNameError}"
+                    Text="{Binding CardHolderNameError}"
+                    TextColor="#FF3B30" />
             </VerticalStackLayout>
 
-            <VerticalStackLayout Spacing="8">
+            <!--  CARD NUMBER  -->
+            <VerticalStackLayout Spacing="4">
                 <Label
                     FontFamily="SenRegular"
                     FontSize="14"
@@ -95,11 +104,19 @@
                         ValueMaskFormat="ExcludePromptAndLiterals"
                         Value="{Binding CardNumber, Mode=TwoWay}" />
                 </Border>
+                <Label
+                    Margin="4,2,0,0"
+                    FontSize="12"
+                    IsVisible="{Binding HasCardNumberError}"
+                    Text="{Binding CardNumberError}"
+                    TextColor="#FF3B30" />
             </VerticalStackLayout>
 
-            <!--  Expiry Date & CVC  -->
+            <!--  EXPIRE DATE & CVC  -->
             <Grid ColumnDefinitions="*, *" ColumnSpacing="16">
-                <VerticalStackLayout Grid.Column="0" Spacing="8">
+
+                <!--  EXPIRE DATE  -->
+                <VerticalStackLayout Grid.Column="0" Spacing="4">
                     <Label
                         FontFamily="SenRegular"
                         FontSize="14"
@@ -124,9 +141,16 @@
                             TextColor="#32343E"
                             Value="{Binding ExpireDate}" />
                     </Border>
+                    <Label
+                        Margin="4,2,0,0"
+                        FontSize="12"
+                        IsVisible="{Binding HasExpireDateError}"
+                        Text="{Binding ExpireDateError}"
+                        TextColor="#FF3B30" />
                 </VerticalStackLayout>
 
-                <VerticalStackLayout Grid.Column="1" Spacing="8">
+                <!--  CVC  -->
+                <VerticalStackLayout Grid.Column="1" Spacing="4">
                     <Label
                         FontFamily="SenRegular"
                         FontSize="14"
@@ -149,6 +173,12 @@
                             Text="{Binding Cvc}"
                             TextColor="#32343E" />
                     </Border>
+                    <Label
+                        Margin="4,2,0,0"
+                        FontSize="12"
+                        IsVisible="{Binding HasCvcError}"
+                        Text="{Binding CvcError}"
+                        TextColor="#FF3B30" />
                 </VerticalStackLayout>
             </Grid>
         </VerticalStackLayout>
@@ -165,6 +195,7 @@
                 FontFamily="SenBold"
                 FontSize="14"
                 HeightRequest="62"
+                IsEnabled="{Binding IsFormValid}"
                 Text="ADD &amp; MAKE PAYMENT"
                 TextColor="White" />
         </Border>
