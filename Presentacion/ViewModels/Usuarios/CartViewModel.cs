@@ -31,6 +31,23 @@ public partial class CartViewModel(IMediator _mediator, ILocationService locatio
     [ObservableProperty]
     private bool isLoading;
 
+    [ObservableProperty]
+    private bool isEditing;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(EditButtonText))]
+    private bool isNotEditing = true;
+
+    // Texto dinámico para el botón superior derecho
+    public string EditButtonText => IsEditing ? "DONE" : "EDIT ITEMS";
+
+    [RelayCommand]
+    private void ToggleEditMode()
+    {
+        IsEditing = !IsEditing;
+        IsNotEditing = !IsEditing;
+    }
+
     [RelayCommand]
     private async Task LoadDataAsync(CancellationToken cancellationToken)
     {
