@@ -188,4 +188,11 @@ public partial class HomeViewModel(IMediator _mediator) : ObservableObject
             navigationParameter);
     }
 
+    [RelayCommand]
+    private async Task NavigateToSearchAsync()
+    {
+        // Navega hacia la página de búsqueda utilizando su nombre registrado
+        await Shell.Current.GoToAsync(nameof(SearchPage));
+    }
+
 }

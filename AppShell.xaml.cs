@@ -23,6 +23,7 @@ namespace FoodApp
             Routing.RegisterRoute(nameof(PaymentPage), typeof(PaymentPage));
             Routing.RegisterRoute(nameof(PaymentSuccessPage), typeof(PaymentSuccessPage));
             Routing.RegisterRoute(nameof(TrackingOrderPage), typeof(TrackingOrderPage));
+            Routing.RegisterRoute(nameof(SearchPage), typeof(SearchPage));
             //Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
             //Routing.RegisterRoute(nameof(HomePage), typeof(HomePage));
         }

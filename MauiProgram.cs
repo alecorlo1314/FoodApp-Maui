@@ -79,6 +79,7 @@ namespace FoodApp
             builder.Services.AddSingleton<PaymentPage>();
             builder.Services.AddSingleton<PaymentSuccessPage>();
             builder.Services.AddSingleton<TrackingOrderPage>();
+            builder.Services.AddSingleton<SearchPage>();
 
             // ViewModels
             builder.Services.AddTransient<OnboardingFavoritesViewModel>();
@@ -96,6 +97,8 @@ namespace FoodApp
             builder.Services.AddSingleton<PaymentViewModel>();
             builder.Services.AddSingleton<PaymentSuccessViewModel>();
             builder.Services.AddSingleton<TrackingOrderViewModel>();
+            builder.Services.AddSingleton<SearchViewModel>();
+            builder.Services.AddSingleton<RestaurantViewModel>();
 
             // Repositorios
             builder.Services.AddTransient<IAuthRepository, SupabaseAuthRepository>();

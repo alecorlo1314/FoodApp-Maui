@@ -154,7 +154,7 @@
                                     Padding="20,10"
                                     HeightRequest="44"
                                     Stroke="#EDEDED"
-                                    StrokeThickness="2">
+                                    StrokeThickness="1">
                                     <Border.StrokeShape>
                                         <RoundRectangle CornerRadius="22" />
                                     </Border.StrokeShape>
@@ -219,93 +219,84 @@
                     <CollectionView ItemsSource="{Binding Foods}" SelectionMode="None">
 
                         <CollectionView.ItemsLayout>
-                            <GridItemsLayout
-                                HorizontalItemSpacing="20"
-                                Orientation="Vertical"
-                                Span="2"
-                                VerticalItemSpacing="16" />
+                            <GridItemsLayout Orientation="Vertical" Span="2" />
                         </CollectionView.ItemsLayout>
 
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="models:FoodItem">
-                                <Border
-                                    Padding="12"
-                                    BackgroundColor="White"
-                                    Stroke="#0D000000"
-                                    StrokeThickness="1">
+                                <Grid Padding="12">
+                                    <Border
+                                        Padding="12"
+                                        BackgroundColor="White"
+                                        Shadow="4 4 15 #96969A 0.15"
+                                        Stroke="Transparent"
+                                        StrokeThickness="1">
 
-                                    <!--  GESTURE RECOGNIZER PARA NAVEGAR A DETALLES  -->
-                                    <Border.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding ViewModel.NavigateToFoodDetailCommand, Source={x:Reference RestaurantDetailPageRoot}, x:DataType='views:RestaurantDetailPage'}" CommandParameter="{Binding}" />
-                                    </Border.GestureRecognizers>
+                                        <!--  GESTURE RECOGNIZER PARA NAVEGAR A DETALLES  -->
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding ViewModel.NavigateToFoodDetailCommand, Source={x:Reference RestaurantDetailPageRoot}, x:DataType='views:RestaurantDetailPage'}" CommandParameter="{Binding}" />
+                                        </Border.GestureRecognizers>
 
-                                    <Border.StrokeShape>
-                                        <RoundRectangle CornerRadius="24" />
-                                    </Border.StrokeShape>
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="24" />
+                                        </Border.StrokeShape>
 
-                                    <Border.Shadow>
-                                        <Shadow
-                                            Brush="#0D000000"
-                                            Opacity="0.4"
-                                            Radius="8"
-                                            Offset="0,4" />
-                                    </Border.Shadow>
+                                        <VerticalStackLayout Spacing="6">
 
-                                    <VerticalStackLayout Spacing="6">
+                                            <Border
+                                                Stroke="Transparent"
+                                                StrokeShape="RoundRectangle 15"
+                                                StrokeThickness="0">
+                                                <!--  Imagen del Alimento  -->
+                                                <Image
+                                                    Aspect="AspectFill"
+                                                    HeightRequest="95"
+                                                    HorizontalOptions="Center"
+                                                    Source="{Binding ImageUrl}" />
+                                            </Border>
 
-                                        <Border
-                                            Stroke="Transparent"
-                                            StrokeShape="RoundRectangle 15"
-                                            StrokeThickness="0">
-                                            <!--  Imagen del Alimento  -->
-                                            <Image
-                                                Aspect="AspectFill"
-                                                HeightRequest="95"
-                                                HorizontalOptions="Center"
-                                                Source="{Binding ImageUrl}" />
-                                        </Border>
-
-                                        <!--  Nombre del Alimento  -->
-                                        <Label
-                                            FontFamily="SenBold"
-                                            FontSize="15"
-                                            LineBreakMode="TailTruncation"
-                                            Text="{Binding Name}"
-                                            TextColor="#181C2E" />
-
-                                        <!--  Subtítulo / Descripción corta  -->
-                                        <Label
-                                            FontFamily="SenRegular"
-                                            FontSize="12"
-                                            LineBreakMode="TailTruncation"
-                                            Text="{Binding Description}"
-                                            TextColor="#A0A5BA" />
-
-                                        <!--  Precio y Botón (+) para Agregar al Carrito  -->
-                                        <Grid Margin="0,4,0,0" ColumnDefinitions="*, Auto">
-
-                                            <!--  Precio Formateado ($40)  -->
+                                            <!--  Nombre del Alimento  -->
                                             <Label
-                                                Grid.Column="0"
                                                 FontFamily="SenBold"
-                                                FontSize="16"
-                                                Text="{Binding PriceFormatted}"
-                                                TextColor="#181C2E"
-                                                VerticalOptions="Center" />
+                                                FontSize="15"
+                                                LineBreakMode="TailTruncation"
+                                                Text="{Binding Name}"
+                                                TextColor="#181C2E" />
 
-                                            <!--  Botón Redondo Naranja (+)  -->
-                                            <ImageButton
-                                                Grid.Column="1"
-                                                Command="{Binding ViewModel.AddToCartCommand, Source={x:Reference RestaurantDetailPageRoot}, x:DataType='views:RestaurantDetailPage'}"
-                                                CommandParameter="{Binding}"
-                                                CornerRadius="16"
-                                                HeightRequest="30"
-                                                Source="ic_add_white.svg"
-                                                WidthRequest="30" />
-                                        </Grid>
+                                            <!--  Subtítulo / Descripción corta  -->
+                                            <Label
+                                                FontFamily="SenRegular"
+                                                FontSize="12"
+                                                LineBreakMode="TailTruncation"
+                                                Text="{Binding Description}"
+                                                TextColor="#A0A5BA" />
 
-                                    </VerticalStackLayout>
-                                </Border>
+                                            <!--  Precio y Botón (+) para Agregar al Carrito  -->
+                                            <Grid Margin="0,4,0,0" ColumnDefinitions="*, Auto">
+
+                                                <!--  Precio Formateado ($40)  -->
+                                                <Label
+                                                    Grid.Column="0"
+                                                    FontFamily="SenBold"
+                                                    FontSize="16"
+                                                    Text="{Binding PriceFormatted}"
+                                                    TextColor="#181C2E"
+                                                    VerticalOptions="Center" />
+
+                                                <!--  Botón Redondo Naranja (+)  -->
+                                                <ImageButton
+                                                    Grid.Column="1"
+                                                    Command="{Binding ViewModel.AddToCartCommand, Source={x:Reference RestaurantDetailPageRoot}, x:DataType='views:RestaurantDetailPage'}"
+                                                    CommandParameter="{Binding}"
+                                                    CornerRadius="16"
+                                                    HeightRequest="30"
+                                                    Source="ic_add_white.svg"
+                                                    WidthRequest="30" />
+                                            </Grid>
+
+                                        </VerticalStackLayout>
+                                    </Border>
+                                </Grid>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>

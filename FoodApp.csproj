@@ -110,6 +110,9 @@
 	  <MauiXaml Update="Presentacion\Views\OnBoarding\OnboardingFavoritesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Presentacion\Views\Usuarios\SearchPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Presentacion\Views\OnBoarding\SplashPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

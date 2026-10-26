@@ -133,27 +133,40 @@
                     sk:Skeleton.IsBusy="{Binding IsLoading, Mode=OneWay}"
                     BackgroundColor="#F6F6F6"
                     HeightRequest="56"
+                    StrokeShape="RoundRectangle 12"
                     StrokeThickness="0">
-                    <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="12" />
-                    </Border.StrokeShape>
-                    <Grid ColumnDefinitions="Auto, *">
+
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NavigateToSearchCommand}" />
+                    </Border.GestureRecognizers>
+
+                    <Grid ColumnDefinitions="Auto, *" InputTransparent="True">
                         <Image
                             Grid.Column="0"
                             HeightRequest="18"
                             Source="ic_search.svg"
                             VerticalOptions="Center"
                             WidthRequest="18" />
-                        <Entry
+                        <Label
                             Grid.Column="1"
                             Margin="12,0,0,0"
                             FontFamily="SenRegular"
                             FontSize="14"
+                            Text="Search dishes, restaurants"
+                            TextColor="#676767"
+                            VerticalOptions="Center" />
+                        <!--<Entry
+                            Grid.Column="1"
+                            Margin="12,0,0,0"
+                            FontFamily="SenRegular"
+                            FontSize="14"
+                            IsEnabled="False"
                             Placeholder="Search dishes, restaurants"
                             PlaceholderColor="#676767"
                             Text="{Binding SearchText}"
                             TextColor="#32343E"
-                            VerticalOptions="Center" />
+                            VerticalOptions="Center">
+                        </Entry>-->
                     </Grid>
                 </Border>
 
