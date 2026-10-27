@@ -80,6 +80,7 @@
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
 		<PackageReference Include="Microsoft.Maui.Controls.Maps" Version="10.0.120" />
+		<PackageReference Include="SimpleToolkit.SimpleShell" Version="6.0.1" />
 		<PackageReference Include="SkiaSharp.Extended.UI.Maui" Version="3.0.0" />
 		<PackageReference Include="Stripe.net" Version="53.0.0" />
 		<PackageReference Include="Supabase" Version="8.4.0" />

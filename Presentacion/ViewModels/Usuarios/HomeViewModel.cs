@@ -9,6 +9,8 @@ using FoodApp.Presentacion.Views.Usuarios;
 using MediatR;
 using System.Collections.ObjectModel;
 namespace FoodApp.Presentacion.ViewModels.Usuarios;
+using Microsoft.Maui.Controls.PlatformConfiguration;
+using Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;
 
 public partial class HomeViewModel(IMediator _mediator) : ObservableObject
 {
@@ -142,10 +144,12 @@ public partial class HomeViewModel(IMediator _mediator) : ObservableObject
 
 
     [RelayCommand]
-    private void OpenMenu()
+    private async Task OpenMenuAsync()
     {
-        // Esto ordena de manera nativa a Shell que abra el menú lateral (Flyout)
-        Shell.Current.FlyoutIsPresented = !Shell.Current.FlyoutIsPresented;
+        if (Shell.Current is AppShell shell)
+        {
+            await shell.ToggleMenuAsync();
+        }
     }
 
     [RelayCommand]

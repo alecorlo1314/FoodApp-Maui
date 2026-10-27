@@ -11,6 +11,7 @@ using FoodApp.Presentacion.Views.Usuarios;
 using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Extensions.Http;
+using SimpleToolkit.SimpleShell;
 using SkiaSharp.Views.Maui.Controls.Hosting;
 using Syncfusion.Maui.Core.Hosting;
 using Syncfusion.Maui.Toolkit.Hosting;
@@ -28,6 +29,7 @@ namespace FoodApp
                 .UseSkiaSharp()
                 .ConfigureSyncfusionCore()
                 .ConfigureSyncfusionToolkit()
+                .UseSimpleShell()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");

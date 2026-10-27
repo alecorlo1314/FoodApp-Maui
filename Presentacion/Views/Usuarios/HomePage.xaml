@@ -10,7 +10,7 @@
     xmlns:views="clr-namespace:FoodApp.Presentacion.Views.Usuarios"
     xmlns:vm="clr-namespace:FoodApp.Presentacion.ViewModels.Usuarios"
     x:Name="HomePageRoot"
-    droid:NavigationBar.Color="White"
+    droid:NavigationBar.Color="#FFFFFF"
     droid:NavigationBar.Style="DarkContent"
     x:DataType="vm:HomeViewModel"
     BackgroundColor="White"

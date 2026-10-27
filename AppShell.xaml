@@ -1,20 +1,120 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Shell
+<simpleShell:SimpleShell
     x:Class="FoodApp.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:views_user="clr-namespace:FoodApp.Presentacion.Views.Usuarios"
-    FlyoutBehavior="Flyout">
+    xmlns:local="clr-namespace:FoodApp.Presentacion.Views.Usuarios"
+    xmlns:simpleShell="clr-namespace:SimpleToolkit.SimpleShell;assembly=SimpleToolkit.SimpleShell"
+    BackgroundColor="#FF7622"
+    FlyoutBehavior="Disabled">
 
-    <FlyoutItem Title="Home" Route="HomePage">
+    <!--  Ruta principal de FoodApp  -->
+    <ShellContent
+        Title="Home"
+        ContentTemplate="{DataTemplate local:HomePage}"
+        Route="HomePage" />
 
-        <ShellContent
-            Title="Home"
-            ContentTemplate="{DataTemplate views_user:HomePage}"
-            Route="HomePage" />
+    <!--  Contenedor de las páginas principales  -->
+    <simpleShell:SimpleShell.RootPageContainer>
 
-    </FlyoutItem>
+        <Grid BackgroundColor="#FF7622">
 
-</Shell>
+            <!--  MENÚ NARANJA  -->
+            <Grid x:Name="MenuLayer" Padding="24,24,0,24">
+
+                <VerticalStackLayout Spacing="24">
+
+                    <!--  Cerrar  -->
+                    <Button
+                        BackgroundColor="Transparent"
+                        Clicked="CloseMenuClicked"
+                        HeightRequest="30"
+                        HorizontalOptions="Start"
+                        ImageSource="ic_equis_menu.svg"
+                        WidthRequest="30" />
+
+                    <Button
+                        Clicked="MenuItemClicked"
+                        CommandParameter="Offer and promo"
+                        ImageSource="ic_offer.svg"
+                        Style="{StaticResource SideMenuButtonStyle}"
+                        Text="Offer and promo" />
+
+                    <Button
+                        Clicked="MenuItemClicked"
+                        CommandParameter="Recent Orders"
+                        ImageSource="ic_orders.svg"
+                        Style="{StaticResource SideMenuButtonStyle}"
+                        Text="Recent Orders" />
+
+                    <Button
+                        Clicked="MenuItemClicked"
+                        CommandParameter="Location"
+                        ImageSource="ic_location.svg"
+                        Style="{StaticResource SideMenuButtonStyle}"
+                        Text="Location" />
+
+                    <Button
+                        Clicked="MenuItemClicked"
+                        CommandParameter="Settings"
+                        ImageSource="ic_settings.svg"
+                        Style="{StaticResource SideMenuButtonStyle}"
+                        Text="Settings" />
+
+                    <Button
+                        Clicked="MenuItemClicked"
+                        CommandParameter="Security"
+                        ImageSource="ic_security.svg"
+                        Style="{StaticResource SideMenuButtonStyle}"
+                        Text="Security" />
+
+                    <Button
+                        Clicked="MenuItemClicked"
+                        CommandParameter="Privacy Policy"
+                        ImageSource="ic_policy.svg"
+                        Style="{StaticResource SideMenuButtonStyle}"
+                        Text="Privacy Policy" />
+
+                </VerticalStackLayout>
+            </Grid>
+
+            <!--  CONTENIDO QUE SE DESPLAZA  -->
+            <Border
+                x:Name="MainSurface"
+                BackgroundColor="White"
+                StrokeShape="RoundRectangle 0"
+                StrokeThickness="0">
+
+                <Grid>
+
+                    <!--  Aquí se mostrará HomePage  -->
+                    <simpleShell:SimpleNavigationHost />
+
+                    <!--  Pulsar vista previa para cerrar  -->
+                    <Grid
+                        x:Name="PreviewOverlay"
+                        BackgroundColor="#01000000"
+                        IsVisible="False">
+
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="PreviewTapped" />
+                        </Grid.GestureRecognizers>
+
+                    </Grid>
+
+                </Grid>
+
+            </Border>
+
+        </Grid>
+
+    </simpleShell:SimpleShell.RootPageContainer>
+
+    <!--  Páginas de detalle  -->
+    <simpleShell:SimpleShell.Content>
+        <simpleShell:SimpleNavigationHost />
+    </simpleShell:SimpleShell.Content>
+
+</simpleShell:SimpleShell>
 
