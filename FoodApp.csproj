@@ -51,6 +51,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<!-- Esta vista se inicializa desde DI mientras no tenga code-behind. -->
+		<MauiXaml Update="Presentacion\Views\Usuarios\ProfilePage.xaml" Inflator="Runtime" />
+		<MauiXaml Update="Presentacion\Views\Usuarios\PersonalInfoPage.xaml" Inflator="Runtime" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
 

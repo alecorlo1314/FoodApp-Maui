@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="FoodApp.Presentacion.Views.Usuarios.ProfilePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:FoodApp.Presentacion.ViewModels.Usuarios"
+    x:DataType="vm:ProfileViewModel"
+    BackgroundColor="White"
+    Shell.NavBarIsVisible="False">
+
+    <!--  RECURSOS DE LA VISTA  -->
+    <ContentPage.Resources>
+        <Style TargetType="Label">
+            <Setter Property="FontFamily" Value="SenRegular" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="TextColor" Value="#32343E" />
+            <Setter Property="VerticalOptions" Value="Center" />
+        </Style>
+        <Style x:Key="ProfileGroupStyle" TargetType="Border">
+            <Setter Property="BackgroundColor" Value="#F6F8FA" />
+            <Setter Property="Padding" Value="20,12" />
+            <Setter Property="StrokeThickness" Value="0" />
+            <Setter Property="StrokeShape" Value="RoundRectangle 16" />
+        </Style>
+        <Style x:Key="ProfileIconCircleStyle" TargetType="Border">
+            <Setter Property="BackgroundColor" Value="White" />
+            <Setter Property="HeightRequest" Value="40" />
+            <Setter Property="WidthRequest" Value="40" />
+            <Setter Property="StrokeThickness" Value="0" />
+            <Setter Property="StrokeShape" Value="RoundRectangle 20" />
+            <Setter Property="VerticalOptions" Value="Center" />
+        </Style>
+        <Style x:Key="ProfileIconStyle" TargetType="Image">
+            <Setter Property="Aspect" Value="AspectFit" />
+            <Setter Property="HeightRequest" Value="20" />
+            <Setter Property="WidthRequest" Value="20" />
+            <Setter Property="HorizontalOptions" Value="Center" />
+            <Setter Property="VerticalOptions" Value="Center" />
+        </Style>
+        <Style x:Key="ProfileHeaderButtonStyle" TargetType="ImageButton">
+            <Setter Property="BackgroundColor" Value="#ECF0F4" />
+            <Setter Property="CornerRadius" Value="23" />
+            <Setter Property="HeightRequest" Value="45" />
+            <Setter Property="WidthRequest" Value="45" />
+        </Style>
+    </ContentPage.Resources>
+
+    <ScrollView VerticalScrollBarVisibility="Never">
+        <VerticalStackLayout Padding="24,24,24,28">
+            <Grid
+                ColumnDefinitions="45,*,45"
+                ColumnSpacing="16"
+                HeightRequest="45">
+                <ImageButton
+                    Command="{Binding GoBackCommand}"
+                    SemanticProperties.Description="Back"
+                    Source="ic_back_white.png"
+                    Style="{StaticResource ProfileHeaderButtonStyle}" />
+                <Label
+                    Grid.Column="1"
+                    Text="Profile"
+                    TextColor="#181C2E" />
+                <ImageButton
+                    Grid.Column="2"
+                    SemanticProperties.Description="More profile options"
+                    Source="ic_more_profile.png"
+                    Style="{StaticResource ProfileHeaderButtonStyle}" />
+            </Grid>
+
+            <Grid
+                Margin="0,24,0,32"
+                ColumnDefinitions="100,*"
+                ColumnSpacing="32">
+                <Border
+                    BackgroundColor="#FFC6AE"
+                    HeightRequest="100"
+                    SemanticProperties.Description="Profile photo placeholder"
+                    StrokeShape="RoundRectangle 50"
+                    StrokeThickness="0"
+                    WidthRequest="100" />
+                <VerticalStackLayout
+                    Grid.Column="1"
+                    Spacing="8"
+                    VerticalOptions="Center">
+                    <Label
+                        FontFamily="SenBold"
+                        FontSize="20"
+                        Text="Vishal Khadok"
+                        TextColor="#32343E" />
+                    <Label
+                        FontSize="14"
+                        Text="I love fast food"
+                        TextColor="#A0A5BA" />
+                </VerticalStackLayout>
+            </Grid>
+
+            <!--  Icon names are reserved for assets to be added later.  -->
+            <VerticalStackLayout Spacing="20">
+                <Border Style="{StaticResource ProfileGroupStyle}">
+                    <VerticalStackLayout Spacing="0">
+                        <Grid
+                            ColumnDefinitions="40,*,16"
+                            ColumnSpacing="14"
+                            HeightRequest="56">
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding NavigateToPersonalInfoCommand}" />
+                            </Grid.GestureRecognizers>
+                            <Border Style="{StaticResource ProfileIconCircleStyle}">
+                                <Image Source="ic_personal_info_profile.svg" Style="{StaticResource ProfileIconStyle}" />
+                            </Border>
+                            <Label Grid.Column="1" Text="Personal Info" />
+                            <Image
+                                Grid.Column="2"
+                                HeightRequest="12"
+                                Source="ic_chevron_right_profile.svg"
+                                Style="{StaticResource ProfileIconStyle}"
+                                WidthRequest="12" />
+                        </Grid>
+                        <Grid
+                            ColumnDefinitions="40,*,16"
+                            ColumnSpacing="14"
+                            HeightRequest="56">
+                            <Border Style="{StaticResource ProfileIconCircleStyle}">
+                                <Image Source="ic_addresses_profile.svg" Style="{StaticResource ProfileIconStyle}" />
+                            </Border>
+                            <Label Grid.Column="1" Text="Addresses" />
+                            <Image
+                                Grid.Column="2"
+                                HeightRequest="12"
+                                Source="ic_chevron_right_profile.svg"
+                                Style="{StaticResource ProfileIconStyle}"
+                                WidthRequest="12" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+                <Border Style="{StaticResource ProfileGroupStyle}">
+                    <VerticalStackLayout Spacing="0">
+                        <Grid
+                            ColumnDefinitions="40,*,16"
+                            ColumnSpacing="14"
+                            HeightRequest="56">
+                            <Border Style="{StaticResource ProfileIconCircleStyle}">
+                                <Image Source="ic_cart_profile.svg" Style="{StaticResource ProfileIconStyle}" />
+                            </Border>
+                            <Label Grid.Column="1" Text="Cart" />
+                            <Image
+                                Grid.Column="2"
+                                HeightRequest="12"
+                                Source="ic_chevron_right_profile.svg"
+                                Style="{StaticResource ProfileIconStyle}"
+                                WidthRequest="12" />
+                        </Grid>
+                        <Grid
+                            ColumnDefinitions="40,*,16"
+                            ColumnSpacing="14"
+                            HeightRequest="56">
+                            <Border Style="{StaticResource ProfileIconCircleStyle}">
+                                <Image Source="ic_favourite_profile.svg" Style="{StaticResource ProfileIconStyle}" />
+                            </Border>
+                            <Label Grid.Column="1" Text="Favourite" />
+                            <Image
+                                Grid.Column="2"
+                                HeightRequest="12"
+                                Source="ic_chevron_right_profile.svg"
+                                Style="{StaticResource ProfileIconStyle}"
+                                WidthRequest="12" />
+                        </Grid>
+                        <Grid
+                            ColumnDefinitions="40,*,16"
+                            ColumnSpacing="14"
+                            HeightRequest="56">
+                            <Border Style="{StaticResource ProfileIconCircleStyle}">
+                                <Image Source="ic_notifications_profile.png" Style="{StaticResource ProfileIconStyle}" />
+                            </Border>
+                            <Label Grid.Column="1" Text="Notifications" />
+                            <Image
+                                Grid.Column="2"
+                                HeightRequest="12"
+                                Source="ic_chevron_right_profile.svg"
+                                Style="{StaticResource ProfileIconStyle}"
+                                WidthRequest="12" />
+                        </Grid>
+                        <Grid
+                            ColumnDefinitions="40,*,16"
+                            ColumnSpacing="14"
+                            HeightRequest="56">
+                            <Border Style="{StaticResource ProfileIconCircleStyle}">
+                                <Image Source="ic_payment_method_profile.svg" Style="{StaticResource ProfileIconStyle}" />
+                            </Border>
+                            <Label Grid.Column="1" Text="Payment Method" />
+                            <Image
+                                Grid.Column="2"
+                                HeightRequest="12"
+                                Source="ic_chevron_right_profile.svg"
+                                Style="{StaticResource ProfileIconStyle}"
+                                WidthRequest="12" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+                <Border Style="{StaticResource ProfileGroupStyle}">
+                    <VerticalStackLayout Spacing="0">
+                        <Grid
+                            ColumnDefinitions="40,*,16"
+                            ColumnSpacing="14"
+                            HeightRequest="56">
+                            <Border Style="{StaticResource ProfileIconCircleStyle}">
+                                <Image Source="ic_faqs_profile.svg" Style="{StaticResource ProfileIconStyle}" />
+                            </Border>
+                            <Label Grid.Column="1" Text="FAQs" />
+                            <Image
+                                Grid.Column="2"
+                                HeightRequest="12"
+                                Source="ic_chevron_right_profile.svg"
+                                Style="{StaticResource ProfileIconStyle}"
+                                WidthRequest="12" />
+                        </Grid>
+                        <Grid
+                            ColumnDefinitions="40,*,16"
+                            ColumnSpacing="14"
+                            HeightRequest="56">
+                            <Border Style="{StaticResource ProfileIconCircleStyle}">
+                                <Image Source="ic_user_reviews_profile.svg" Style="{StaticResource ProfileIconStyle}" />
+                            </Border>
+                            <Label Grid.Column="1" Text="User Reviews" />
+                            <Image
+                                Grid.Column="2"
+                                HeightRequest="12"
+                                Source="ic_chevron_right_profile.svg"
+                                Style="{StaticResource ProfileIconStyle}"
+                                WidthRequest="12" />
+                        </Grid>
+                        <Grid
+                            ColumnDefinitions="40,*,16"
+                            ColumnSpacing="14"
+                            HeightRequest="56">
+                            <Border Style="{StaticResource ProfileIconCircleStyle}">
+                                <Image Source="ic_settings_profile.svg" Style="{StaticResource ProfileIconStyle}" />
+                            </Border>
+                            <Label Grid.Column="1" Text="Settings" />
+                            <Image
+                                Grid.Column="2"
+                                HeightRequest="12"
+                                Source="ic_chevron_right_profile.svg"
+                                Style="{StaticResource ProfileIconStyle}"
+                                WidthRequest="12" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+                <Border Style="{StaticResource ProfileGroupStyle}">
+                    <VerticalStackLayout Spacing="0">
+                        <Grid
+                            ColumnDefinitions="40,*,16"
+                            ColumnSpacing="14"
+                            HeightRequest="56">
+                            <Border Style="{StaticResource ProfileIconCircleStyle}">
+                                <Image Source="ic_logout_profile.svg" Style="{StaticResource ProfileIconStyle}" />
+                            </Border>
+                            <Label Grid.Column="1" Text="Log Out" />
+                            <Image
+                                Grid.Column="2"
+                                HeightRequest="12"
+                                Source="ic_chevron_right_profile.svg"
+                                Style="{StaticResource ProfileIconStyle}"
+                                WidthRequest="12" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

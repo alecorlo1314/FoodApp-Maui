@@ -35,6 +35,8 @@ public partial class AppShell : SimpleShell
         Routing.RegisterRoute(nameof(PaymentSuccessPage), typeof(PaymentSuccessPage));
         Routing.RegisterRoute(nameof(TrackingOrderPage), typeof(TrackingOrderPage));
         Routing.RegisterRoute(nameof(SearchPage), typeof(SearchPage));
+        Routing.RegisterRoute(nameof(ProfilePage), typeof(ProfilePage));
+        Routing.RegisterRoute(nameof(PersonalInfoPage), typeof(PersonalInfoPage));
         //Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
         //Routing.RegisterRoute(nameof(HomePage), typeof(HomePage));
     }
@@ -127,22 +129,27 @@ public partial class AppShell : SimpleShell
     }
 
     private async void MenuItemClicked(
-        object sender, EventArgs e)
+        object sender,
+        EventArgs e)
     {
         if (sender is not Button button)
             return;
 
-        string option =
-            button.CommandParameter?.ToString() ?? "";
+        string? option = button.CommandParameter?.ToString();
 
+        // Primero cerrar el menú y completar la animación
         await CloseMenuAsync();
 
-        // De momento, las rutas del menú son ilustrativas.
-        // Aquí conectarás cada opción a su pantalla.
-        await DisplayAlertAsync(
-            "FoodApp",
-            $"Seleccionaste: {option}",
-            "OK");
+        // Después navegar a la pantalla seleccionada
+        switch (option)
+        {
+            case "Settings":
+                await Shell.Current.GoToAsync(
+                    nameof(ProfilePage));
+                break;
+
+                // Aquí puedes agregar las demás opciones
+        }
     }
 
     private void UpdateSystemBars()
