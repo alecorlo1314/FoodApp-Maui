@@ -12,7 +12,6 @@
     x:Name="RestaurantDetailPageRoot"
     droid:NavigationBar.Color="White"
     x:DataType="vm:RestaurantDetailViewModel"
-    BackgroundColor="White"
     SafeAreaEdges="None"
     Shell.NavBarIsVisible="False">
 
@@ -20,7 +19,10 @@
         <toolkit:StatusBarBehavior StatusBarColor="Transparent" StatusBarStyle="DarkContent" />
     </ContentPage.Behaviors>
 
-    <Grid RowDefinitions="*" SafeAreaEdges="None">
+    <Grid
+        BackgroundColor="White"
+        RowDefinitions="*"
+        SafeAreaEdges="None">
 
         <ScrollView IsVisible="{Binding IsNotLoading}">
             <VerticalStackLayout Spacing="20">
