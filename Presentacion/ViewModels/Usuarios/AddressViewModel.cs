@@ -34,18 +34,24 @@ public partial class AddressViewModel : ObservableObject
     private async Task GoBackAsync() => await Shell.Current.GoToAsync("..");
 
     [RelayCommand]
-    private void AddNewAddress()
+    private async Task TaskAddNewAddress()
     {
     }
 
     [RelayCommand]
-    private void EditAddress(AddressModel address)
+    private async Task EditAddress(AddressModel address)
     {
     }
 
     [RelayCommand]
-    private void DeleteAddress(AddressModel address)
+    private async Task DeleteAddress(AddressModel address)
     {
         Addresses.Remove(address);
+    }
+
+    [RelayCommand]
+    private async Task AddNewAddress()
+    {
+        await Shell.Current.DisplayAlertAsync("Informacion", "Aun estamos en desarrollo", "OK");
     }
 }

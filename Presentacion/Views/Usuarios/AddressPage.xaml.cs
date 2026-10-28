@@ -1,16 +1,16 @@
-using FoodApp.Presentacion.ViewModels.Usuarios;
+﻿using FoodApp.Presentacion.ViewModels.Usuarios;
 
 namespace FoodApp.Presentacion.Views.Usuarios;
 
-public partial class AddressPage : ContentPage
+public partial class AddressPage
 {
-    public AddressViewModel ViewModel { get; }
-
+    private readonly AddressViewModel _viewModel;
+    public AddressViewModel ViewModel => _viewModel;
     public AddressPage(AddressViewModel viewModel)
     {
         ArgumentNullException.ThrowIfNull(viewModel);
-        ViewModel = viewModel;
-        BindingContext = viewModel;
+        _viewModel = viewModel;
+        BindingContext = _viewModel;
         InitializeComponent();
     }
 }

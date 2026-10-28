@@ -7,8 +7,8 @@
     xmlns:views="clr-namespace:FoodApp.Presentacion.Views.Usuarios"
     xmlns:vm="clr-namespace:FoodApp.Presentacion.ViewModels.Usuarios"
     x:Name="AddressPageRoot"
-    x:DataType="vm:AddressViewModel"
     Title="My Address"
+    x:DataType="vm:AddressViewModel"
     BackgroundColor="White"
     Shell.NavBarIsVisible="False">
 
@@ -36,7 +36,10 @@
         </Style>
     </ContentPage.Resources>
 
-    <Grid Padding="24" RowDefinitions="45,*,62" RowSpacing="24">
+    <Grid
+        Padding="24"
+        RowDefinitions="45,*,62"
+        RowSpacing="24">
         <Grid ColumnDefinitions="45,*" ColumnSpacing="16">
             <ImageButton
                 Command="{Binding GoBackCommand}"
@@ -67,7 +70,11 @@
                         MinimumHeightRequest="101"
                         StrokeShape="RoundRectangle 16"
                         StrokeThickness="0">
-                        <Grid ColumnDefinitions="48,*,20,20" ColumnSpacing="12" RowDefinitions="Auto,*" RowSpacing="8">
+                        <Grid
+                            ColumnDefinitions="48,*,20,20"
+                            ColumnSpacing="12"
+                            RowDefinitions="Auto,*"
+                            RowSpacing="8">
                             <Border
                                 Grid.RowSpan="2"
                                 BackgroundColor="White"

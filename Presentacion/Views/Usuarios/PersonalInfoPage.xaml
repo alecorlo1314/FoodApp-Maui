@@ -81,7 +81,12 @@
                     SemanticProperties.Description="Profile photo placeholder"
                     StrokeShape="RoundRectangle 50"
                     StrokeThickness="0"
-                    WidthRequest="100" />
+                    WidthRequest="100">
+                    <Image
+                        Aspect="AspectFill"
+                        HeightRequest="100"
+                        Source="{Binding Profile.Photo}" />
+                </Border>
                 <VerticalStackLayout
                     Grid.Column="1"
                     Spacing="8"
@@ -89,9 +94,9 @@
                     <Label
                         FontFamily="SenBold"
                         FontSize="20"
-                        Text="Vishal Khadok"
+                        Text="{Binding Profile.Name}"
                         TextColor="#181C2E" />
-                    <Label Text="I love fast food" TextColor="#A0A5BA" />
+                    <Label Text="{Binding Profile.Bio}" TextColor="#A0A5BA" />
                 </VerticalStackLayout>
             </Grid>
 
@@ -114,7 +119,7 @@
                             Spacing="2"
                             VerticalOptions="Center">
                             <Label Style="{StaticResource PersonalInfoFieldTitleStyle}" Text="FULL NAME" />
-                            <Label Text="Vishal Khadok" TextColor="#6B6E82" />
+                            <Label Text="{Binding Profile.Name}" TextColor="#6B6E82" />
                         </VerticalStackLayout>
                     </Grid>
                     <Grid
@@ -131,7 +136,7 @@
                             <Label Style="{StaticResource PersonalInfoFieldTitleStyle}" Text="EMAIL" />
                             <Label
                                 LineBreakMode="TailTruncation"
-                                Text="hello@halallab.co"
+                                Text="{Binding Profile.Email}"
                                 TextColor="#6B6E82" />
                         </VerticalStackLayout>
                     </Grid>
@@ -147,7 +152,7 @@
                             Spacing="2"
                             VerticalOptions="Center">
                             <Label Style="{StaticResource PersonalInfoFieldTitleStyle}" Text="PHONE NUMBER" />
-                            <Label Text="408-841-0926" TextColor="#6B6E82" />
+                            <Label Text="{Binding Profile.PhoneNumber}" TextColor="#6B6E82" />
                         </VerticalStackLayout>
                     </Grid>
                 </VerticalStackLayout>

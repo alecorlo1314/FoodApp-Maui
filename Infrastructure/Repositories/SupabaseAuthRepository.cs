@@ -94,9 +94,8 @@ public class SupabaseAuthRepository(Client _supabaseClient) : IAuthRepository
                 // 2. Si todo sale bien en Auth, guardamos el perfil adicional en la base de datos
                 var newProfile = new ProfileModel
                 {
-                    Id = session.User.Id,
+                    Id = Guid.Parse(session.User.Id),
                     Name = name,
-                    DefaultAddress = "Selecciona una dirección"
                 };
 
                 await _supabaseClient.From<ProfileModel>().Insert(newProfile, cancellationToken: cancellationToken);
