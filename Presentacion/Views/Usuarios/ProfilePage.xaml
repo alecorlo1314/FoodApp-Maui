@@ -45,8 +45,11 @@
         </Style>
     </ContentPage.Resources>
 
+    <!--  VISTA SCROLEABLE  -->
     <ScrollView VerticalScrollBarVisibility="Never">
-        <VerticalStackLayout Padding="24,24,24,28">
+        <VerticalStackLayout Padding="24">
+
+            <!--  HEADER  -->
             <Grid
                 ColumnDefinitions="45,*,45"
                 ColumnSpacing="16"
@@ -54,7 +57,7 @@
                 <ImageButton
                     Command="{Binding GoBackCommand}"
                     SemanticProperties.Description="Back"
-                    Source="ic_back_white.png"
+                    Source="ic_back_white.svg"
                     Style="{StaticResource ProfileHeaderButtonStyle}" />
                 <Label
                     Grid.Column="1"
@@ -67,6 +70,7 @@
                     Style="{StaticResource ProfileHeaderButtonStyle}" />
             </Grid>
 
+            <!--  CONTENIDO FOTO Y NOMBRE  -->
             <Grid
                 Margin="0,24,0,32"
                 ColumnDefinitions="100,*"
@@ -94,10 +98,13 @@
                 </VerticalStackLayout>
             </Grid>
 
-            <!--  Icon names are reserved for assets to be added later.  -->
+            <!--  CONTENIDO GRUPOS  -->
             <VerticalStackLayout Spacing="20">
+
+                <!--  GRUPO PERSONAL INFO Y DIRECCIONES  -->
                 <Border Style="{StaticResource ProfileGroupStyle}">
                     <VerticalStackLayout Spacing="0">
+
                         <Grid
                             ColumnDefinitions="40,*,16"
                             ColumnSpacing="14"
@@ -111,11 +118,12 @@
                             <Label Grid.Column="1" Text="Personal Info" />
                             <Image
                                 Grid.Column="2"
-                                HeightRequest="12"
+                                HeightRequest="24"
                                 Source="ic_chevron_right_profile.svg"
                                 Style="{StaticResource ProfileIconStyle}"
-                                WidthRequest="12" />
+                                WidthRequest="24" />
                         </Grid>
+
                         <Grid
                             ColumnDefinitions="40,*,16"
                             ColumnSpacing="14"
@@ -126,13 +134,16 @@
                             <Label Grid.Column="1" Text="Addresses" />
                             <Image
                                 Grid.Column="2"
-                                HeightRequest="12"
+                                HeightRequest="24"
                                 Source="ic_chevron_right_profile.svg"
                                 Style="{StaticResource ProfileIconStyle}"
-                                WidthRequest="12" />
+                                WidthRequest="24" />
                         </Grid>
+
                     </VerticalStackLayout>
                 </Border>
+
+                <!--  GRUPO CART, FAVORITOS, NOTIFICACIONES Y METODOS DE PAGO  -->
                 <Border Style="{StaticResource ProfileGroupStyle}">
                     <VerticalStackLayout Spacing="0">
                         <Grid
@@ -145,10 +156,10 @@
                             <Label Grid.Column="1" Text="Cart" />
                             <Image
                                 Grid.Column="2"
-                                HeightRequest="12"
+                                HeightRequest="24"
                                 Source="ic_chevron_right_profile.svg"
                                 Style="{StaticResource ProfileIconStyle}"
-                                WidthRequest="12" />
+                                WidthRequest="24" />
                         </Grid>
                         <Grid
                             ColumnDefinitions="40,*,16"
@@ -160,10 +171,10 @@
                             <Label Grid.Column="1" Text="Favourite" />
                             <Image
                                 Grid.Column="2"
-                                HeightRequest="12"
+                                HeightRequest="24"
                                 Source="ic_chevron_right_profile.svg"
                                 Style="{StaticResource ProfileIconStyle}"
-                                WidthRequest="12" />
+                                WidthRequest="24" />
                         </Grid>
                         <Grid
                             ColumnDefinitions="40,*,16"
@@ -175,10 +186,10 @@
                             <Label Grid.Column="1" Text="Notifications" />
                             <Image
                                 Grid.Column="2"
-                                HeightRequest="12"
+                                HeightRequest="24"
                                 Source="ic_chevron_right_profile.svg"
                                 Style="{StaticResource ProfileIconStyle}"
-                                WidthRequest="12" />
+                                WidthRequest="24" />
                         </Grid>
                         <Grid
                             ColumnDefinitions="40,*,16"
@@ -190,13 +201,15 @@
                             <Label Grid.Column="1" Text="Payment Method" />
                             <Image
                                 Grid.Column="2"
-                                HeightRequest="12"
+                                HeightRequest="24"
                                 Source="ic_chevron_right_profile.svg"
                                 Style="{StaticResource ProfileIconStyle}"
-                                WidthRequest="12" />
+                                WidthRequest="24" />
                         </Grid>
                     </VerticalStackLayout>
                 </Border>
+
+                <!--  GRUPO FAQS,REVIEWS Y SETTINGS  -->
                 <Border Style="{StaticResource ProfileGroupStyle}">
                     <VerticalStackLayout Spacing="0">
                         <Grid
@@ -209,10 +222,10 @@
                             <Label Grid.Column="1" Text="FAQs" />
                             <Image
                                 Grid.Column="2"
-                                HeightRequest="12"
+                                HeightRequest="24"
                                 Source="ic_chevron_right_profile.svg"
                                 Style="{StaticResource ProfileIconStyle}"
-                                WidthRequest="12" />
+                                WidthRequest="24" />
                         </Grid>
                         <Grid
                             ColumnDefinitions="40,*,16"
@@ -224,10 +237,10 @@
                             <Label Grid.Column="1" Text="User Reviews" />
                             <Image
                                 Grid.Column="2"
-                                HeightRequest="12"
+                                HeightRequest="24"
                                 Source="ic_chevron_right_profile.svg"
                                 Style="{StaticResource ProfileIconStyle}"
-                                WidthRequest="12" />
+                                WidthRequest="24" />
                         </Grid>
                         <Grid
                             ColumnDefinitions="40,*,16"
@@ -239,13 +252,15 @@
                             <Label Grid.Column="1" Text="Settings" />
                             <Image
                                 Grid.Column="2"
-                                HeightRequest="12"
+                                HeightRequest="24"
                                 Source="ic_chevron_right_profile.svg"
                                 Style="{StaticResource ProfileIconStyle}"
-                                WidthRequest="12" />
+                                WidthRequest="24" />
                         </Grid>
                     </VerticalStackLayout>
                 </Border>
+
+                <!--  GRUPO LOG OUT  -->
                 <Border Style="{StaticResource ProfileGroupStyle}">
                     <VerticalStackLayout Spacing="0">
                         <Grid
@@ -258,13 +273,14 @@
                             <Label Grid.Column="1" Text="Log Out" />
                             <Image
                                 Grid.Column="2"
-                                HeightRequest="12"
+                                HeightRequest="24"
                                 Source="ic_chevron_right_profile.svg"
                                 Style="{StaticResource ProfileIconStyle}"
-                                WidthRequest="12" />
+                                WidthRequest="24" />
                         </Grid>
                     </VerticalStackLayout>
                 </Border>
+
             </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>

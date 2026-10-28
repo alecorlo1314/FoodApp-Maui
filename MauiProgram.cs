@@ -82,23 +82,8 @@ namespace FoodApp
             builder.Services.AddSingleton<PaymentSuccessPage>();
             builder.Services.AddSingleton<TrackingOrderPage>();
             builder.Services.AddSingleton<SearchPage>();
-            builder.Services.AddTransient<ProfilePage>(services =>
-            {
-                var page = new ProfilePage
-                {
-                    BindingContext = services.GetRequiredService<ProfileViewModel>()
-                };
-                // Inicialización del XAML sin crear code-behind para esta vista.
-                return page.LoadFromXaml(typeof(ProfilePage));
-            });
-            builder.Services.AddTransient<PersonalInfoPage>(services =>
-            {
-                var page = new PersonalInfoPage
-                {
-                    BindingContext = services.GetRequiredService<PersonalInfoViewModel>()
-                };
-                return page.LoadFromXaml(typeof(PersonalInfoPage));
-            });
+            builder.Services.AddTransient<ProfilePage>();
+            builder.Services.AddTransient<PersonalInfoPage>();
 
             // ViewModels
             builder.Services.AddTransient<OnboardingFavoritesViewModel>();
