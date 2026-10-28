@@ -84,6 +84,7 @@ namespace FoodApp
             builder.Services.AddSingleton<SearchPage>();
             builder.Services.AddTransient<ProfilePage>();
             builder.Services.AddTransient<PersonalInfoPage>();
+            builder.Services.AddTransient<AddressPage>();
 
             // ViewModels
             builder.Services.AddTransient<OnboardingFavoritesViewModel>();
@@ -104,6 +105,7 @@ namespace FoodApp
             builder.Services.AddSingleton<SearchViewModel>();
             builder.Services.AddTransient<ProfileViewModel>();
             builder.Services.AddTransient<PersonalInfoViewModel>();
+            builder.Services.AddTransient<AddressViewModel>();
             builder.Services.AddSingleton<RestaurantViewModel>();
 
             // Repositorios

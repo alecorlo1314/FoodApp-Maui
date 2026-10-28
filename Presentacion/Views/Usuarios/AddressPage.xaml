@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="FoodApp.Presentacion.Views.Usuarios.AddressPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:FoodApp.Presentacion.Models"
+    xmlns:views="clr-namespace:FoodApp.Presentacion.Views.Usuarios"
+    xmlns:vm="clr-namespace:FoodApp.Presentacion.ViewModels.Usuarios"
+    x:Name="AddressPageRoot"
+    x:DataType="vm:AddressViewModel"
+    Title="My Address"
+    BackgroundColor="White"
+    Shell.NavBarIsVisible="False">
+
+    <ContentPage.Resources>
+        <Style TargetType="Label">
+            <Setter Property="FontFamily" Value="SenRegular" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="TextColor" Value="#32343E" />
+        </Style>
+        <Style x:Key="ProfileHeaderButtonStyle" TargetType="ImageButton">
+            <Setter Property="BackgroundColor" Value="#ECF0F4" />
+            <Setter Property="CornerRadius" Value="23" />
+            <Setter Property="HeightRequest" Value="45" />
+            <Setter Property="WidthRequest" Value="45" />
+        </Style>
+        <Style x:Key="AddressActionButtonStyle" TargetType="ImageButton">
+            <Setter Property="BackgroundColor" Value="Transparent" />
+            <Setter Property="HeightRequest" Value="20" />
+            <Setter Property="WidthRequest" Value="20" />
+            <Setter Property="MinimumHeightRequest" Value="20" />
+            <Setter Property="MinimumWidthRequest" Value="20" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Aspect" Value="AspectFit" />
+            <Setter Property="VerticalOptions" Value="Start" />
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid Padding="24" RowDefinitions="45,*,62" RowSpacing="24">
+        <Grid ColumnDefinitions="45,*" ColumnSpacing="16">
+            <ImageButton
+                Command="{Binding GoBackCommand}"
+                SemanticProperties.Description="Back"
+                Source="ic_back_white.svg"
+                Style="{StaticResource ProfileHeaderButtonStyle}" />
+            <Label
+                Grid.Column="1"
+                FontSize="17"
+                Text="My Address"
+                TextColor="#181C2E"
+                VerticalOptions="Center" />
+        </Grid>
+
+        <CollectionView
+            Grid.Row="1"
+            ItemsSource="{Binding Addresses}"
+            SelectionMode="None"
+            VerticalScrollBarVisibility="Never">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout ItemSpacing="20" Orientation="Vertical" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:AddressModel">
+                    <Border
+                        Padding="16"
+                        BackgroundColor="#F0F5FA"
+                        MinimumHeightRequest="101"
+                        StrokeShape="RoundRectangle 16"
+                        StrokeThickness="0">
+                        <Grid ColumnDefinitions="48,*,20,20" ColumnSpacing="12" RowDefinitions="Auto,*" RowSpacing="8">
+                            <Border
+                                Grid.RowSpan="2"
+                                BackgroundColor="White"
+                                HeightRequest="48"
+                                StrokeShape="RoundRectangle 24"
+                                StrokeThickness="0"
+                                VerticalOptions="Start"
+                                WidthRequest="48">
+                                <Image
+                                    Aspect="AspectFit"
+                                    HeightRequest="24"
+                                    HorizontalOptions="Center"
+                                    Source="{Binding IconSource}"
+                                    VerticalOptions="Center"
+                                    WidthRequest="24" />
+                            </Border>
+                            <Label
+                                Grid.Column="1"
+                                CharacterSpacing="0.4"
+                                FontSize="13"
+                                Text="{Binding Title}"
+                                VerticalOptions="Center" />
+                            <ImageButton
+                                Grid.Column="2"
+                                Command="{Binding ViewModel.EditAddressCommand, Source={x:Reference AddressPageRoot}, x:DataType='views:AddressPage'}"
+                                CommandParameter="{Binding}"
+                                SemanticProperties.Description="Edit address"
+                                Source="ic_edit_address.png"
+                                Style="{StaticResource AddressActionButtonStyle}" />
+                            <ImageButton
+                                Grid.Column="3"
+                                Command="{Binding ViewModel.DeleteAddressCommand, Source={x:Reference AddressPageRoot}, x:DataType='views:AddressPage'}"
+                                CommandParameter="{Binding}"
+                                SemanticProperties.Description="Delete address"
+                                Source="ic_delete_address.png"
+                                Style="{StaticResource AddressActionButtonStyle}" />
+                            <Label
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Grid.ColumnSpan="3"
+                                FontSize="14"
+                                LineBreakMode="WordWrap"
+                                Text="{Binding Description}"
+                                TextColor="#979AA2" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Button
+            Grid.Row="2"
+            BackgroundColor="#FF7622"
+            Command="{Binding AddNewAddressCommand}"
+            CornerRadius="12"
+            FontFamily="SenBold"
+            FontSize="14"
+            HeightRequest="62"
+            Text="ADD NEW ADDRESS"
+            TextColor="White" />
+    </Grid>
+</ContentPage>

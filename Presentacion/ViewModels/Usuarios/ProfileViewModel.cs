@@ -13,4 +13,8 @@ public partial class ProfileViewModel : ObservableObject
     [RelayCommand]
     private async Task NavigateToPersonalInfoAsync() =>
         await Shell.Current.GoToAsync(nameof(PersonalInfoPage));
+
+    [RelayCommand]
+    private async Task NavigateToAddressesAsync() =>
+        await Shell.Current.GoToAsync(nameof(AddressPage));
 }

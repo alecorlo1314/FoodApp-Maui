@@ -37,6 +37,7 @@ public partial class AppShell : SimpleShell
         Routing.RegisterRoute(nameof(SearchPage), typeof(SearchPage));
         Routing.RegisterRoute(nameof(ProfilePage), typeof(ProfilePage));
         Routing.RegisterRoute(nameof(PersonalInfoPage), typeof(PersonalInfoPage));
+        Routing.RegisterRoute(nameof(AddressPage), typeof(AddressPage));
         //Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
         //Routing.RegisterRoute(nameof(HomePage), typeof(HomePage));
     }
