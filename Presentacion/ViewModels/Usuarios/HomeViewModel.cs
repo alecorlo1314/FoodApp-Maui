@@ -4,13 +4,10 @@ using FoodApp.Aplicacion.Features.Cart.Queries.GetCountCart;
 using FoodApp.Aplicacion.Features.Categories.Queries.GetCategories;
 using FoodApp.Aplicacion.Features.Restaurants.Queries.GetRestaurants;
 using FoodApp.Aplicacion.Features.Users.Queries.GetActiveUserProfile;
-using FoodApp.Domain.Entities;
 using FoodApp.Presentacion.Views.Usuarios;
 using MediatR;
 using System.Collections.ObjectModel;
 namespace FoodApp.Presentacion.ViewModels.Usuarios;
-using Microsoft.Maui.Controls.PlatformConfiguration;
-using Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;
 
 public partial class HomeViewModel(IMediator _mediator) : ObservableObject
 {
@@ -34,11 +31,11 @@ public partial class HomeViewModel(IMediator _mediator) : ObservableObject
     [ObservableProperty]
     private string searchText = string.Empty;
     [ObservableProperty]
-    private Category? selectedCategory;
+    private CategoryDto? selectedCategory;
     [ObservableProperty]
-    private ObservableCollection<Category> categories = new();
+    private ObservableCollection<CategoryDto> categories = new();
     [ObservableProperty]
-    private ObservableCollection<Restaurant> restaurants = new();
+    private ObservableCollection<RestaurantDto> restaurants = new();
 
     [RelayCommand]
     private async Task LoadDataAsync(CancellationToken cancellationToken)
@@ -156,7 +153,7 @@ public partial class HomeViewModel(IMediator _mediator) : ObservableObject
     private void OpenCart() => Shell.Current.GoToAsync(nameof(CartPage));
 
     [RelayCommand]
-    private async Task SelectCategoryAsync(Category category)
+    private async Task SelectCategoryAsync(CategoryDto category)
     {
         SelectedCategory = category;
 
@@ -177,7 +174,7 @@ public partial class HomeViewModel(IMediator _mediator) : ObservableObject
 
 
     [RelayCommand]
-    private async Task SelectRestaurantAsync(Restaurant restaurant)
+    private async Task SelectRestaurantAsync(RestaurantDto restaurant)
     {
         if (restaurant is null)
             return;

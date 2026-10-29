@@ -1,7 +1,7 @@
 ﻿using FoodApp.Domain.Common;
-using FoodApp.Domain.Entities;
+using FoodApp.Aplicacion.Features.Payments.Queries.GetPaymentMethods;
 using MediatR;
 
 namespace FoodApp.Aplicacion.Features.Payments.Commands.AddPaymenthMethod;
 
-public record AddPaymentMethodCommand(UserPaymentMethod Card) : IRequest<Result<bool>>;
+public record AddPaymentMethodCommand(UserPaymentMethodDto Card) : IRequest<Result<bool>>;

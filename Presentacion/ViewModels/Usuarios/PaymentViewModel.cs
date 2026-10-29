@@ -20,7 +20,7 @@ public partial class PaymentViewModel(IMediator _mediator) : ObservableObject
     private Guid _checkoutId = Guid.NewGuid();
     private Guid _checkoutUserId;
     private List<OrderItemPayload>? _checkoutItems;
-    private UserPaymentMethod? _checkoutCard;
+    private UserPaymentMethodDto? _checkoutCard;
     private decimal _checkoutAmount;
     private string? _confirmedPaymentId;
     private bool _paymentSubmitted;
@@ -67,7 +67,7 @@ public partial class PaymentViewModel(IMediator _mediator) : ObservableObject
     private bool hasCard;
 
     [ObservableProperty]
-    private UserPaymentMethod? savedCard;
+    private UserPaymentMethodDto? savedCard;
 
     [ObservableProperty]
     private bool isLoading;
@@ -77,10 +77,10 @@ public partial class PaymentViewModel(IMediator _mediator) : ObservableObject
     private bool isBottomSheetOpen;
 
     [ObservableProperty]
-    private List<UserPaymentMethod> allCards = new();
+    private List<UserPaymentMethodDto> allCards = new();
 
     [ObservableProperty]
-    private List<UserPaymentMethod> filteredCards = new();
+    private List<UserPaymentMethodDto> filteredCards = new();
 
     [ObservableProperty]
     private string selectedBrandFilter = "All";
@@ -158,7 +158,7 @@ public partial class PaymentViewModel(IMediator _mediator) : ObservableObject
     }
 
     [RelayCommand]
-    private void SelectCard(UserPaymentMethod card)
+    private void SelectCard(UserPaymentMethodDto card)
     {
         if (card != null)
         {
@@ -258,7 +258,7 @@ public partial class PaymentViewModel(IMediator _mediator) : ObservableObject
 
                 _checkoutUserId = user.Value.Id;
                 _checkoutAmount = TotalAmount;
-                _checkoutCard = new UserPaymentMethod
+                _checkoutCard = new UserPaymentMethodDto
                 {
                     CardNumberMasked = SavedCard.CardNumberMasked,
                     ExpiryDate = SavedCard.ExpiryDate

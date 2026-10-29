@@ -3,7 +3,7 @@
     x:Class="FoodApp.Presentacion.Views.Usuarios.PaymentPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:domain="clr-namespace:FoodApp.Domain.Entities"
+    xmlns:payments="clr-namespace:FoodApp.Aplicacion.Features.Payments.Queries.GetPaymentMethods"
     xmlns:droid="clr-namespace:CommunityToolkit.Maui.PlatformConfiguration.AndroidSpecific;assembly=CommunityToolkit.Maui"
     xmlns:skia="clr-namespace:SkiaSharp.Extended.UI.Controls;assembly=SkiaSharp.Extended.UI"
     xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Toolkit.BottomSheet;assembly=Syncfusion.Maui.Toolkit"
@@ -448,7 +448,7 @@
                         </CollectionView.ItemsLayout>
 
                         <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="domain:UserPaymentMethod">
+                            <DataTemplate x:DataType="payments:UserPaymentMethodDto">
                                 <Border
                                     Padding="16,12"
                                     BackgroundColor="#F4F5F7"

@@ -1,8 +1,8 @@
-using FoodApp.Domain.Entities;
+using FoodApp.Aplicacion.Features.Restaurants.Queries.GetRestaurants;
 
 namespace FoodApp.Aplicacion.Common.Interfaces;
 
 public interface IRestaurantRepository
 {
-    Task<IEnumerable<Restaurant>> GetRestaurantsAsync(CancellationToken cancellationToken = default);
+    Task<IEnumerable<RestaurantDto>> GetRestaurantsAsync(CancellationToken cancellationToken = default);
 }

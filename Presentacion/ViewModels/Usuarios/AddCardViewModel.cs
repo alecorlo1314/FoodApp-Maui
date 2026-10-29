@@ -1,7 +1,7 @@
+using FoodApp.Aplicacion.Features.Payments.Queries.GetPaymentMethods;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FoodApp.Aplicacion.Features.Payments.Commands.AddPaymenthMethod;
-using FoodApp.Domain.Entities;
 using MediatR;
 using System.Text.RegularExpressions;
 
@@ -154,7 +154,7 @@ public partial class AddCardViewModel(IMediator _mediator) : ObservableObject
                 ? DetectCardBrand(cleanCardNumber)
                 : CardBrand;
 
-            var newCard = new UserPaymentMethod
+            var newCard = new UserPaymentMethodDto
             {
                 CardHolderName = CardHolderName.Trim(),
                 CardNumberMasked = lastFour,

@@ -1,8 +1,8 @@
-using FoodApp.Domain.Entities;
+using FoodApp.Aplicacion.Features.Categories.Queries.GetCategories;
 
 namespace FoodApp.Aplicacion.Common.Interfaces;
 
 public interface ICategoryRepository
 {
-    Task<IEnumerable<Category>> GetCategoriesAsync(CancellationToken cancellationToken = default);
+    Task<IEnumerable<CategoryDto>> GetCategoriesAsync(CancellationToken cancellationToken = default);
 }

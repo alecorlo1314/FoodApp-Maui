@@ -4,7 +4,8 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:droid="clr-namespace:CommunityToolkit.Maui.PlatformConfiguration.AndroidSpecific;assembly=CommunityToolkit.Maui"
-    xmlns:models="clr-namespace:FoodApp.Domain.Entities"
+    xmlns:categories="clr-namespace:FoodApp.Aplicacion.Features.RestaurantCategories.Queries.GetRestaurantCategories"
+    xmlns:foods="clr-namespace:FoodApp.Aplicacion.Features.Foods.Queries.GetFoodsByCategory"
     xmlns:sk="clr-namespace:Maui.Skeleton;assembly=Maui.Skeleton"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:views="clr-namespace:FoodApp.Presentacion.Views.Usuarios"
@@ -150,7 +151,7 @@
                         SelectedItem="{Binding SelectedCategory}"
                         SelectionMode="Single">
                         <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="models:RestaurantCategory">
+                            <DataTemplate x:DataType="categories:RestaurantCategoryDto">
                                 <Border
                                     Margin="0,0,12,0"
                                     Padding="20,10"
@@ -225,7 +226,7 @@
                         </CollectionView.ItemsLayout>
 
                         <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="models:FoodItem">
+                            <DataTemplate x:DataType="foods:FoodItemDto">
                                 <Grid Padding="12">
                                     <Border
                                         Padding="12"

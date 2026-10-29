@@ -1,6 +1,6 @@
-﻿using Supabase.Postgrest.Attributes;
+using FoodApp.Aplicacion.Features.Restaurants.Queries.GetRestaurants;
+using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
-using FoodApp.Domain.Entities;
 
 namespace FoodApp.Infrastructure.Models
 {
@@ -31,16 +31,15 @@ namespace FoodApp.Infrastructure.Models
         [Column("description")]
         public string Description { get; set; } = string.Empty;
 
-        public Restaurant ToDomain() => new()
-        {
-            Id = Id,
-            Name = Name,
-            ImageUrl = ImageUrl,
-            Tags = Tags ?? new(),
-            Rating = Rating,
-            DeliveryFee = DeliveryFee,
-            DeliveryTime = DeliveryTime,
-            Description = Description
-        };
+        public RestaurantDto ToDto() => new (
+            Id,
+            Name,
+            ImageUrl,
+            Tags,
+            Rating,
+            DeliveryFee,
+            DeliveryTime,
+            Description
+        );
     }
 }

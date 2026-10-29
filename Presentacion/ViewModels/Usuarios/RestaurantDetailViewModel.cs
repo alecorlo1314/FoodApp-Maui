@@ -1,3 +1,4 @@
+using FoodApp.Aplicacion.Features.Restaurants.Queries.GetRestaurants;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FoodApp.Aplicacion.Features.Cart.Commands.AddToCart;
@@ -14,16 +15,16 @@ namespace FoodApp.Presentacion.ViewModels.Usuarios;
 public partial class RestaurantDetailViewModel(IMediator _mediator) : ObservableObject
 {
     [ObservableProperty]
-    private Restaurant restaurant = new();
+    private RestaurantDto restaurant = new(0);
 
     [ObservableProperty]
-    private ObservableCollection<RestaurantCategory> categories = new();
+    private ObservableCollection<RestaurantCategoryDto> categories = new();
 
     [ObservableProperty]
-    private ObservableCollection<FoodItem> foods = new();
+    private ObservableCollection<FoodItemDto> foods = new();
 
     [ObservableProperty]
-    private RestaurantCategory? selectedCategory;
+    private RestaurantCategoryDto? selectedCategory;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsNotLoading))]
@@ -111,7 +112,7 @@ public partial class RestaurantDetailViewModel(IMediator _mediator) : Observable
 
     [RelayCommand]
     private async Task SelectCategoryAsync(
-        RestaurantCategory category, CancellationToken cancellationToken)
+        RestaurantCategoryDto category, CancellationToken cancellationToken)
     {
         if (category is null || IsLoading)
             return;
@@ -148,7 +149,7 @@ public partial class RestaurantDetailViewModel(IMediator _mediator) : Observable
     }
 
     [RelayCommand]
-    private async Task NavigateToFoodDetailAsync(FoodItem foodItem)
+    private async Task NavigateToFoodDetailAsync(FoodItemDto foodItem)
     {
         if (foodItem == null) return;
 
@@ -162,7 +163,7 @@ public partial class RestaurantDetailViewModel(IMediator _mediator) : Observable
     }
 
     [RelayCommand]
-    private async Task AddToCartAsync(FoodItem foodItem, CancellationToken cancellationToken)
+    private async Task AddToCartAsync(FoodItemDto foodItem, CancellationToken cancellationToken)
     {
         if(foodItem == null) return;
 

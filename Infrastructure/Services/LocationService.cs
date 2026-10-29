@@ -1,5 +1,5 @@
+using FoodApp.Aplicacion.Features.Location.Queries.GetLatLongLocation;
 using FoodApp.Aplicacion.Common.Interfaces;
-using FoodApp.Domain.Entities;
 
 namespace FoodApp.Infrastructure.Services;
 
@@ -64,7 +64,7 @@ public class LocationService : ILocationService
     }
 
 
-    public async Task<Coordenada> GetLatLongAsync(CancellationToken cancellationToken = default)
+    public async Task<CoordenadaDto> GetLatLongAsync(CancellationToken cancellationToken = default)
     {
         try
         {
@@ -80,11 +80,11 @@ public class LocationService : ILocationService
                 cancellationToken.ThrowIfCancellationRequested();
 
                 if (status != PermissionStatus.Granted)
-                    return new Coordenada();
+                    return new CoordenadaDto();
             }
 
             if (!Geolocation.Default.IsEnabled)
-                return new Coordenada();
+                return new CoordenadaDto();
 
             // Primero intentar obtener ubicación cacheada
             var location = await Geolocation.Default
@@ -106,9 +106,9 @@ public class LocationService : ILocationService
             }
 
             if (location is null)
-                return new Coordenada();
+                return new CoordenadaDto();
 
-            return new Coordenada
+            return new CoordenadaDto
             {
                 Latitude = location.Latitude,
                 Longitude = location.Longitude
@@ -123,7 +123,7 @@ public class LocationService : ILocationService
             System.Diagnostics.Debug.WriteLine(
                 $"Error de ubicación: {ex.Message}");
 
-            return new Coordenada();
+            return new CoordenadaDto();
         }
     }
 

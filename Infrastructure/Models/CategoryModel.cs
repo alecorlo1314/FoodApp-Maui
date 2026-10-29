@@ -1,6 +1,6 @@
-﻿using Supabase.Postgrest.Attributes;
+using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
-using FoodApp.Domain.Entities;
+using FoodApp.Aplicacion.Features.Categories.Queries.GetCategories;
 
 namespace FoodApp.Infrastructure.Models
 {
@@ -16,8 +16,8 @@ namespace FoodApp.Infrastructure.Models
         [Column("icon_url")]
         public string IconUrl { get; set; } = string.Empty;
 
-        // Mapeo hacia la entidad de Dominio
-        public Category ToDomain() => new()
+        // Mapeo hacia el DTO de la query
+        public CategoryDto ToDto() => new()
         {
             Id = Id,
             Name = Name,
