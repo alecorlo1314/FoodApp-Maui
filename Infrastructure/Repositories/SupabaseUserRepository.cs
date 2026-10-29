@@ -1,13 +1,15 @@
 using FoodApp.Aplicacion.Common.Interfaces;
-using FoodApp.Domain.Entities;
+using FoodApp.Aplicacion.Features.Users.Queries.GetProfiles;
 using FoodApp.Infrastructure.Models;
-using Supabase.Gotrue;
 
 namespace FoodApp.Infrastructure.Repositories;
 
 public class SupabaseUserRepository(Supabase.Client _supabaseClient) : IUserRepository
 {
-    public async Task<Profile?> GetProfileByIdAsync(Guid userId, CancellationToken cancellationToken = default)
+    #region Obtener Perfil por ID
+    public async Task<ProfileDto?> GetProfileByIdAsync(
+    Guid userId,
+    CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
         try
@@ -31,6 +33,9 @@ public class SupabaseUserRepository(Supabase.Client _supabaseClient) : IUserRepo
         }
     }
 
+    #endregion
+
+    #region Obtener Nombre de Usuario
     public async Task<string> GetUserNameAsync(CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -60,4 +65,6 @@ public class SupabaseUserRepository(Supabase.Client _supabaseClient) : IUserRepo
             return "Usuario";
         }
     }
+
+    #endregion
 }

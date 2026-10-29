@@ -1,7 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FoodApp.Aplicacion.Features.Users.Queries.GetProfiles;
-using FoodApp.Domain.Entities;
 using MediatR;
 
 namespace FoodApp.Presentacion.ViewModels.Usuarios;
@@ -9,7 +8,7 @@ namespace FoodApp.Presentacion.ViewModels.Usuarios;
 public partial class PersonalInfoViewModel(IMediator _mediator) : ObservableObject
 {
     [ObservableProperty]
-    private Profile? profile;
+    private ProfileDto? profile;
 
     [ObservableProperty]
     private bool isLoading;

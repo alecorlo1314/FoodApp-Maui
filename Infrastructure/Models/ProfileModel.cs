@@ -1,4 +1,5 @@
-﻿using FoodApp.Domain.Entities;
+﻿using FoodApp.Aplicacion.Features.Users.Queries.GetProfiles;
+using FoodApp.Domain.Entities;
 using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
 
@@ -24,14 +25,6 @@ public class ProfileModel : BaseModel
     [Column("phone_number")]
     public string? PhoneNumber { get; set; }
 
-    public Profile ToDomain() => new()
-    {
-        Id = Id,
-        Name = Name,
-        Email = Email,
-        Photo = Photo,
-        Bio = Bio,
-        PhoneNumber = PhoneNumber
-
-    };
+    public ProfileDto ToDomain() => 
+        new(Id, Name, Email, Photo, Bio, PhoneNumber);
 }

@@ -9,6 +9,7 @@ namespace FoodApp.Infrastructure.Repositories;
 
 public class SupabaseAuthRepository(Client _supabaseClient) : IAuthRepository
 {
+    #region Usuarios actual de Supabase
     public Result<CurrentUserDto> GetCurrentUser()
     {
         try
@@ -44,16 +45,17 @@ public class SupabaseAuthRepository(Client _supabaseClient) : IAuthRepository
         }
     }
 
+    #endregion
 
-
+    #region Iniciar Sesion Supabase
     public async Task<Result> LoginAsync(
-        string email,
-        string password, CancellationToken cancellationToken = default)
+    string email,
+    string password, 
+    CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
         try
         {
-            // This SDK overload cannot abort Auth HTTP; check cancellation around it.
             var session = await _supabaseClient.Auth.SignIn(
                 email, password);
             cancellationToken.ThrowIfCancellationRequested();
@@ -76,8 +78,14 @@ public class SupabaseAuthRepository(Client _supabaseClient) : IAuthRepository
         }
     }
 
+    #endregion
 
-    public async Task<Result> RegisterAsync(string name, string email, string password, CancellationToken cancellationToken = default)
+    #region Registrar Usuario Supabase
+    public async Task<Result> RegisterAsync(
+        string name, 
+        string email, 
+        string password, 
+        CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
         try
@@ -119,4 +127,6 @@ public class SupabaseAuthRepository(Client _supabaseClient) : IAuthRepository
             return Result.Failure($"Ocurrió un error inesperado: {ex.Message}");
         }
     }
+
+    #endregion
 }
