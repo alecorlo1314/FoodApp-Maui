@@ -55,17 +55,25 @@
                     VerticalOptions="Center" />
             </HorizontalStackLayout>
 
-            <!--  Botón DONE  -->
+            <!--  Botón EDIT ITEMS / DONE  -->
             <Button
                 Grid.Column="2"
                 BackgroundColor="Transparent"
-                Command="{Binding GoBackCommand}"
+                Command="{Binding ToggleEditModeCommand}"
                 FontFamily="SenBold"
                 FontSize="14"
-                HorizontalOptions="End"
-                Text="DONE"
+                Text="{Binding EditButtonText}"
                 TextColor="#059C6A"
-                VerticalOptions="Center" />
+                VerticalOptions="Center">
+                <Button.Triggers>
+                    <DataTrigger
+                        Binding="{Binding IsNotEditing}"
+                        TargetType="Button"
+                        Value="True">
+                        <Setter Property="TextColor" Value="#FF7622" />
+                    </DataTrigger>
+                </Button.Triggers>
+            </Button>
         </Grid>
 
         <!--  2. LISTA DE ITEMS EN EL CARRITO  -->
@@ -135,6 +143,7 @@
                                 CornerRadius="22"
                                 HeightRequest="27"
                                 HorizontalOptions="End"
+                                IsVisible="{Binding ViewModel.IsEditing, Source={x:Reference CartPageRoot}, x:DataType='views:CartPage'}"
                                 Source="ic_close_white.svg"
                                 WidthRequest="27" />
 

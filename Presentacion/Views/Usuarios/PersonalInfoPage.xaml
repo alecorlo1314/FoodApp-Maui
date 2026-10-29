@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="FoodApp.Presentacion.Views.Usuarios.PersonalInfoPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:FoodApp.Presentacion.ViewModels.Usuarios"
+    Title="Personal Info"
+    x:DataType="vm:PersonalInfoViewModel"
+    BackgroundColor="White"
+    Shell.NavBarIsVisible="False">
+
+    <!--  RECURSOS  -->
+    <ContentPage.Resources>
+        <Style TargetType="Label">
+            <Setter Property="FontFamily" Value="SenRegular" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="TextColor" Value="#32343E" />
+            <Setter Property="VerticalOptions" Value="Center" />
+        </Style>
+        <Style x:Key="PersonalInfoIconCircleStyle" TargetType="Border">
+            <Setter Property="BackgroundColor" Value="White" />
+            <Setter Property="HeightRequest" Value="40" />
+            <Setter Property="WidthRequest" Value="40" />
+            <Setter Property="StrokeShape" Value="RoundRectangle 16" />
+            <Setter Property="StrokeThickness" Value="0" />
+            <Setter Property="VerticalOptions" Value="Center" />
+        </Style>
+        <Style x:Key="PersonalInfoIconStyle" TargetType="Image">
+            <Setter Property="Aspect" Value="AspectFit" />
+            <Setter Property="HeightRequest" Value="20" />
+            <Setter Property="WidthRequest" Value="20" />
+            <Setter Property="HorizontalOptions" Value="Center" />
+            <Setter Property="VerticalOptions" Value="Center" />
+        </Style>
+        <Style x:Key="PersonalInfoFieldTitleStyle" TargetType="Label">
+            <Setter Property="FontFamily" Value="SenRegular" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="CharacterSpacing" Value="0.6" />
+            <Setter Property="TextColor" Value="#32343E" />
+        </Style>
+    </ContentPage.Resources>
+
+    <!--  VISTA SCROLEABLE  -->
+    <ScrollView VerticalScrollBarVisibility="Never">
+        <VerticalStackLayout Padding="24">
+            <!--  HEADER  -->
+            <Grid
+                ColumnDefinitions="45,*,Auto"
+                ColumnSpacing="16"
+                HeightRequest="45">
+                <ImageButton
+                    Command="{Binding GoBackCommand}"
+                    CornerRadius="23"
+                    HeightRequest="45"
+                    SemanticProperties.Description="Back"
+                    Source="ic_back_white.svg"
+                    WidthRequest="45" />
+                <Label
+                    Grid.Column="1"
+                    FontFamily="SenRegular"
+                    FontSize="17"
+                    Text="Personal Info"
+                    TextColor="#181C2E" />
+                <Label
+                    Grid.Column="2"
+                    FontFamily="SenRegular"
+                    FontSize="14"
+                    Text="EDIT"
+                    TextColor="#FF7622"
+                    TextDecorations="Underline" />
+            </Grid>
+
+            <!--  CONTENIDO FOTO Y NOMBRE  -->
+            <Grid
+                Margin="0,24,0,32"
+                ColumnDefinitions="100,*"
+                ColumnSpacing="32">
+                <Border
+                    BackgroundColor="#FFC6AE"
+                    HeightRequest="100"
+                    SemanticProperties.Description="Profile photo placeholder"
+                    StrokeShape="RoundRectangle 50"
+                    StrokeThickness="0"
+                    WidthRequest="100">
+                    <Image
+                        Aspect="AspectFill"
+                        HeightRequest="100"
+                        Source="{Binding Profile.Photo}" />
+                </Border>
+                <VerticalStackLayout
+                    Grid.Column="1"
+                    Spacing="8"
+                    VerticalOptions="Center">
+                    <Label
+                        FontFamily="SenBold"
+                        FontSize="20"
+                        Text="{Binding Profile.Name}"
+                        TextColor="#181C2E" />
+                    <Label Text="{Binding Profile.Bio}" TextColor="#A0A5BA" />
+                </VerticalStackLayout>
+            </Grid>
+
+            <!--  CONTENIDO  -->
+            <Border
+                Padding="20,12"
+                BackgroundColor="#F6F8FA"
+                StrokeShape="RoundRectangle 16"
+                StrokeThickness="0">
+                <VerticalStackLayout Spacing="0">
+                    <Grid
+                        ColumnDefinitions="40,*"
+                        ColumnSpacing="14"
+                        HeightRequest="56">
+                        <Border Style="{StaticResource PersonalInfoIconCircleStyle}">
+                            <Image Source="ic_personal_info_profile.png" Style="{StaticResource PersonalInfoIconStyle}" />
+                        </Border>
+                        <VerticalStackLayout
+                            Grid.Column="1"
+                            Spacing="2"
+                            VerticalOptions="Center">
+                            <Label Style="{StaticResource PersonalInfoFieldTitleStyle}" Text="FULL NAME" />
+                            <Label Text="{Binding Profile.Name}" TextColor="#6B6E82" />
+                        </VerticalStackLayout>
+                    </Grid>
+                    <Grid
+                        ColumnDefinitions="40,*"
+                        ColumnSpacing="14"
+                        HeightRequest="56">
+                        <Border Style="{StaticResource PersonalInfoIconCircleStyle}">
+                            <Image Source="ic_email_profile.png" Style="{StaticResource PersonalInfoIconStyle}" />
+                        </Border>
+                        <VerticalStackLayout
+                            Grid.Column="1"
+                            Spacing="2"
+                            VerticalOptions="Center">
+                            <Label Style="{StaticResource PersonalInfoFieldTitleStyle}" Text="EMAIL" />
+                            <Label
+                                LineBreakMode="TailTruncation"
+                                Text="{Binding Profile.Email}"
+                                TextColor="#6B6E82" />
+                        </VerticalStackLayout>
+                    </Grid>
+                    <Grid
+                        ColumnDefinitions="40,*"
+                        ColumnSpacing="14"
+                        HeightRequest="56">
+                        <Border Style="{StaticResource PersonalInfoIconCircleStyle}">
+                            <Image Source="ic_phone_profile.png" Style="{StaticResource PersonalInfoIconStyle}" />
+                        </Border>
+                        <VerticalStackLayout
+                            Grid.Column="1"
+                            Spacing="2"
+                            VerticalOptions="Center">
+                            <Label Style="{StaticResource PersonalInfoFieldTitleStyle}" Text="PHONE NUMBER" />
+                            <Label Text="{Binding Profile.PhoneNumber}" TextColor="#6B6E82" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

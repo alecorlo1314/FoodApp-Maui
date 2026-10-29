@@ -3,14 +3,15 @@
     x:Class="FoodApp.Presentacion.Views.Usuarios.HomePage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:RestaurantDto="clr-namespace:FoodApp.Aplicacion.Features.Restaurants.Queries.GetRestaurants"
     xmlns:droid="clr-namespace:CommunityToolkit.Maui.PlatformConfiguration.AndroidSpecific;assembly=CommunityToolkit.Maui"
-    xmlns:models="clr-namespace:FoodApp.Domain.Entities"
+    xmlns:models="clr-namespace:FoodApp.Aplicacion.Features.Categories.Queries.GetCategories"
     xmlns:sk="clr-namespace:Maui.Skeleton;assembly=Maui.Skeleton"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:views="clr-namespace:FoodApp.Presentacion.Views.Usuarios"
     xmlns:vm="clr-namespace:FoodApp.Presentacion.ViewModels.Usuarios"
     x:Name="HomePageRoot"
-    droid:NavigationBar.Color="White"
+    droid:NavigationBar.Color="#FFFFFF"
     droid:NavigationBar.Style="DarkContent"
     x:DataType="vm:HomeViewModel"
     BackgroundColor="White"
@@ -133,27 +134,40 @@
                     sk:Skeleton.IsBusy="{Binding IsLoading, Mode=OneWay}"
                     BackgroundColor="#F6F6F6"
                     HeightRequest="56"
+                    StrokeShape="RoundRectangle 12"
                     StrokeThickness="0">
-                    <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="12" />
-                    </Border.StrokeShape>
-                    <Grid ColumnDefinitions="Auto, *">
+
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NavigateToSearchCommand}" />
+                    </Border.GestureRecognizers>
+
+                    <Grid ColumnDefinitions="Auto, *" InputTransparent="True">
                         <Image
                             Grid.Column="0"
                             HeightRequest="18"
                             Source="ic_search.svg"
                             VerticalOptions="Center"
                             WidthRequest="18" />
-                        <Entry
+                        <Label
                             Grid.Column="1"
                             Margin="12,0,0,0"
                             FontFamily="SenRegular"
                             FontSize="14"
+                            Text="Search dishes, restaurants"
+                            TextColor="#676767"
+                            VerticalOptions="Center" />
+                        <!--<Entry
+                            Grid.Column="1"
+                            Margin="12,0,0,0"
+                            FontFamily="SenRegular"
+                            FontSize="14"
+                            IsEnabled="False"
                             Placeholder="Search dishes, restaurants"
                             PlaceholderColor="#676767"
                             Text="{Binding SearchText}"
                             TextColor="#32343E"
-                            VerticalOptions="Center" />
+                            VerticalOptions="Center">
+                        </Entry>-->
                     </Grid>
                 </Border>
 
@@ -202,7 +216,7 @@
                             </CollectionView.ItemsLayout>
 
                             <CollectionView.ItemTemplate>
-                                <DataTemplate x:DataType="models:Category">
+                                <DataTemplate x:DataType="models:CategoryDto">
                                     <Border
                                         Padding="8"
                                         sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
@@ -298,7 +312,7 @@
                                 <LinearItemsLayout ItemSpacing="20" Orientation="Vertical" />
                             </CollectionView.ItemsLayout>
                             <CollectionView.ItemTemplate>
-                                <DataTemplate x:DataType="models:Restaurant">
+                                <DataTemplate x:DataType="RestaurantDto:RestaurantDto">
                                     <VerticalStackLayout Spacing="10">
 
                                         <!--  Imagen Portada del Restaurante con Skeleton  -->

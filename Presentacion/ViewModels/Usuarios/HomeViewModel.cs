@@ -4,7 +4,6 @@ using FoodApp.Aplicacion.Features.Cart.Queries.GetCountCart;
 using FoodApp.Aplicacion.Features.Categories.Queries.GetCategories;
 using FoodApp.Aplicacion.Features.Restaurants.Queries.GetRestaurants;
 using FoodApp.Aplicacion.Features.Users.Queries.GetActiveUserProfile;
-using FoodApp.Domain.Entities;
 using FoodApp.Presentacion.Views.Usuarios;
 using MediatR;
 using System.Collections.ObjectModel;
@@ -32,11 +31,11 @@ public partial class HomeViewModel(IMediator _mediator) : ObservableObject
     [ObservableProperty]
     private string searchText = string.Empty;
     [ObservableProperty]
-    private Category? selectedCategory;
+    private CategoryDto? selectedCategory;
     [ObservableProperty]
-    private ObservableCollection<Category> categories = new();
+    private ObservableCollection<CategoryDto> categories = new();
     [ObservableProperty]
-    private ObservableCollection<Restaurant> restaurants = new();
+    private ObservableCollection<RestaurantDto> restaurants = new();
 
     [RelayCommand]
     private async Task LoadDataAsync(CancellationToken cancellationToken)
@@ -142,17 +141,19 @@ public partial class HomeViewModel(IMediator _mediator) : ObservableObject
 
 
     [RelayCommand]
-    private void OpenMenu()
+    private async Task OpenMenuAsync()
     {
-        // Esto ordena de manera nativa a Shell que abra el menú lateral (Flyout)
-        Shell.Current.FlyoutIsPresented = !Shell.Current.FlyoutIsPresented;
+        if (Shell.Current is AppShell shell)
+        {
+            await shell.ToggleMenuAsync();
+        }
     }
 
     [RelayCommand]
     private void OpenCart() => Shell.Current.GoToAsync(nameof(CartPage));
 
     [RelayCommand]
-    private async Task SelectCategoryAsync(Category category)
+    private async Task SelectCategoryAsync(CategoryDto category)
     {
         SelectedCategory = category;
 
@@ -173,7 +174,7 @@ public partial class HomeViewModel(IMediator _mediator) : ObservableObject
 
 
     [RelayCommand]
-    private async Task SelectRestaurantAsync(Restaurant restaurant)
+    private async Task SelectRestaurantAsync(RestaurantDto restaurant)
     {
         if (restaurant is null)
             return;
@@ -186,6 +187,13 @@ public partial class HomeViewModel(IMediator _mediator) : ObservableObject
         await Shell.Current.GoToAsync(
             nameof(RestaurantDetailPage),
             navigationParameter);
+    }
+
+    [RelayCommand]
+    private async Task NavigateToSearchAsync()
+    {
+        // Navega hacia la página de búsqueda utilizando su nombre registrado
+        await Shell.Current.GoToAsync(nameof(SearchPage));
     }
 
 }

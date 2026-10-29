@@ -5,6 +5,7 @@ using FoodApp.Aplicacion.Features.Authentication.Commands.CurrentUser;
 using FoodApp.Aplicacion.Features.Cart.Commands.RemoveCartItem;
 using FoodApp.Aplicacion.Features.Cart.Commands.UpdateQuantity;
 using FoodApp.Aplicacion.Features.Cart.Queries.GetCart;
+using FoodApp.Presentacion.Models;
 using FoodApp.Presentacion.Views.Usuarios;
 using MediatR;
 using System.Collections.ObjectModel;
@@ -26,10 +27,27 @@ public partial class CartViewModel(IMediator _mediator, ILocationService locatio
     private decimal total;
 
     [ObservableProperty]
-    private string deliveryAddress = "2118 Thornridge Cir. Syracuse"; // aun por definir
+    private string deliveryAddress;
 
     [ObservableProperty]
     private bool isLoading;
+
+    [ObservableProperty]
+    private bool isEditing;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(EditButtonText))]
+    private bool isNotEditing = true;
+
+    // Texto dinámico para el botón superior derecho
+    public string EditButtonText => IsEditing ? "DONE" : "EDIT ITEMS";
+
+    [RelayCommand]
+    private void ToggleEditMode()
+    {
+        IsEditing = !IsEditing;
+        IsNotEditing = !IsEditing;
+    }
 
     [RelayCommand]
     private async Task LoadDataAsync(CancellationToken cancellationToken)
@@ -196,11 +214,18 @@ public partial class CartViewModel(IMediator _mediator, ILocationService locatio
     [RelayCommand(CanExecute = nameof(CanPlaceOrder))]
     private async Task PlaceOrderAsync()
     {
-        // Pasamos el Total a la vista de pago mediante un parámetro de navegación
+        var orderItems = CartItems.Select(item => new OrderItemPayloadModel
+        {
+            ProductId = item.FoodId,
+            Quantity = item.Quantity
+        }).ToList();
+
+
         var navigationParameter = new Dictionary<string, object>
-            {
-                { "TotalAmount", Total }
-            };
+        {
+            { "TotalAmount", Total },
+            { "OrderItems", orderItems }
+        };
 
         await Shell.Current.GoToAsync(nameof(PaymentPage), navigationParameter);
     }

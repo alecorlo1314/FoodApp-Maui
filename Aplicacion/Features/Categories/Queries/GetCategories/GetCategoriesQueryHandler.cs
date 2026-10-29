@@ -1,13 +1,12 @@
 using FoodApp.Aplicacion.Common.Interfaces;
 using FoodApp.Domain.Common;
-using FoodApp.Domain.Entities;
 using MediatR;
 
 namespace FoodApp.Aplicacion.Features.Categories.Queries.GetCategories
 {
-    public class GetCategoriesQueryHandler(ICategoryRepository _categoryRepository) : IRequestHandler<GetCategoriesQuery, Result<IEnumerable<Category>>>
+    public class GetCategoriesQueryHandler(ICategoryRepository _categoryRepository) : IRequestHandler<GetCategoriesQuery, Result<IEnumerable<CategoryDto>>>
     {
-        public async Task<Result<IEnumerable<Category>>> Handle(GetCategoriesQuery request, CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<CategoryDto>>> Handle(GetCategoriesQuery request, CancellationToken cancellationToken)
         {
             try
             {
@@ -17,11 +16,11 @@ namespace FoodApp.Aplicacion.Features.Categories.Queries.GetCategories
             }
             catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
             {
-                return Result.Failure<IEnumerable<Category>>("La operación fue cancelada.");
+                return Result.Failure<IEnumerable<CategoryDto>>("La operación fue cancelada.");
             }
             catch (Exception ex)
             {
-                return Result.Failure<IEnumerable<Category>>(ex.Message);
+                return Result.Failure<IEnumerable<CategoryDto>>(ex.Message);
             }
         }
     }

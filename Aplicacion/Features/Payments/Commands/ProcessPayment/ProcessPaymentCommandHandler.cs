@@ -29,7 +29,8 @@ public class ProcessPaymentCommandHandler(IPaymentGatewayService _paymentGateway
                 expMonth,
                 expYear,
                 request.Cvc,
-                cancellationToken);
+                cancellationToken,
+                (request.CheckoutId == Guid.Empty ? Guid.NewGuid() : request.CheckoutId).ToString("D"));
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {

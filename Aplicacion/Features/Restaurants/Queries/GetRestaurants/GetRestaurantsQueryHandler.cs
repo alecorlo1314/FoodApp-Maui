@@ -1,14 +1,14 @@
 using FoodApp.Aplicacion.Common.Interfaces;
 using FoodApp.Domain.Common;
-using FoodApp.Domain.Entities;
 using MediatR;
 
 namespace FoodApp.Aplicacion.Features.Restaurants.Queries.GetRestaurants
 {
     public class GetRestaurantsQueryHandler(IRestaurantRepository _restaurantRepository) : 
-        IRequestHandler<GetRestaurantsQuery, Result<IEnumerable<Restaurant>>>
+        IRequestHandler<GetRestaurantsQuery, Result<IEnumerable<RestaurantDto>>>
     {
-        public async Task<Result<IEnumerable<Restaurant>>> Handle(GetRestaurantsQuery request, CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<RestaurantDto>>> Handle(
+            GetRestaurantsQuery request, CancellationToken cancellationToken)
         {
             try
             {
@@ -18,11 +18,11 @@ namespace FoodApp.Aplicacion.Features.Restaurants.Queries.GetRestaurants
             }
             catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
             {
-                return Result.Failure<IEnumerable<Restaurant>>("La operación fue cancelada.");
+                return Result.Failure<IEnumerable<RestaurantDto>>("La operación fue cancelada.");
             }
             catch (Exception ex)
             {
-                return Result.Failure<IEnumerable<Restaurant>>(ex.Message);
+                return Result.Failure<IEnumerable<RestaurantDto>>(ex.Message);
             }
         }
     }

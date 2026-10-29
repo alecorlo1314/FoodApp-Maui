@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="FoodApp.Presentacion.Views.Usuarios.SearchPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:droid="clr-namespace:CommunityToolkit.Maui.PlatformConfiguration.AndroidSpecific;assembly=CommunityToolkit.Maui"
+    xmlns:models="clr-namespace:FoodApp.Presentacion.Models"
+    xmlns:sk="clr-namespace:Maui.Skeleton;assembly=Maui.Skeleton"
+    xmlns:views="clr-namespace:FoodApp.Presentacion.Views.Usuarios"
+    xmlns:vm="clr-namespace:FoodApp.Presentacion.ViewModels.Usuarios"
+    x:Name="SearchPageRoot"
+    droid:NavigationBar.Color="White"
+    droid:NavigationBar.Style="DarkContent"
+    x:DataType="vm:SearchViewModel"
+    BackgroundColor="White"
+    Shell.NavBarIsVisible="False">
+
+    <Grid Margin="24,16" RowDefinitions="Auto, *">
+
+        <!--  1. CABECERA Y BARRA DE BÚSQUEDA  -->
+        <VerticalStackLayout Grid.Row="0" Spacing="16">
+            <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="16">
+                <ImageButton
+                    Grid.Column="0"
+                    Command="{Binding GoBackCommand}"
+                    CornerRadius="20"
+                    HeightRequest="45"
+                    Source="ic_back_white.svg"
+                    WidthRequest="45" />
+                <Label
+                    Grid.Column="1"
+                    FontFamily="SenRegular"
+                    FontSize="18"
+                    HorizontalOptions="Start"
+                    Text="Search"
+                    TextColor="#181C2E"
+                    VerticalOptions="Center" />
+
+                <!--  Icono del Carrito con insignia de cantidad (ej. 2)  -->
+                <Grid
+                    Grid.Column="2"
+                    HeightRequest="45"
+                    WidthRequest="45">
+                    <ImageButton
+                        Command="{Binding OpenCartCommand}"
+                        HeightRequest="45"
+                        HorizontalOptions="Center"
+                        Source="ic_carrito_compras.svg"
+                        VerticalOptions="Center"
+                        WidthRequest="45" />
+
+                    <!--  Badge Naranja de Cantidad  -->
+                    <Border
+                        BackgroundColor="#FF7622"
+                        HeightRequest="20"
+                        HorizontalOptions="End"
+                        IsVisible="{Binding IsCartCountVisible}"
+                        StrokeThickness="0"
+                        VerticalOptions="Start"
+                        WidthRequest="20">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10" />
+                        </Border.StrokeShape>
+                        <Label
+                            FontFamily="SenBold"
+                            FontSize="11"
+                            HorizontalTextAlignment="Center"
+                            Text="{Binding CartCount}"
+                            TextColor="White"
+                            VerticalTextAlignment="Center" />
+                    </Border>
+                </Grid>
+            </Grid>
+
+            <!--  Barra de Busqueda Estilizada  -->
+            <Border
+                Padding="16,0"
+                sk:Skeleton.Animation="{sk:DefaultAnimation Source=Aurora,
+                                                            Direction=DiagonalReverse,
+                                                            SweepColors='#00FFFFFF,#70FFFFFF,#00FFFFFF'}"
+                sk:Skeleton.BackgroundColor="#F6F6F6"
+                sk:Skeleton.IsBusy="{Binding IsLoading, Mode=OneWay}"
+                BackgroundColor="#F6F6F6"
+                HeightRequest="56"
+                StrokeShape="RoundRectangle 12"
+                StrokeThickness="0">
+
+                <Grid ColumnDefinitions="Auto, *">
+                    <Image
+                        Grid.Column="0"
+                        HeightRequest="18"
+                        Source="ic_search.svg"
+                        VerticalOptions="Center"
+                        WidthRequest="18" />
+                    <Entry
+                        Grid.Column="1"
+                        Margin="12,0,0,0"
+                        FontFamily="SenRegular"
+                        FontSize="14"
+                        IsEnabled="False"
+                        Placeholder="Search dishes, restaurants"
+                        PlaceholderColor="#676767"
+                        Text="{Binding SearchQuery}"
+                        TextColor="#32343E"
+                        VerticalOptions="Center" />
+                </Grid>
+            </Border>
+        </VerticalStackLayout>
+
+        <!--  2. CONTENIDO PRINCIPAL SCROLLABLE  -->
+        <ScrollView
+            Grid.Row="1"
+            Margin="0,16,0,0"
+            VerticalScrollBarVisibility="Never">
+            <VerticalStackLayout Spacing="24">
+
+                <!--  SECCIÓN RECENT KEYWORDS (Se oculta si no hay búsquedas)  -->
+                <VerticalStackLayout IsVisible="{Binding HasRecentKeywords}" Spacing="12">
+
+                    <Label
+                        FontFamily="SenRegular"
+                        FontSize="20"
+                        Text="Recent Keywords"
+                        TextColor="#32343E" />
+
+                    <FlexLayout
+                        AlignItems="Center"
+                        BindableLayout.ItemsSource="{Binding RecentKeywords}"
+                        Direction="Row"
+                        JustifyContent="Start"
+                        Wrap="Wrap">
+
+                        <BindableLayout.ItemTemplate>
+
+                            <!--  Cada elemento es un string  -->
+                            <DataTemplate x:DataType="x:String">
+
+                                <Border
+                                    Margin="0,0,8,8"
+                                    Padding="16,10"
+                                    BackgroundColor="White"
+                                    Stroke="#EDEDED"
+                                    StrokeShape="RoundRectangle 20"
+                                    StrokeThickness="1">
+
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding ViewModel.SearchKeywordCommand, Source={x:Reference SearchPageRoot}, x:DataType='views:SearchPage'}" CommandParameter="{Binding .}" />
+                                    </Border.GestureRecognizers>
+
+                                    <Label
+                                        FontFamily="SenRegular"
+                                        FontSize="16"
+                                        Text="{Binding .}"
+                                        TextColor="#181C2E" />
+
+                                </Border>
+
+                            </DataTemplate>
+
+                        </BindableLayout.ItemTemplate>
+
+                    </FlexLayout>
+
+                </VerticalStackLayout>
+
+                <!--  SECCIÓN SUGGESTED RESTAURANTS (Ordenados por Rating)  -->
+                <VerticalStackLayout Spacing="12">
+                    <Label
+                        FontFamily="SenRegular"
+                        FontSize="20"
+                        Text="Suggested Restaurants"
+                        TextColor="#32343E" />
+
+                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding SuggestedRestaurants}" Spacing="12">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="models:RestaurantModel">
+                                <Grid RowDefinitions="*, Auto">
+                                    <Grid
+                                        Padding="0,8"
+                                        ColumnDefinitions="60, *, Auto"
+                                        ColumnSpacing="16">
+                                        <!--  Imagen  -->
+                                        <Border
+                                            Grid.Column="0"
+                                            BackgroundColor="#98A8B8"
+                                            HeightRequest="50"
+                                            StrokeThickness="0"
+                                            WidthRequest="60">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="12" />
+                                            </Border.StrokeShape>
+                                            <Image Aspect="AspectFill" Source="{Binding ImageUrl}" />
+                                        </Border>
+                                        <!--  Información  -->
+                                        <VerticalStackLayout
+                                            Grid.Column="1"
+                                            Spacing="4"
+                                            VerticalOptions="Center">
+                                            <Label
+                                                FontFamily="SenRegular"
+                                                FontSize="16"
+                                                Text="{Binding Name}"
+                                                TextColor="#181C2E" />
+                                            <HorizontalStackLayout Spacing="4">
+                                                <Image
+                                                    HeightRequest="14"
+                                                    Source="ic_star.png"
+                                                    VerticalOptions="Center"
+                                                    WidthRequest="14" />
+                                                <Label
+                                                    FontFamily="SenRegular"
+                                                    FontSize="16"
+                                                    Text="{Binding Rating}"
+                                                    TextColor="#181C2E"
+                                                    VerticalOptions="Center" />
+                                            </HorizontalStackLayout>
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                    <Line
+                                        Grid.Row="1"
+                                        Stroke="#EBEBEB"
+                                        X2="600" />
+                                </Grid>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+
+                <!--  SECCIÓN POPULAR FAST FOOD (Ordenados por cantidad de pedidos)  -->
+                <VerticalStackLayout Spacing="12">
+                    <Label
+                        FontFamily="SenRegular"
+                        FontSize="20"
+                        Text="Popular Fast Food"
+                        TextColor="#181C2E" />
+                    <ScrollView HorizontalScrollBarVisibility="Never" Orientation="Horizontal">
+                        <HorizontalStackLayout
+                            Padding="12"
+                            BindableLayout.ItemsSource="{Binding PopularFastFoods}"
+                            Spacing="16">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="models:PopularFoodModel">
+                                    <Border
+                                        Padding="12"
+                                        BackgroundColor="White"
+                                        Shadow="4 4 30 #96969A 0.15"
+                                        StrokeShape="RoundRectangle 24"
+                                        StrokeThickness="0">
+                                        <VerticalStackLayout Spacing="8">
+                                            <Border
+                                                BackgroundColor="#98A8B8"
+                                                HeightRequest="100"
+                                                HorizontalOptions="Center"
+                                                StrokeShape="RoundRectangle 15"
+                                                StrokeThickness="0"
+                                                WidthRequest="126">
+
+                                                <Image Aspect="AspectFill" Source="{Binding ImageUrl}" />
+                                            </Border>
+                                            <Label
+                                                FontFamily="SenBold"
+                                                FontSize="15"
+                                                Text="{Binding Name}"
+                                                TextColor="#181C2E" />
+                                            <Label
+                                                FontFamily="SenRegular"
+                                                FontSize="13"
+                                                Text="{Binding RestaurantName}"
+                                                TextColor="#646982" />
+                                        </VerticalStackLayout>
+                                    </Border>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </HorizontalStackLayout>
+                    </ScrollView>
+                </VerticalStackLayout>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

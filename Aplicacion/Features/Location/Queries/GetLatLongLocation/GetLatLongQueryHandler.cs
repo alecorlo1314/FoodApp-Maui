@@ -1,13 +1,12 @@
 using FoodApp.Aplicacion.Common.Interfaces;
 using FoodApp.Domain.Common;
-using FoodApp.Domain.Entities;
 using MediatR;
 
 namespace FoodApp.Aplicacion.Features.Location.Queries.GetLatLongLocation;
 
-public class GetLatLongQueryHandler(ILocationService _locationService) : IRequestHandler<GetLatLongQuery, Result<Coordenada>>
+public class GetLatLongQueryHandler(ILocationService _locationService) : IRequestHandler<GetLatLongQuery, Result<CoordenadaDto>>
 {
-    public async Task<Result<Coordenada>> Handle(GetLatLongQuery request, CancellationToken cancellationToken)
+    public async Task<Result<CoordenadaDto>> Handle(GetLatLongQuery request, CancellationToken cancellationToken)
     {
         try
         {
@@ -17,11 +16,11 @@ public class GetLatLongQueryHandler(ILocationService _locationService) : IReques
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
-            return Result.Failure<Coordenada>("La operación fue cancelada.");
+            return Result.Failure<CoordenadaDto>("La operación fue cancelada.");
         }
         catch (Exception ex)
         {
-            return Result.Failure<Coordenada>(ex.Message);
+            return Result.Failure<CoordenadaDto>(ex.Message);
         }
     }
 }

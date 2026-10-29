@@ -11,6 +11,7 @@ using FoodApp.Presentacion.Views.Usuarios;
 using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Extensions.Http;
+using SimpleToolkit.SimpleShell;
 using SkiaSharp.Views.Maui.Controls.Hosting;
 using Syncfusion.Maui.Core.Hosting;
 using Syncfusion.Maui.Toolkit.Hosting;
@@ -28,6 +29,7 @@ namespace FoodApp
                 .UseSkiaSharp()
                 .ConfigureSyncfusionCore()
                 .ConfigureSyncfusionToolkit()
+                .UseSimpleShell()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -79,6 +81,10 @@ namespace FoodApp
             builder.Services.AddSingleton<PaymentPage>();
             builder.Services.AddSingleton<PaymentSuccessPage>();
             builder.Services.AddSingleton<TrackingOrderPage>();
+            builder.Services.AddSingleton<SearchPage>();
+            builder.Services.AddTransient<ProfilePage>();
+            builder.Services.AddTransient<PersonalInfoPage>();
+            builder.Services.AddTransient<AddressPage>();
 
             // ViewModels
             builder.Services.AddTransient<OnboardingFavoritesViewModel>();
@@ -96,6 +102,11 @@ namespace FoodApp
             builder.Services.AddSingleton<PaymentViewModel>();
             builder.Services.AddSingleton<PaymentSuccessViewModel>();
             builder.Services.AddSingleton<TrackingOrderViewModel>();
+            builder.Services.AddSingleton<SearchViewModel>();
+            builder.Services.AddTransient<ProfileViewModel>();
+            builder.Services.AddTransient<PersonalInfoViewModel>();
+            builder.Services.AddTransient<AddressViewModel>();
+            builder.Services.AddSingleton<RestaurantViewModel>();
 
             // Repositorios
             builder.Services.AddTransient<IAuthRepository, SupabaseAuthRepository>();
@@ -105,6 +116,7 @@ namespace FoodApp
             builder.Services.AddTransient<IRestaurantCategoryRepository, RestaurantCategoryRepository>();
             builder.Services.AddTransient<IFoodRepository, FoodRepository>();
             builder.Services.AddTransient<ICartRepository, CartRepository>();
+            builder.Services.AddTransient<IProductMetricsRepository, ProductMetricsRepository>();
             builder.Services.AddScoped<IUserPaymentRepository, UserPaymentRepository>();
             builder.Services.AddTransient<ILocationService, LocationService>();
 

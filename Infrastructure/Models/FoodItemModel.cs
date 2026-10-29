@@ -1,6 +1,6 @@
-﻿using Supabase.Postgrest.Attributes;
+using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
-using FoodApp.Domain.Entities;
+using FoodApp.Aplicacion.Features.Foods.Queries.GetFoodsByCategory;
 
 namespace FoodApp.Infrastructure.Models;
 
@@ -28,7 +28,7 @@ public class FoodItemModel : BaseModel
     [Column("price")]
     public decimal Price { get; set; }
 
-    public FoodItem ToDomain() => new()
+    public FoodItemDto ToDto() => new()
     {
         Id = Id,
         RestaurantId = RestaurantId,

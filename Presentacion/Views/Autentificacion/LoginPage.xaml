@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
     x:Class="FoodApp.Presentacion.Views.Autentificacion.LoginPage"
-    x:DataType="vm:LoginViewModel"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:vm="clr-namespace:FoodApp.Presentacion.ViewModels.Autentificacion"
     xmlns:droid="clr-namespace:CommunityToolkit.Maui.PlatformConfiguration.AndroidSpecific;assembly=CommunityToolkit.Maui"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:vm="clr-namespace:FoodApp.Presentacion.ViewModels.Autentificacion"
     droid:NavigationBar.Color="White"
     droid:NavigationBar.Style="DarkContent"
+    x:DataType="vm:LoginViewModel"
     BackgroundColor="#121223"
     Shell.FlyoutBehavior="Disabled">
 
@@ -245,28 +245,28 @@
 
                         <!--  Facebook  -->
                         <ImageButton
-                            IsEnabled="False"
                             CornerRadius="31"
                             HeightRequest="62"
                             HorizontalOptions="Center"
+                            IsEnabled="False"
                             Source="ic_facebook.svg"
                             VerticalOptions="Center"
                             WidthRequest="62" />
 
                         <!--  Twitter / X  -->
                         <ImageButton
-                            IsEnabled="False"
                             HeightRequest="62"
                             HorizontalOptions="Center"
+                            IsEnabled="False"
                             Source="ic_twitter.svg"
                             VerticalOptions="Center"
                             WidthRequest="62" />
 
                         <!--  Apple  -->
                         <ImageButton
-                            IsEnabled="False"
                             HeightRequest="62"
                             HorizontalOptions="Center"
+                            IsEnabled="False"
                             Source="ic_apple.svg"
                             VerticalOptions="Center"
                             WidthRequest="62" />

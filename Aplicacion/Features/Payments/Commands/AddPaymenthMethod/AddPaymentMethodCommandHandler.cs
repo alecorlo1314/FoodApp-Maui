@@ -16,8 +16,8 @@ namespace FoodApp.Aplicacion.Features.Payments.Commands.AddPaymenthMethod
                 if (string.IsNullOrEmpty(userId.Value.Id.ToString()))
                     return Result.Failure<bool>("Usuario no autenticado.");
 
-                request.Card.UserId = userId.Value.Id.ToString();
-                await _paymentRepository.AddCardAsync(request.Card, cancellationToken);
+                var card = request.Card with { UserId = userId.Value.Id.ToString() };
+                await _paymentRepository.AddCardAsync(card, cancellationToken);
 
                 return Result.Success(true);
             }

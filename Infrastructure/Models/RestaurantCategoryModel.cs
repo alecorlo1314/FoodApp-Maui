@@ -1,6 +1,6 @@
-﻿using Supabase.Postgrest.Attributes;
+using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
-using FoodApp.Domain.Entities;
+using FoodApp.Aplicacion.Features.RestaurantCategories.Queries.GetRestaurantCategories;
 
 namespace FoodApp.Infrastructure.Models
 {
@@ -16,7 +16,7 @@ namespace FoodApp.Infrastructure.Models
         [Column("name")]
         public string Name { get; set; } = string.Empty;
 
-        public RestaurantCategory ToDomain() => new()
+        public RestaurantCategoryDto ToDto() => new()
         {
             Id = Id,
             RestaurantId = RestaurantId,

@@ -1,5 +1,5 @@
+using FoodApp.Aplicacion.Features.Payments.Queries.GetPaymentMethods;
 using FoodApp.Aplicacion.Common.Interfaces;
-using FoodApp.Domain.Entities;
 using FoodApp.Infrastructure.Models;
 using Supabase;
 
@@ -7,7 +7,7 @@ namespace FoodApp.Infrastructure.Repositories
 {
     public class UserPaymentRepository(Client _supabaseClient) : IUserPaymentRepository
     {
-        public async Task<IEnumerable<UserPaymentMethod>> GetCardsByUserIdAsync(string userId, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<UserPaymentMethodDto>> GetCardsByUserIdAsync(string userId, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             var response = await _supabaseClient
@@ -15,10 +15,10 @@ namespace FoodApp.Infrastructure.Repositories
                 .Where(x => x.UserId == userId)
                 .Get(cancellationToken: cancellationToken);
 
-            return response.Models.Select(m => m.ToDomain());
+            return response.Models.Select(m => m.ToDto());
         }
 
-        public async Task AddCardAsync(UserPaymentMethod card, CancellationToken cancellationToken = default)
+        public async Task AddCardAsync(UserPaymentMethodDto card, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             var model = new UserPaymentMethodModel

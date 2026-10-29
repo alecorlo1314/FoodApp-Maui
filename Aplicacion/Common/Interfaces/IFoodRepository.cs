@@ -1,8 +1,8 @@
-using FoodApp.Domain.Entities;
+using FoodApp.Aplicacion.Features.Foods.Queries.GetFoodsByCategory;
 
 namespace FoodApp.Aplicacion.Common.Interfaces;
 
 public interface IFoodRepository
 {
-    Task<IEnumerable<FoodItem>> GetFoodsByCategoryAsync(long restaurantId, long categoryId, CancellationToken cancellationToken = default);
+    Task<IEnumerable<FoodItemDto>> GetFoodsByCategoryAsync(long restaurantId, long categoryId, CancellationToken cancellationToken = default);
 }

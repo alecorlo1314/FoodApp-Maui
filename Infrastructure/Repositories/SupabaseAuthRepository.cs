@@ -1,15 +1,16 @@
 using FoodApp.Aplicacion.Common.Interfaces;
 using FoodApp.Infrastructure.Models;
 using FoodApp.Domain.Common;
-using FoodApp.Domain.Entities;
 using Supabase;
+using FoodApp.Aplicacion.Features.Authentication.Commands.CurrentUser;
 
 
 namespace FoodApp.Infrastructure.Repositories;
 
 public class SupabaseAuthRepository(Client _supabaseClient) : IAuthRepository
 {
-    public Result<UsuarioActual> GetCurrentUser()
+    #region Usuarios actual de Supabase
+    public Result<CurrentUserDto> GetCurrentUser()
     {
         try
         {
@@ -21,41 +22,40 @@ public class SupabaseAuthRepository(Client _supabaseClient) : IAuthRepository
 
             if (usuarioActual is null)
             {
-                return Result.Failure<UsuarioActual>(
+                return Result.Failure<CurrentUserDto>(
                     "No hay un usuario autenticado.");
             }
 
             if (!Guid.TryParse(usuarioActual.Id, out var userId))
             {
-                return Result.Failure<UsuarioActual>(
+                return Result.Failure<CurrentUserDto>(
                     "El identificador del usuario no es válido.");
             }
 
-            var usuario = new UsuarioActual
-            {
-                Id = userId,
-                Email = usuarioActual.Email
-            };
+            var usuario = new CurrentUserDto(
+                userId,
+                usuarioActual.Email);
 
             return Result.Success(usuario);
         }
         catch (Exception)
         {
-            return Result.Failure<UsuarioActual>(
+            return Result.Failure<CurrentUserDto>(
                 "Ocurrió un error al obtener el usuario actual.");
         }
     }
 
+    #endregion
 
-
+    #region Iniciar Sesion Supabase
     public async Task<Result> LoginAsync(
-        string email,
-        string password, CancellationToken cancellationToken = default)
+    string email,
+    string password, 
+    CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
         try
         {
-            // This SDK overload cannot abort Auth HTTP; check cancellation around it.
             var session = await _supabaseClient.Auth.SignIn(
                 email, password);
             cancellationToken.ThrowIfCancellationRequested();
@@ -78,8 +78,14 @@ public class SupabaseAuthRepository(Client _supabaseClient) : IAuthRepository
         }
     }
 
+    #endregion
 
-    public async Task<Result> RegisterAsync(string name, string email, string password, CancellationToken cancellationToken = default)
+    #region Registrar Usuario Supabase
+    public async Task<Result> RegisterAsync(
+        string name, 
+        string email, 
+        string password, 
+        CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
         try
@@ -94,9 +100,8 @@ public class SupabaseAuthRepository(Client _supabaseClient) : IAuthRepository
                 // 2. Si todo sale bien en Auth, guardamos el perfil adicional en la base de datos
                 var newProfile = new ProfileModel
                 {
-                    Id = session.User.Id,
+                    Id = Guid.Parse(session.User.Id),
                     Name = name,
-                    DefaultAddress = "Selecciona una dirección"
                 };
 
                 await _supabaseClient.From<ProfileModel>().Insert(newProfile, cancellationToken: cancellationToken);
@@ -122,4 +127,6 @@ public class SupabaseAuthRepository(Client _supabaseClient) : IAuthRepository
             return Result.Failure($"Ocurrió un error inesperado: {ex.Message}");
         }
     }
+
+    #endregion
 }

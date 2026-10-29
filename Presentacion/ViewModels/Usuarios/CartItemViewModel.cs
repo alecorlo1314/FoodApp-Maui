@@ -8,6 +8,7 @@ public partial class CartItemViewModel : ObservableObject
     public CartItemViewModel(CartItem item)
     {
         Id = item.Id;
+        FoodId = item.FoodId;
         Name = item.Name;
         ImageUrl = item.ImageUrl;
         SizeName = item.SizeName;
@@ -16,6 +17,7 @@ public partial class CartItemViewModel : ObservableObject
     }
 
     public long Id { get; }
+    public long FoodId { get; }
     public string Name { get; }
     public string ImageUrl { get; }
     public string SizeName { get; }

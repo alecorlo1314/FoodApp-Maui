@@ -7,5 +7,6 @@ public record ProcessPaymentCommand(
         decimal Amount,
         string CardNumber,
         string ExpireDate,
-        string Cvc
+        string Cvc,
+        Guid CheckoutId = default
     ) : IRequest<Result<string>>;

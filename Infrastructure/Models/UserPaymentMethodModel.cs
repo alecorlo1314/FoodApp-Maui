@@ -1,6 +1,6 @@
-﻿using Supabase.Postgrest.Attributes;
+using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
-using FoodApp.Domain.Entities;
+using FoodApp.Aplicacion.Features.Payments.Queries.GetPaymentMethods;
 
 namespace FoodApp.Infrastructure.Models;
 
@@ -28,7 +28,7 @@ public class UserPaymentMethodModel : BaseModel
     [Column("is_default")]
     public bool IsDefault { get; set; }
 
-    public UserPaymentMethod ToDomain() => new()
+    public UserPaymentMethodDto ToDto() => new()
     {
         Id = Id,
         UserId = UserId,

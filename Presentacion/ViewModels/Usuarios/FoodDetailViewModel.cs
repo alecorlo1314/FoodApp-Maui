@@ -1,3 +1,4 @@
+using FoodApp.Aplicacion.Features.Foods.Queries.GetFoodsByCategory;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FoodApp.Aplicacion.Features.Authentication.Commands.CurrentUser;
@@ -12,7 +13,7 @@ namespace FoodApp.Presentacion.ViewModels.Usuarios
     public partial class FoodDetailViewModel(IMediator _mediator) : ObservableObject
     {
         [ObservableProperty]
-        private FoodItem foodItem = new();
+        private FoodItemDto foodItem = new();
 
         [ObservableProperty]
         private ObservableCollection<FoodSize> sizes = new();
