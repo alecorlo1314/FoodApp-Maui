@@ -13,7 +13,9 @@ public class GetPaymentMethodsQueryHandler(IUserPaymentRepository _paymentReposi
         try
         {
             cancellationToken.ThrowIfCancellationRequested();
+
             var userId = _authService.GetCurrentUser();
+
             if (string.IsNullOrEmpty(userId.Value.Id.ToString()))
                 return Result.Failure<IEnumerable<UserPaymentMethod>>("Usuario no autenticado.");
 

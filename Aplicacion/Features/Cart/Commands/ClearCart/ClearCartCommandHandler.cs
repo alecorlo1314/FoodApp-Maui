@@ -12,9 +12,17 @@ public class ClearCartCommandHandler(ICartRepository cart, IAuthRepository auth)
         try
         {
             cancellationToken.ThrowIfCancellationRequested();
+
             var user = auth.GetCurrentUser();
-            if (user.IsFailure || user.Value is null || user.Value.Id == Guid.Empty || user.Value.Id != request.UserId)
+
+            if (user.IsFailure || 
+                user.Value is null || 
+                user.Value.Id == Guid.Empty || 
+                user.Value.Id != request.UserId)
+            {
                 return Result.Failure<bool>("La sesión no corresponde al usuario del carrito.");
+            }
+
             await cart.ClearAsync(request.UserId, cancellationToken);
             var remaining = await cart.GetCartItemsAsync(request.UserId.ToString(), cancellationToken);
             cancellationToken.ThrowIfCancellationRequested();

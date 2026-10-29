@@ -6,9 +6,9 @@ using MediatR;
 namespace FoodApp.Aplicacion.Features.Authentication.Commands.CurrentUser;
 
 internal class GetCurrentUserQueryHandler(IAuthRepository authRepository)
-    : IRequestHandler<GetCurrentUser, Result<UsuarioActual>>
+    : IRequestHandler<GetCurrentUser, Result<CurrentUserDto>>
 {
-    public async Task<Result<UsuarioActual>> Handle(GetCurrentUser request, CancellationToken cancellationToken)
+    public async Task<Result<CurrentUserDto>> Handle(GetCurrentUser request, CancellationToken cancellationToken)
     {
         try
         {
@@ -18,11 +18,11 @@ internal class GetCurrentUserQueryHandler(IAuthRepository authRepository)
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
-            return Result.Failure<UsuarioActual>("La operación fue cancelada.");
+            return Result.Failure<CurrentUserDto>("La operación fue cancelada.");
         }
         catch (Exception ex)
         {
-            return Result.Failure<UsuarioActual>(ex.Message);
+            return Result.Failure<CurrentUserDto>(ex.Message);
         }
     }
 }

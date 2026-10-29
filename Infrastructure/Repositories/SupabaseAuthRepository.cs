@@ -1,15 +1,15 @@
 using FoodApp.Aplicacion.Common.Interfaces;
 using FoodApp.Infrastructure.Models;
 using FoodApp.Domain.Common;
-using FoodApp.Domain.Entities;
 using Supabase;
+using FoodApp.Aplicacion.Features.Authentication.Commands.CurrentUser;
 
 
 namespace FoodApp.Infrastructure.Repositories;
 
 public class SupabaseAuthRepository(Client _supabaseClient) : IAuthRepository
 {
-    public Result<UsuarioActual> GetCurrentUser()
+    public Result<CurrentUserDto> GetCurrentUser()
     {
         try
         {
@@ -21,27 +21,25 @@ public class SupabaseAuthRepository(Client _supabaseClient) : IAuthRepository
 
             if (usuarioActual is null)
             {
-                return Result.Failure<UsuarioActual>(
+                return Result.Failure<CurrentUserDto>(
                     "No hay un usuario autenticado.");
             }
 
             if (!Guid.TryParse(usuarioActual.Id, out var userId))
             {
-                return Result.Failure<UsuarioActual>(
+                return Result.Failure<CurrentUserDto>(
                     "El identificador del usuario no es válido.");
             }
 
-            var usuario = new UsuarioActual
-            {
-                Id = userId,
-                Email = usuarioActual.Email
-            };
+            var usuario = new CurrentUserDto(
+                userId,
+                usuarioActual.Email);
 
             return Result.Success(usuario);
         }
         catch (Exception)
         {
-            return Result.Failure<UsuarioActual>(
+            return Result.Failure<CurrentUserDto>(
                 "Ocurrió un error al obtener el usuario actual.");
         }
     }
