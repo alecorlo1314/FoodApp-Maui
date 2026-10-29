@@ -42,4 +42,18 @@ public class CartItemModel : BaseModel
         Price = Price,
         Quantity = Quantity
     };
+    public CartItemEntidad ToEntidad() => new(
+        UserId, FoodId, Name, ImageUrl, SizeName, Price, Quantity, Id);
+
+    public static CartItemModel ToModel(CartItemEntidad item) => new()
+    {
+        Id = item.Id,
+        UserId = item.UserId,
+        FoodId = item.FoodId,
+        Name = item.Name,
+        ImageUrl = item.ImageUrl,
+        SizeName = item.SizeName,
+        Price = item.Price,
+        Quantity = item.Quantity
+    };
 }

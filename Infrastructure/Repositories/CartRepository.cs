@@ -7,6 +7,9 @@ namespace FoodApp.Infrastructure.Repositories
 {
     public class CartRepository(Client _supabaseClient) : ICartRepository
     {
+        private static readonly SemaphoreSlim AddItemLock = new(1, 1);
+
+        #region Get Cart Items
         public async Task<IEnumerable<CartItem>> GetCartItemsAsync(string userId, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -17,47 +20,57 @@ namespace FoodApp.Infrastructure.Repositories
 
             return response.Models.Select(m => m.ToDomain());
         }
+        #endregion
 
-        public async Task AddItemAsync(CartItem item, CancellationToken cancellationToken = default)
+        #region Add or Update Item in Cart
+        public async Task AddItemAsync(CartItemEntidad item, CancellationToken cancellationToken = default)
         {
+            ArgumentNullException.ThrowIfNull(item);
             cancellationToken.ThrowIfCancellationRequested();
-            // Verificar si el producto con el mismo tamaño ya está en el carrito del usuario
-            var existing = await _supabaseClient
-                .From<CartItemModel>()
-                .Where(x => x.UserId == item.UserId &&
-                x.FoodId == item.FoodId && 
-                x.SizeName == item.SizeName)
-                .Get(cancellationToken: cancellationToken);
-
-            var existingModel = existing.Models.FirstOrDefault();
-
-            if (existingModel != null)
+            await AddItemLock.WaitAsync(cancellationToken);
+            try
             {
-                // Si ya existe, sumamos la cantidad
-                existingModel.Quantity += item.Quantity;
-                await _supabaseClient.From<CartItemModel>().Update(existingModel, cancellationToken: cancellationToken);
-            }
-            else
-            {
-                // Si no existe, lo creamos nuevo
-                var model = new CartItemModel
+                var existing = await _supabaseClient
+                    .From<CartItemModel>()
+                    .Where(x => x.UserId == item.UserId &&
+                        x.FoodId == item.FoodId &&
+                        x.SizeName == item.SizeName)
+                    .Get(cancellationToken: cancellationToken);
+
+                var existingModel = existing.Models.SingleOrDefault();
+
+                if (existingModel != null)
                 {
-                    UserId = item.UserId,
-                    FoodId = item.FoodId,
-                    Name = item.Name,
-                    ImageUrl = item.ImageUrl,
-                    SizeName = item.SizeName,
-                    Price = item.Price,
-                    Quantity = item.Quantity
-                };
-                await _supabaseClient.From<CartItemModel>().Insert(model, cancellationToken: cancellationToken);
+                    var cartItem = existingModel.ToEntidad();
+                    cartItem.IncreaseQuantity(item.Quantity);
+                    cartItem.UpdatePrice(item.Price);
+
+                    await _supabaseClient.From<CartItemModel>()
+                        .Where(x => x.Id == cartItem.Id && x.UserId == item.UserId)
+                        .Set(x => x.Quantity, cartItem.Quantity)
+                        .Set(x => x.Price, cartItem.Price)
+                        .Update(cancellationToken: cancellationToken);
+                }
+                else
+                {
+                    var model = CartItemModel.ToModel(item);
+                    await _supabaseClient.From<CartItemModel>()
+                        .Insert(model, cancellationToken: cancellationToken);
+                }
+            }
+            finally
+            {
+                AddItemLock.Release();
             }
         }
+        #endregion
 
+        #region Update Item Quantity
         public async Task UpdateQuantityAsync(long cartItemId, int quantity, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var model = new CartItemModel { Id = cartItemId, Quantity = quantity };
+            if (quantity <= 0)
+                throw new ArgumentException("La cantidad debe ser mayor a cero.", nameof(quantity));
             // En Supabase Postgrest para actualizar un campo específico de forma sencilla:
             await _supabaseClient
                 .From<CartItemModel>()
@@ -65,7 +78,9 @@ namespace FoodApp.Infrastructure.Repositories
                 .Set(x => x.Quantity, quantity)
                 .Update(cancellationToken: cancellationToken);
         }
+        #endregion
 
+        #region Remove Specific Item
         public async Task RemoveItemAsync(long cartItemId, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -73,7 +88,9 @@ namespace FoodApp.Infrastructure.Repositories
                 .Where(x => x.Id == cartItemId)
                 .Delete(cancellationToken: cancellationToken);
         }
+        #endregion
 
+        #region Clear Entire Cart
         public async Task ClearAsync(Guid userId, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -83,7 +100,9 @@ namespace FoodApp.Infrastructure.Repositories
                 .Where(item => item.UserId == userId)
                 .Delete(cancellationToken: cancellationToken);
         }
+        #endregion
 
+        #region Get Cart Items Count
         public async Task<int> GetCountCartQuery(string userId, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -94,5 +113,6 @@ namespace FoodApp.Infrastructure.Repositories
 
             return resupuesta.Count;
         }
+        #endregion
     }
 }
